@@ -136,4 +136,4 @@ elif "Genel ve İdari" in kategori:
             otomatik_sesli_oku(f"{secim} için yol tarifi. {DIGER_ALANLAR[secim]['tarif']}")
             if DIGER_ALANLAR[secim]['kat']:
                 kroki_goster(DIGER_ALANLAR[secim]['kat'])
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi ")
+st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi (Engin PEKDEMİR) ")
