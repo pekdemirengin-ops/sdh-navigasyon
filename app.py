@@ -9,6 +9,32 @@ st.title("🏥 SDH Barajyolu Ek Hizmet Binası")
 st.subheader("SDH Yapay Zeka Navigasyonu")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
+# ==============================================================================
+# 🚀 OTOMATİK SESLİ TARİF MOTORU (Sadece bu kısım eklenmiştir)
+# ==============================================================================
+def otomatik_sesli_oku(metin):
+    """Tarayıcı üzerinden belirtilen metni otomatik olarak seslendirir."""
+    if metin and metin.strip():
+        # Ses motorunun "1. Kat" ifadesini düzgün okuması için geçici dönüştürme yapıyoruz
+        okunacak_metin = metin.replace("1. Kat", "Birinci Kat").replace("1. kat", "Birinci kat")
+        temiz_metin = okunacak_metin.replace("'", "\\'").replace('"', '\\"')
+        js_kodu = f"""
+        <script>
+            var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+            msg.lang = 'tr-TR';
+            msg.rate = 1.0; 
+            msg.pitch = 1.0; 
+            window.speechSynthesis.cancel(); // Önceki sesleri sustur
+            window.speechSynthesis.speak(msg);
+        </script>
+        """
+        st.components.v1.html(js_kodu, height=0)
+
+# İlk açılışta tek seferlik karşılama anonsu
+if "karsilandi" not in st.session_state:
+    st.session_state["karsilandi"] = True
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+
 # 🚀 AKILLI GÖRSEL BULUCU MOTORU (Uzantı Sorununu Çözer)
 def kroki_goster(kat_adi):
     """Klasörde kat_adi ile başlayan (png, jpg, jpeg vb.) herhangi bir resmi bulur."""
@@ -74,7 +100,6 @@ DIGER_ALANLAR = {
     "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"}
 }
 
-
 # ARAYÜZ KATMANI
 st.write("### 👇 Lütfen Gitmek İstediğiniz Kategoriyi Seçiniz:")
 kategori = st.radio("Navigasyon Modu", ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], horizontal=True, label_visibility="collapsed")
@@ -86,9 +111,13 @@ if "Poliklinikler" in kategori:
         if POLIKLINIKLER[secim]['fancy']:
             st.error(f"🎯 **Hedef Birim:** {secim}")
             st.error(f"🚶 **Yönlendirme:** {POLIKLINIKLER[secim]['tarif']}")
+            # 🔊 SESLİ OKUMA ENTEGRASYONU
+            otomatik_sesli_oku(f"Dikkat. {POLIKLINIKLER[secim]['tarif']}")
         else:
             st.success(f"🎯 **Hedef Birim:** {secim}")
             st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {POLIKLINIKLER[secim]['tarif']}")
+            # 🔊 SESLİ OKUMA ENTEGRASYONU
+            otomatik_sesli_oku(f"{secim} için yol tarifi. {POLIKLINIKLER[secim]['tarif']}")
             if POLIKLINIKLER[secim]['kat']:
                 kroki_goster(POLIKLINIKLER[secim]['kat'])
 
@@ -96,12 +125,15 @@ elif "Genel ve İdari" in kategori:
     secim = st.selectbox("Aradığınız Genel veya İdari Birimi seçiniz:", list(DIGER_ALANLAR.keys()))
     if secim != "Seçim Yapınız...":
         if DIGER_ALANLAR[secim]['fancy']:
-            st.error(f"🎯 **Hedef Alan:** {secim}")
-            st.error(f"🚶 **Yönlendirme:** {DIGER_ALANLAR[secim]['tarif']}")
+            st.error(f"🎯 Hedef Alan: {secim}")
+            st.error(f"🚶 Yönlendirme: {DIGER_ALANLAR[secim]['tarif']}")
+            # 🔊 SESLİ OKUMA ENTEGRASYONU
+            otomatik_sesli_oku(f"Dikkat. {DIGER_ALANLAR[secim]['tarif']}")
         else:
-            st.success(f"🎯 **Hedef Alan:** {secim}")
-            st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {DIGER_ALANLAR[secim]['tarif']}")
+            st.success(f"🎯 Hedef Alan: {secim}")
+            st.warning(f"🚶 Resmi Plan Yol Tarifi: {DIGER_ALANLAR[secim]['tarif']}")
+            # 🔊 SESLİ OKUMA ENTEGRASYONU
+            otomatik_sesli_oku(f"{secim} için yol tarifi. {DIGER_ALANLAR[secim]['tarif']}")
             if DIGER_ALANLAR[secim]['kat']:
                 kroki_goster(DIGER_ALANLAR[secim]['kat'])
-
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi v1.7")
+st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi ")
