@@ -175,7 +175,7 @@ else:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
     secim = st.selectbox(
-        "Aradığınız Genel veya İdari Birimi seçiniz:", 
+        "ARADIĞINIZ DİĞER BİRİMLERİ SEÇİNİZ:", 
         liste_alan, 
         key="secilen_birim"
     )
