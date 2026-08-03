@@ -148,7 +148,7 @@ def arama_yapildi():
                 break
 
 st.text_input(
-    "Aramak istediğiniz birimi yazın lütfen:",
+    "ARAMAK İSTEDİĞİNİZ BİRİMİ YAZINIZ :",
     placeholder="Örn: Dahiliye, Göz, Kan Alma, WC...",
     key="arama_kutusu",
     on_change=arama_yapildi
