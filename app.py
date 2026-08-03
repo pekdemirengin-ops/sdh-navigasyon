@@ -33,7 +33,7 @@ def otomatik_sesli_oku(metin):
 # İlk açılışta tek seferlik karşılama anonsu
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # 🚀 AKILLI GÖRSEL BULUCU MOTORU (Uzantı Sorununu Çözer)
 def kroki_goster(kat_adi):
