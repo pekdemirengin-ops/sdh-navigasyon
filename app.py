@@ -130,27 +130,7 @@ with col4:
     if st.button("🏥 Heyet", use_container_width=True):
         birim_sec("Sağlık Kurulu / Heyet Odası")
 
-# ==============================================================================
-# 🔍 AKILLI ARAMA MOTORU
-# ==============================================================================
-st.write("---")
-st.write("### 🔍 Birim Arama")
 
-def arama_yapildi():
-    aranan = st.session_state["arama_kutusu"].lower().strip()
-    if aranan:
-        tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
-        for birim in tum_birimler:
-            if aranan in birim.lower() and birim != "Seçim Yapınız...":
-                birim_sec(birim)
-                break
-
-st.text_input(
-    "Aramak istediğiniz birimi yazın veya mikrofona söyleyin:",
-    placeholder="Örn: Dahiliye, Göz, Kan Alma, WC...",
-    key="arama_kutusu",
-    on_change=arama_yapildi
-)
 
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
