@@ -58,6 +58,7 @@ if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+    st.session_state["kategori"] = "🏥 Genel ve İdari Birimler"
 
 # ==============================================================================
 # 🚀 SES BİLEŞENİ & KROKİ
