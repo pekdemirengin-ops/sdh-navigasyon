@@ -1,4 +1,3 @@
-from streamlit_mic_recorder import mic_recorder
 import streamlit as st
 import os
 from PIL import Image
