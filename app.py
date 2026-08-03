@@ -97,7 +97,7 @@ def kroki_goster(kat_adi):
 # 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
 st.title("🏥 SDH BARAJ YOLU EK HİZMET BİNASI")
-st.subheader("SDH SESLİ DİSİTAL YÖNLENDİRME")
+st.subheader("SDH SESLİ DİJİTAL YÖNLENDİRME")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 if "karsilandi" not in st.session_state:
@@ -127,7 +127,7 @@ with col3:
     if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
-    if st.button("ASANSÖR", use_container_width=True):
+    if st.button("🛗 ASANSÖR", use_container_width=True):
         birim_sec("Asansör")
 with col5:
     if st.button("🚻 WC", use_container_width=True):
