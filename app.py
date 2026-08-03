@@ -32,7 +32,7 @@ def otomatik_sesli_oku(metin):
 # İlk açılışta tek seferlik karşılama anonsu
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
 
 # ==============================================================================
 # 🎙️ SES TANIMA (MİKROFON) MOTORU
@@ -210,5 +210,5 @@ elif "Genel ve İdari" in kategori:
             if veri["kat"]:
                 kroki_goster(veri["kat"])
 
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi v1.7")
+st.caption("🤖  Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi Engin PEKDEMİR v1.7")
 
