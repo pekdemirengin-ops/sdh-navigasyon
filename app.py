@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
+from streamlit_mic_recorder import speech_to_text
 
 # ==============================================================================
 # ⚙️ SAYFA AYARLARI
@@ -38,7 +39,7 @@ POLIKLINIKLER = {
     "Diyetisyen (Heyet Diyet)": {"fancy": False, "tarif": "Zemin Kat - Ana girişten girdikten sonra tam karşınızda. Ortopedi Heyet odasının yanında yer alır.", "kat": "zemin"},
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sola dönün. Sol tarafta yer alır.", "kat": "1kat"},
     "Konuşma Terapisi Birimi": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sol koridorun en sonundaki odadır (Sabim Cimer odasının yanı).", "kat": "1kat"}
-    }
+}
 
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
@@ -51,14 +52,13 @@ DIGER_ALANLAR = {
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır. ", "kat": ""},
     "Asansör": {"fancy": False, "tarif": " 1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.", "kat": "zemin"},
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
-   }
+}
 
 # Session State Başlatma
 if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
-    st.session_state["kategori"] = "🏥 Genel ve İdari Birimler"
 
 # ==============================================================================
 # 🚀 SES BİLEŞENİ & KROKİ
@@ -96,6 +96,22 @@ def kroki_goster(kat_adi):
     else:
         st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
 
+def birim_sec(birim_adi):
+    st.session_state["secilen_birim"] = birim_adi
+    if birim_adi in DIGER_ALANLAR:
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+    else:
+        st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+
+def arama_isle(aranan_metin):
+    aranan = aranan_metin.lower().strip()
+    if aranan:
+        tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
+        for birim in tum_birimler:
+            if aranan in birim.lower() and birim != "Seçim Yapınız...":
+                birim_sec(birim)
+                break
+
 # ==============================================================================
 # 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
@@ -111,14 +127,7 @@ if "karsilandi" not in st.session_state:
 # 🚀 HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
-col1, col2, col3, col4, col5, col6, col7, = st.columns(7)
-
-def birim_sec(birim_adi):
-    st.session_state["secilen_birim"] = birim_adi
-    if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
-    else:
-        st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 
 with col1:
     if st.button("🩸 KAN ALMA", use_container_width=True):
@@ -127,7 +136,7 @@ with col2:
     if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
         birim_sec("Sağlık Kurulu / Heyet Odası")
 with col3:
-    if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
+    if st.button("📋 EVRAK KAYIT", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
     if st.button("🛗 ASANSÖR", use_container_width=True):
@@ -136,11 +145,43 @@ with col5:
     if st.button("🚻 WC", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
 with col6:
-    if st.button("Sağlık Kurulu Kayıt", use_container_width=True):
+    if st.button("S.K. KAYIT", use_container_width=True):
         birim_sec("Sağlık Kurulu Kayıt")
 with col7:
-    if st.button("Hasta Kayıt", use_container_width=True):
+    if st.button("HASTA KAYIT", use_container_width=True):
         birim_sec("Hasta Kayıt")
+
+# ==============================================================================
+# 🎙️ SESLİ ARAMA VE ARAMA MOTORU (YENİ EKLENEN BÖLÜM)
+# ==============================================================================
+st.write("---")
+st.write("### 🔍 Birim Arama / Sesle Ara")
+
+col_input, col_mic = st.columns([3, 1])
+
+with col_mic:
+    st.write("🎙️ **Sesle Ara:**")
+    # Mikrofon kaydedici ses tanıma bileşeni
+    ses_metni = speech_to_text(
+        language='tr', 
+        start_prompt="🔴 Konuşun", 
+        stop_prompt="⏹️ Bitti", 
+        key='speech_search'
+    )
+
+with col_input:
+    metin_girisi = st.text_input(
+        "Aramak istediğiniz birimi yazın:",
+        value=ses_metni if ses_metni else "",
+        placeholder="Örn: Dahiliye, Kan Alma, Asansör...",
+        key="arama_input"
+    )
+
+# Ses veya metin girdisi değiştiğinde otomatik arama yap
+aktif_arama = ses_metni if ses_metni else metin_girisi
+if aktif_arama:
+    arama_isle(aktif_arama)
+
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
 # ==============================================================================
