@@ -127,7 +127,7 @@ with col3:
     if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
-    if st.button("🛗 ASANSÖR", use_container_width=True):
+    if st.button if st.button("🛗 Asansör"):
         birim_sec("Asansör")
 with col5:
     if st.button("🚻 WC", use_container_width=True):
