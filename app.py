@@ -115,7 +115,7 @@ def birim_sec(birim_adi):
     if birim_adi in DIGER_ALANLAR:
         st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     else:
-        st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+        st.session_state["kategori"] = "🏥 POLİKLİNİKLER"
 
 with col1:
     if st.button("🩸 Kan Alma", use_container_width=True):
