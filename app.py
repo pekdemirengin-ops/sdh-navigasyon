@@ -35,10 +35,10 @@ if "karsilandi" not in st.session_state:
     otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
 
 # ==============================================================================
-# 🎙️ KESİN ÇÖZÜMLÜ SES TANIMA (MİKROFON) MOTORU
+# 🎙️ SES TANIMA (MİKROFON) MOTORU
 # ==============================================================================
 def sesle_arama_motoru():
-    """Vatandaşın sesini dinler ve HTML5 bileşeni üzerinden doğrudan veri iletir."""
+    """Vatandaşın sesini dinler ve HTML5 bileşeni üzerinden arayüze aktarır."""
     js_ses_kodu = """
     <div style="text-align: center; margin-bottom: 15px;">
         <button id="mic-btn" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%;">
@@ -65,13 +65,14 @@ def sesle_arama_motoru():
             };
 
             recognition.onresult = function(event) {
-                const sonucMetni = event.results.transcript;
+                const sonucMetni = event.results[0][0].transcript;
                 btn.style.backgroundColor = '#d9534f';
                 btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
                 status.innerText = 'Anlaşılan: "' + sonucMetni + '"';
                 
-                // 📌 KESİN ÇÖZÜM: Veriyi Streamlit iframe sınırını aşarak doğrudan hafıza hücresine gönderir
-                Streamlit.setComponentValue(sonucMetni);
+                if (window.Streamlit) {
+                    Streamlit.setComponentValue(sonucMetni);
+                }
             };
 
             recognition.onerror = function(event) {
@@ -85,7 +86,6 @@ def sesle_arama_motoru():
         }
     </script>
     """
-    # Streamlit html bileşenine resmi js_kodu api desteği eklenmiştir
     return st.components.v1.html(js_ses_kodu, height=100, scrolling=False)
 
 # 🚀 AKILLI GÖRSEL BULUCU MOTORU
@@ -103,7 +103,7 @@ def kroki_goster(kat_adi):
     if bulunan_dosya:
         try:
             image = Image.open(bulunan_dosya)
-            st.image(image, caption=f"🗺️ Resmi {kat_adi.upper()} Krokisi", use_container_width=True)
+            st.image(image, caption=f"🗺️ {kat_adi.upper()} Krokisi", use_container_width=True)
         except Exception as e:
             st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
     else:
@@ -118,7 +118,7 @@ POLIKLINIKLER = {
     "Solunum Fonksiyon Testi Odası": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca tam sol koridorun en başında, sağ taraftaki odadır.", "kat": "1kat"},
     "İşitme Testi Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sağ taraftaki odadır (Emzirme Odası yanı).", "kat": "1kat"},
     "Emzirme Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sağ taraftaki odadır (İşitme Testi yanı).", "kat": "1kat"},
-    "Cildiye Heyet Polikliniği (Oda 1 ve 2)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden sağa dönün, sağğ tarafta yan yanadır veya asansörden çıkınca sol dönün, sol tarafta yan yanadır.", "kat": "1kat"},
+    "Cildiye Heyet Polikliniği (Oda 1 ve 2)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden sağa dönün, sağ tarafta yan yanadır veya asansörden çıkınca sola dönün, sol tarafta yan yanadır.", "kat": "1kat"},
     "Çocuk Hastalıkları Polikliniği (DİĞER BİNA GİRİŞİ)": {"fancy": True, "tarif": "🚨 DİĞER BİNA GİRİŞİNDEDİR! Çocuk hastalıkları poliklinik muayeneleri için lütfen diğer bina girişini kullanınız.", "kat": ""},
     "Heyet Çocuk Polk. (Çözger)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında sol taraftadır (Görme Alanı odasının hemen yanındadır).", "kat": "1kat"},
     "Heyet Çocuk Psikiyatri Polk.": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sol koridorun sonundan 1 önceki soldaki odadır. (Çocuk Evde Sağlık odasının yanı).", "kat": "1kat"},
@@ -138,6 +138,7 @@ POLIKLINIKLER = {
     "Diyetisyen (Heyet Diyet)": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdikten sonra tam karşınızda. Ortopedi Heyet odasının yanındadır.", "kat": "zemin"},
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, asansörün hemen yanındaki odadır.", "kat": "1kat"},
 }    
+
 # 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
@@ -145,9 +146,9 @@ DIGER_ALANLAR = {
     "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdiğinizde sağ tarafınızda yer almaktadır.", "kat": "zemin"},
     "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde hemen sağ köşededir.", "kat": "zemin"},
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde tam karşınızda.", "kat": "zemin"},
-    "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir .", "kat": "zemin"},
+    "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Lütfen ana binadan çıkıp diğer binaya geçiş yapınız.", "kat": ""},
-    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"}
+    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "kat": "zemin"}
 }
 
 # ==============================================================================
@@ -156,7 +157,6 @@ DIGER_ALANLAR = {
 ses_sonucu = sesle_arama_motoru()
 varsayilan_secim = "Seçim Yapınız..."
 
-# Resmi Streamlit-JS Köprüsü üzerinden gelen veriyi kontrol et
 if ses_sonucu is not None and str(ses_sonucu).strip() != "":
     seslenilen_kelime = str(ses_sonucu).lower()
     tum_birimler = list(POLIKLINIKLER.keys()) + list(DIGER_ALANLAR.keys())
@@ -169,9 +169,7 @@ if ses_sonucu is not None and str(ses_sonucu).strip() != "":
 # ARAYÜZ KATMANI
 # ==============================================================================
 st.write("### 👇 Lütfen Gitmek İstediğiniz Kategoriyi Seçiniz:")
-kategori_varsayilan = 0
-if varsayilan_secim in DIGER_ALANLAR:
-    kategori_varsayilan = 1
+kategori_varsayilan = 1 if varsayilan_secim in DIGER_ALANLAR else 0
 
 kategori = st.radio("Navigasyon Modu", ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], index=kategori_varsayilan, horizontal=True, label_visibility="collapsed")
 st.write("---")
@@ -212,5 +210,5 @@ elif "Genel ve İdari" in kategori:
             if veri["kat"]:
                 kroki_goster(veri["kat"])
 
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Sesli Ditital Yönlendirme Sistemi v1.7")
+st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi v1.7")
 
