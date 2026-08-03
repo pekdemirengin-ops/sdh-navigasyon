@@ -33,7 +33,7 @@ def otomatik_sesli_oku(metin):
 # İlk açılışta tek seferlik karşılama anonsu
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # 🚀 AKILLI GÖRSEL BULUCU MOTORU (Uzantı Sorununu Çözer)
 def kroki_goster(kat_adi):
@@ -136,6 +136,6 @@ elif "Genel ve İdari" in kategori:
             otomatik_sesli_oku(f"{secim} için yol tarifi. {DIGER_ALANLAR[secim]['tarif']}")
             if DIGER_ALANLAR[secim]['kat']:
                 kroki_goster(DIGER_ALANLAR[secim]['kat'])
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi (Engin PEKDEMİR) ")
+st.caption("🤖 Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR) ")
 
 
