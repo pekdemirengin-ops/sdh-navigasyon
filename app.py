@@ -110,7 +110,7 @@ if "karsilandi" not in st.session_state:
 # 🚀 HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
-col1, col2, col3, col4, col5, = st.columns(5)
+col1, col2, col3, col4, col5, col6, col7, = st.columns(7)
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
@@ -134,7 +134,12 @@ with col4:
 with col5:
     if st.button("🚻 WC", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
-
+with col6:
+    if st.button("Sağlık Kurulu Kayıt", use_container_width=True):
+        birim_sec("Sağlık Kurulu Kayıt")
+with col7:
+    if st.button("Hasta Kayıt", use_container_width=True):
+        birim_sec("Hasta Kayıt")
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
 # ==============================================================================
