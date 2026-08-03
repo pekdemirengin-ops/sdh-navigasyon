@@ -129,7 +129,7 @@ with col3:
 with col4:
     if st.button("ASANSÖR", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
-with col4:
+with col5:
     if st.button("🚻 WC", use_container_width=True):
         birim_sec("Asansör")
 # ==============================================================================
