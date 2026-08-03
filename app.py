@@ -166,7 +166,7 @@ else:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
     secim = st.selectbox(
-        "Aradığınız DİĞER BİRİMLER seçiniz:", 
+        "Aradığınız Yeri seçiniz:", 
         liste_alan, 
         key="secilen_birim"
     )
