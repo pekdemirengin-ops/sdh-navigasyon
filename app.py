@@ -8,49 +8,6 @@ from PIL import Image
 st.set_page_config(page_title="SDH Navigasyon", page_icon="🏥", layout="centered")
 
 # ==============================================================================
-# 🚀 OTOMATİK SESLİ TARİF MOTORU (Text-to-Speech)
-# ==============================================================================
-def otomatik_sesli_oku(metin):
-    """Tarayıcı üzerinden belirtilen metni otomatik olarak seslendirir."""
-    if metin and metin.strip():
-        okunacak_metin = metin.replace("1. Kat", "Birinci Kat").replace("1. kat", "Birinci kat")
-        temiz_metin = okunacak_metin.replace("'", "\\'").replace('"', '\\"')
-        js_kodu = f"""
-        <script>
-            var msg = new SpeechSynthesisUtterance('{temiz_metin}');
-            msg.lang = 'tr-TR';
-            msg.rate = 1.0; 
-            msg.pitch = 1.0; 
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(msg);
-        </script>
-        """
-        st.components.v1.html(js_kodu, height=0)
-
-# ==============================================================================
-# 🖼️ AKILLI GÖRSEL BULUCU MOTORU
-# ==============================================================================
-def kroki_goster(kat_adi):
-    """Klasörde kat_adi ile başlayan (png, jpg, jpeg vb.) herhangi bir resmi bulur."""
-    hedef_prefix = "zemin_kat" if kat_adi == "zemin" else "birinci_kat"
-    bulunan_dosya = None
-    
-    if os.path.exists("."):
-        for dosya in os.listdir("."):
-            if dosya.lower().startswith(hedef_prefix):
-                bulunan_dosya = dosya
-                break
-                
-    if bulunan_dosya:
-        try:
-            image = Image.open(bulunan_dosya)
-            st.image(image, caption=f"🗺️ Resmi {kat_adi.upper()} Krokisi", use_container_width=True)
-        except Exception as e:
-            st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
-    else:
-        st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
-
-# ==============================================================================
 # 🗄️ VERİ TABANI
 # ==============================================================================
 POLIKLINIKLER = {
@@ -94,8 +51,50 @@ DIGER_ALANLAR = {
     "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "kat": "zemin"}
 }
 
+# Session State Başlatma
+if "secilen_birim" not in st.session_state:
+    st.session_state["secilen_birim"] = "Seçim Yapınız..."
+if "kategori" not in st.session_state:
+    st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+
 # ==============================================================================
-# 📱 BAŞLIK VE İLK KARŞILAMA
+# 🚀 SES BİLEŞENİ & KROKİ
+# ==============================================================================
+def otomatik_sesli_oku(metin):
+    if metin and metin.strip():
+        okunacak_metin = metin.replace("1. Kat", "Birinci Kat").replace("1. kat", "Birinci kat")
+        temiz_metin = okunacak_metin.replace("'", "\\'").replace('"', '\\"')
+        js_kodu = f"""
+        <script>
+            var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+            msg.lang = 'tr-TR';
+            msg.rate = 1.0; 
+            msg.pitch = 1.0; 
+            window.speechSynthesis.cancel();
+            window.speechSynthesis.speak(msg);
+        </script>
+        """
+        st.components.v1.html(js_kodu, height=0)
+
+def kroki_goster(kat_adi):
+    hedef_prefix = "zemin_kat" if kat_adi == "zemin" else "birinci_kat"
+    bulunan_dosya = None
+    if os.path.exists("."):
+        for dosya in os.listdir("."):
+            if dosya.lower().startswith(hedef_prefix):
+                bulunan_dosya = dosya
+                break
+    if bulunan_dosya:
+        try:
+            image = Image.open(bulunan_dosya)
+            st.image(image, caption=f"🗺️ Resmi {kat_adi.upper()} Krokisi", use_container_width=True)
+        except Exception as e:
+            st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
+    else:
+        st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
+
+# ==============================================================================
+# 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
 st.title("🏥 SDH Barajyolu Ek Hizmet Binası")
 st.subheader("SDH Yapay Zeka Navigasyonu")
@@ -106,24 +105,30 @@ if "karsilandi" not in st.session_state:
     otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # ==============================================================================
-# ⚡ EKLENTİ 1: HIZLI ERİŞİM BUTONLARI (SIK KULLANILANLAR)
+# 🚀 HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
 col1, col2, col3, col4 = st.columns(4)
 
-hizli_secim = None
+def birim_sec(birim_adi):
+    st.session_state["secilen_birim"] = birim_adi
+    if birim_adi in DIGER_ALANLAR:
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+    else:
+        st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+
 with col1:
     if st.button("🩸 Kan Alma", use_container_width=True):
-        hizli_secim = "Kan Alma"
+        birim_sec("Kan Alma")
 with col2:
     if st.button("🚻 WC", use_container_width=True):
-        hizli_secim = "Tuvaletler / Lavabolar (WC)"
+        birim_sec("Tuvaletler / Lavabolar (WC)")
 with col3:
     if st.button("📋 Vezne", use_container_width=True):
-        hizli_secim = "Evrak Kayıt / Vezne"
+        birim_sec("Evrak Kayıt / Vezne")
 with col4:
     if st.button("🏥 Heyet", use_container_width=True):
-        hizli_secim = "Sağlık Kurulu / Heyet Odası"
+        birim_sec("Sağlık Kurulu / Heyet Odası")
 
 # ==============================================================================
 # 🔍 AKILLI ARAMA MOTORU
@@ -131,76 +136,78 @@ with col4:
 st.write("---")
 st.write("### 🔍 Birim Arama")
 
-arama_input = st.text_input(
+def arama_yapildi():
+    aranan = st.session_state["arama_kutusu"].lower().strip()
+    if aranan:
+        tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
+        for birim in tum_birimler:
+            if aranan in birim.lower() and birim != "Seçim Yapınız...":
+                birim_sec(birim)
+                break
+
+st.text_input(
     "Aramak istediğiniz birimi yazın veya mikrofona söyleyin:",
     placeholder="Örn: Dahiliye, Göz, Kan Alma, WC...",
-    key="akilli_arama"
+    key="arama_kutusu",
+    on_change=arama_yapildi
 )
 
-varsayilan_secim = "Seçim Yapınız..."
-
-# Hızlı buton seçildiyse öncelik ver
-if hizli_secim:
-    varsayilan_secim = hizli_secim
-elif arama_input and arama_input.strip() != "":
-    aranan = arama_input.lower().strip()
-    tum_birimler = list(POLIKLINIKLER.keys()) + list(DIGER_ALANLAR.keys())
-    for birim in tum_birimler:
-        if aranan in birim.lower() and birim != "Seçim Yapınız...":
-            varsayilan_secim = birim
-            break
-
 # ==============================================================================
-# 🖥️ ARAYÜZ KATMANI
+# 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
 # ==============================================================================
-kategori_varsayilan = 1 if varsayilan_secim in DIGER_ALANLAR else 0
+st.write("---")
 
 kategori = st.radio(
     "Navigasyon Modu", 
     ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
-    index=kategori_varsayilan,
+    key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
 )
 
-st.write("---")
-
 if "Poliklinikler" in kategori:
     liste = list(POLIKLINIKLER.keys())
-    idx = liste.index(varsayilan_secim) if varsayilan_secim in POLIKLINIKLER else 0
-    secim = st.selectbox("Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", liste, index=idx)
     
-    if secim != "Seçim Yapınız...":
-        veri = POLIKLINIKLER[secim]
-        if veri['fancy']:
-            st.error(f"🎯 **Hedef Birim:** {secim}")
-            st.error(f"🚶 **Yönlendirme:** {veri['tarif']}")
-            otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
-        else:
-            st.success(f"🎯 **Hedef Birim:** {secim}")
-            st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {veri['tarif']}")
-            otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
-            if veri['kat']:
-                kroki_goster(veri['kat'])
+    # Seçilen birim geçerli listede yoksa sıfırla
+    if st.session_state["secilen_birim"] not in liste:
+        st.session_state["secilen_birim"] = "Seçim Yapınız..."
+        
+    secim = st.selectbox(
+        "Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", 
+        liste, 
+        key="secilen_birim"
+    )
 
-elif "Genel ve İdari" in kategori:
+else:
     liste_alan = list(DIGER_ALANLAR.keys())
-    idx_alan = liste_alan.index(varsayilan_secim) if varsayilan_secim in DIGER_ALANLAR else 0
-    secim = st.selectbox("Aradığınız Genel veya İdari Birimi seçiniz:", liste_alan, index=idx_alan)
     
-    if secim != "Seçim Yapınız...":
-        veri = DIGER_ALANLAR[secim]
-        if veri['fancy']:
-            st.error(f"🎯 **Hedef Alan:** {secim}")
-            st.error(f"🚶 **Yönlendirme:** {veri['tarif']}")
-            otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
-        else:
-            st.success(f"🎯 **Hedef Alan:** {secim}")
-            st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {veri['tarif']}")
-            otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
-            if veri['kat']:
-                kroki_goster(veri['kat'])
+    # Seçilen birim geçerli listede yoksa sıfırla
+    if st.session_state["secilen_birim"] not in liste_alan:
+        st.session_state["secilen_birim"] = "Seçim Yapınız..."
+        
+    secim = st.selectbox(
+        "Aradığınız Genel veya İdari Birimi seçiniz:", 
+        liste_alan, 
+        key="secilen_birim"
+    )
+
+# ==============================================================================
+# 📣 YÖNLENDİRME SONUCU VE SESLENDİRME
+# ==============================================================================
+if secim != "Seçim Yapınız...":
+    tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
+    veri = tum_birimler[secim]
+    
+    if veri['fancy']:
+        st.error(f"🎯 **Hedef Birim:** {secim}")
+        st.error(f"🚶 **Yönlendirme:** {veri['tarif']}")
+        otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
+    else:
+        st.success(f"🎯 **Hedef Birim:** {secim}")
+        st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {veri['tarif']}")
+        otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
+        if veri['kat']:
+            kroki_goster(veri['kat'])
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
-
 
