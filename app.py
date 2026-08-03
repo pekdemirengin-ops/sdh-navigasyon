@@ -174,7 +174,7 @@ if "Poliklinikler" in kategori:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
     secim = st.selectbox(
-        "Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", 
+        "GİTMEK İSTEDİĞİNİZ POLİKLİNİĞİ SEÇİNİZ:", 
         liste, 
         key="secilen_birim"
     )
