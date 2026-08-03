@@ -160,7 +160,7 @@ st.write("---")
 
 kategori = st.radio(
     "Navigasyon Modu", 
-    ["🏥 POLİKLİNİKLER", "⚙️ Genel ve İdari Birimler"], 
+    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
     key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
