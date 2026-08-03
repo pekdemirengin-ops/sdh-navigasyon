@@ -118,16 +118,16 @@ def birim_sec(birim_adi):
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 with col1:
-    if st.button("🩸 Kan Alma", use_container_width=True):
+    if st.button("🩸 KAN ALMA", use_container_width=True):
         birim_sec("Kan Alma")
 with col2:
     if st.button("🚻 WC", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
 with col3:
-    if st.button("📋 Vezne", use_container_width=True):
+    if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
-    if st.button("🏥 Heyet", use_container_width=True):
+    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
         birim_sec("Sağlık Kurulu / Heyet Odası")
 
 
@@ -138,7 +138,7 @@ st.write("---")
 
 kategori = st.radio(
     "Navigasyon Modu", 
-    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
+    ["🏥 POLİKLİNİKLER", "⚙️ DİĞER BİRİMLER"], 
     key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
