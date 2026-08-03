@@ -121,14 +121,14 @@ with col1:
     if st.button("🩸 KAN ALMA", use_container_width=True):
         birim_sec("Kan Alma")
 with col2:
-    if st.button("🚻 WC", use_container_width=True):
-        birim_sec("Tuvaletler / Lavabolar (WC)")
+    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
+        birim_sec("Sağlık Kurulu / Heyet Odası")
 with col3:
     if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
-    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
-        birim_sec("Sağlık Kurulu / Heyet Odası")
+    if st.button("🚻 WC", use_container_width=True):
+        birim_sec("Tuvaletler / Lavabolar (WC)")
 
 # ==============================================================================
 # 🔍 AKILLI ARAMA MOTORU
