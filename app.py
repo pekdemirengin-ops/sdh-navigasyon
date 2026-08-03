@@ -187,7 +187,7 @@ st.write("---")
 if "Poliklinikler" in kategori:
     # Sesle aranan birim listede varsa onu otomatik seçili getirir
     liste = list(POLIKLINIKLER.keys())
-    idx = liste.index(varsayilan_secim) if varsayilan_secim in POLIKLINIKLER else 0
+    idx = list.index(varsayilan_secim) if varsayilan_secim in POLIKLINIKLER else 0
     
     secim = st.selectbox("Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", liste, index=idx)
     if secim != "Seçim Yapınız...":
@@ -218,7 +218,8 @@ elif "Genel ve İdari" in kategori:
         else:
             st.success(f"🎯 Hedef Alan: {secim}")
             st.warning(f"🚶 Resmi Plan Yol Tarifi: {veri['tarif']}")
-            otomatik_sesli_oku(f"{secim} için yol tarifi. {DIGER_ALANLAR[secim]['tarif']}")
+            # 📌 Hatanın Düzeltildiği Yer: Metin yapısı veri nesnesi üzerinden güvenli hale getirildi
+            otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
             if veri["kat"]:
                 kroki_goster(veri["kat"])
 
