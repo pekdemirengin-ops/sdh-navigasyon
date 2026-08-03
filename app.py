@@ -55,7 +55,7 @@ DIGER_ALANLAR = {
 if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
-    st.session_state["kategori"] = "🏥 POLİKLİNİKLER"
+    st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 # ==============================================================================
 # 🚀 SES BİLEŞENİ & KROKİ
@@ -115,7 +115,7 @@ def birim_sec(birim_adi):
     if birim_adi in DIGER_ALANLAR:
         st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     else:
-        st.session_state["kategori"] = "🏥 POLİKLİNİKLER"
+        st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 with col1:
     if st.button("🩸 Kan Alma", use_container_width=True):
@@ -124,12 +124,11 @@ with col2:
     if st.button("🚻 WC", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
 with col3:
-    if st.button("📋 VEZNE", use_container_width=True):
+    if st.button("📋 Vezne", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
-    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
+    if st.button("🏥 Heyet", use_container_width=True):
         birim_sec("Sağlık Kurulu / Heyet Odası")
-
 
 
 # ==============================================================================
@@ -139,7 +138,7 @@ st.write("---")
 
 kategori = st.radio(
     "Navigasyon Modu", 
-    ["🏥 POLİKLİNİKLER", "⚙️ DİĞER BİRİMLER"], 
+    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
     key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
@@ -166,7 +165,7 @@ else:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
     secim = st.selectbox(
-        "Aradığınız Yeri seçiniz:", 
+        "Aradığınız Genel veya İdari Birimi seçiniz:", 
         liste_alan, 
         key="secilen_birim"
     )
