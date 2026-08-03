@@ -42,7 +42,7 @@ POLIKLINIKLER = {
 
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
-    "Sağlık Kurulu Kayıt": {"fancy": False, "tarif": "Ana girişten sola dönün. Koridorun sol tarafında ilk odadır.", "kat": "zemin"}
+    "Sağlık Kurulu Kayıt": {"fancy": False, "tarif": "Zenin kat - Ana girişten sola dönün. Koridorun sol tarafında ilk odadır.", "kat": "zemin"}
     "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Koridorun sonunda yer almaktadır.", "kat": "zemin"},
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Ana girişten tam karşınızda.", "kat": "zemin"},
     "Hasta Kayıt": {"fancy": False, "tarif": "Ana girişte sol tarafta yer alır. .", "kat": "zemin"}
