@@ -10,12 +10,11 @@ st.subheader("SDH Yapay Zeka Navigasyonu")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 # ==============================================================================
-# 🚀 OTOMATİK SESLİ TARİF MOTORU (Sadece bu kısım eklenmiştir)
+# 🚀 OTOMATİK SESLİ TARİF MOTORU
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     """Tarayıcı üzerinden belirtilen metni otomatik olarak seslendirir."""
     if metin and metin.strip():
-        # Ses motorunun "1. Kat" ifadesini düzgün okuması için geçici dönüştürme yapıyoruz
         okunacak_metin = metin.replace("1. Kat", "Birinci Kat").replace("1. kat", "Birinci kat")
         temiz_metin = okunacak_metin.replace("'", "\\'").replace('"', '\\"')
         js_kodu = f"""
@@ -33,15 +32,73 @@ def otomatik_sesli_oku(metin):
 # İlk açılışta tek seferlik karşılama anonsu
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
 
-# 🚀 AKILLI GÖRSEL BULUCU MOTORU (Uzantı Sorununu Çözer)
+# ==============================================================================
+# 🎙️ SES TANIMA (MİKROFON) MOTORU
+# ==============================================================================
+def sesle_arama_motoru():
+    """Vatandaşın sesini dinler ve arama kutusuna yazar."""
+    js_ses_kodu = """
+    <div style="text-align: center; margin-bottom: 15px;">
+        <button id="mic-btn" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%;">
+            🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)
+        </button>
+        <p id="status-text" style="color: gray; font-size: 14px; margin-top: 5px;">Mikrofona basıp gitmek istediğiniz yeri söyleyin.</p>
+    </div>
+    <script>
+        const btn = document.getElementById('mic-btn');
+        const status = document.getElementById('status-text');
+        
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            btn.onclick = function() {
+                recognition.start();
+                btn.style.backgroundColor = '#5cb85c';
+                btn.innerText = '🔴 Sizi Dinliyorum...';
+                status.innerText = 'Şimdi hastane içindeki birimi söyleyin...';
+            };
+
+            recognition.onresult = function(event) {
+                const sonucMetni = event.results[0][0].transcript;
+                btn.style.backgroundColor = '#d9534f';
+                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
+                status.innerText = 'Anlaşılan: "' + sonucMetni + '"';
+                
+                // Streamlit'e veriyi gizli bir input veya URL parametresi üzerinden pasla
+                window.parent.postMessage({type: 'streamlit:setComponentValue', value: sonucMetni}, '*');
+            };
+
+            recognition.onerror = function(event) {
+                btn.style.backgroundColor = '#d9534f';
+                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
+                status.innerText = 'Ses anlaşılamadı, lütfen tekrar deneyin.';
+            };
+            
+            recognition.onend = function() {
+                btn.style.backgroundColor = '#d9534f';
+                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
+            };
+        } else {
+            btn.style.display = 'none';
+            status.innerText = 'Tarayıcınız ses tanıma özelliğini desteklemiyor.';
+        }
+    </script>
+    """
+    # HTML ve JS kodunu Streamlit'e enjekte eder ve dönen sonucu yakalar
+    return st.components.v1.html(js_ses_kodu, height=90, scrolling=False)
+
+# 🚀 AKILLI GÖRSEL BULUCU MOTORU
 def kroki_goster(kat_adi):
     """Klasörde kat_adi ile başlayan (png, jpg, jpeg vb.) herhangi bir resmi bulur."""
     hedef_prefix = "zemin_kat" if kat_adi == "zemin" else "birinci_kat"
     bulunan_dosya = None
     
-    # Klasördeki tüm dosyaları tara ve uzantısına bakmaksızın ismi eşleşeni bul
     if os.path.exists("."):
         for dosya in os.listdir("."):
             if dosya.lower().startswith(hedef_prefix):
@@ -87,8 +144,7 @@ POLIKLINIKLER = {
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, asansörün hemen yanındaki odadır.", "kat": "1kat"},
     "Konuşma Terapisi Birimi": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sol koridorun en sonundaki odadır (Sabim Cimer odasının yanı).", "kat": "1kat"}
 }
-
-# 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
+2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Giriş kapısından sola dönüp ilerleyin koridorun sonunda yer alır.", "kat": "zemin"},
@@ -97,43 +153,74 @@ DIGER_ALANLAR = {
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde tam karşınızda.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir .", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Lütfen ana binadan çıkıp diğer binaya geçiş yapınız.", "kat": ""},
-    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"}
+    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"},
 }
+# ==============================================================================
+# MİKROFON BUTONU VE AKILLI EŞLEŞTİRME SİSTEMİ
+# ==============================================================================
+ses_sonucu = sesle_arama_motoru()
+varsayilan_secim = "Seçim Yapınız..."
 
+# Eğer vatandaş mikrofona basıp konuştuysa, söylenen kelimeye en yakın polikliniği bulur
+if ses_sonucu is not None and str(ses_sonucu).strip() != "":
+    seslenilen_kelime = str(ses_sonucu).lower()
+    # Hem poliklinikler hem diğer alanlar içinde akıllı arama yapar
+    tum_birimler = list(POLIKLINIKLER.keys()) + list(DIGER_ALANLAR.keys())
+    for birim in tum_birimler:
+        if seslenilen_kelime in birim.lower() and birim != "Seçim Yapınız...":
+            varsayilan_secim = birim
+            break
+
+# ==============================================================================
 # ARAYÜZ KATMANI
+# ==============================================================================
 st.write("### 👇 Lütfen Gitmek İstediğiniz Kategoriyi Seçiniz:")
-kategori = st.radio("Navigasyon Modu", ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], horizontal=True, label_visibility="collapsed")
+
+# Eğer sesli aramada idari bir alan bulunduysa radyoyu otomatik "Genel ve İdari Birimler" yapar
+kategori_varsayilan = 0
+if varsayilan_secim in DIGER_ALANLAR:
+    kategori_varsayilan = 1
+
+kategori = st.radio("Navigasyon Modu", ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], index=kategori_varsayilan, horizontal=True, label_visibility="collapsed")
 st.write("---")
 
 if "Poliklinikler" in kategori:
-    secim = st.selectbox("Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", list(POLIKLINIKLER.keys()))
+    # Sesle aranan birim listede varsa onu otomatik seçili getirir
+    liste = list(POLIKLINIKLER.keys())
+    idx = liste.index(varsayilan_secim) if varsayilan_secim in POLIKLINIKLER else 0
+    
+    secim = st.selectbox("Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", liste, index=idx)
     if secim != "Seçim Yapınız...":
-        if POLIKLINIKLER[secim]['fancy']:
-            st.error(f"🎯 **Hedef Birim:** {secim}")
-            st.error(f"🚶 **Yönlendirme:** {POLIKLINIKLER[secim]['tarif']}")
-            # 🔊 SESLİ OKUMA ENTEGRASYONU
-            otomatik_sesli_oku(f"Dikkat. {POLIKLINIKLER[secim]['tarif']}")
+        veri = POLIKLINIKLER[secim]
+        if veri['fancy']:
+            st.error(f"🎯 Hedef Birim: {secim}")
+            st.error(f"🚶 Yönlendirme: {veri['tarif']}")
+            otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
         else:
-            st.success(f"🎯 **Hedef Birim:** {secim}")
-            st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {POLIKLINIKLER[secim]['tarif']}")
-            # 🔊 SESLİ OKUMA ENTEGRASYONU
-            otomatik_sesli_oku(f"{secim} için yol tarifi. {POLIKLINIKLER[secim]['tarif']}")
-            if POLIKLINIKLER[secim]['kat']:
-                kroki_goster(POLIKLINIKLER[secim]['kat'])
+            st.success(f"🎯 Hedef Birim: {secim}")
+            st.warning(f"🚶 Resmi Plan Yol Tarifi: {veri['tarif']}")
+            otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
+            if veri["kat"]:
+                kroki_goster(veri["kat"])
 
 elif "Genel ve İdari" in kategori:
-    secim = st.selectbox("Aradığınız Genel veya İdari Birimi seçiniz:", list(DIGER_ALANLAR.keys()))
+    # Sesle aranan birim listede varsa onu otomatik seçili getirir
+    liste_alan = list(DIGER_ALANLAR.keys())
+    idx_alan = liste_alan.index(varsayilan_secim) if varsayilan_secim in DIGER_ALANLAR else 0
+    
+    secim = st.selectbox("Aradığınız Genel veya İdari Birimi seçiniz:", liste_alan, index=idx_alan)
     if secim != "Seçim Yapınız...":
-        if DIGER_ALANLAR[secim]['fancy']:
+        veri = DIGER_ALANLAR[secim]
+        if veri['fancy']:
             st.error(f"🎯 Hedef Alan: {secim}")
-            st.error(f"🚶 Yönlendirme: {DIGER_ALANLAR[secim]['tarif']}")
-            # 🔊 SESLİ OKUMA ENTEGRASYONU
-            otomatik_sesli_oku(f"Dikkat. {DIGER_ALANLAR[secim]['tarif']}")
+            st.error(f"🚶 Yönlendirme: {veri['tarif']}")
+            otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
         else:
             st.success(f"🎯 Hedef Alan: {secim}")
-            st.warning(f"🚶 Resmi Plan Yol Tarifi: {DIGER_ALANLAR[secim]['tarif']}")
-            # 🔊 SESLİ OKUMA ENTEGRASYONU
+            st.warning(f"🚶 Resmi Plan Yol Tarifi: {veri['tarif']}")
             otomatik_sesli_oku(f"{secim} için yol tarifi. {DIGER_ALANLAR[secim]['tarif']}")
-            if DIGER_ALANLAR[secim]['kat']:
-                kroki_goster(DIGER_ALANLAR[secim]['kat'])
-st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Resmi Navigasyon Sistemi (Engin PEKDEMİR) ")
+            if veri["kat"]:
+                kroki_goster(veri["kat"])
+
+st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Sesli Ditital Yönlendirme Sistemi v1.7")
+
