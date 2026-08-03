@@ -137,6 +137,7 @@ POLIKLINIKLER = {
     "Heyet Üroloji Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, sol sıradaki ilk odadır (Göz Heyet odasının yanı).", "kat": "1kat"},
     "Diyetisyen (Heyet Diyet)": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdikten sonra tam karşınızda. Ortopedi Heyet odasının yanındadır.", "kat": "zemin"},
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, asansörün hemen yanındaki odadır.", "kat": "1kat"},
+}    
 # 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
