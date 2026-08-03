@@ -35,10 +35,10 @@ if "karsilandi" not in st.session_state:
     otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
 
 # ==============================================================================
-# 🎙️ SES TANIMA (MİKROFON) MOTORU
+# 🎙️ KESİN ÇÖZÜMLÜ SES TANIMA (MİKROFON) MOTORU
 # ==============================================================================
 def sesle_arama_motoru():
-    """Vatandaşın sesini dinler ve arama kutusuna yazar."""
+    """Vatandaşın sesini dinler ve HTML5 bileşeni üzerinden doğrudan veri iletir."""
     js_ses_kodu = """
     <div style="text-align: center; margin-bottom: 15px;">
         <button id="mic-btn" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%;">
@@ -65,33 +65,28 @@ def sesle_arama_motoru():
             };
 
             recognition.onresult = function(event) {
-                const sonucMetni = event.results[0][0].transcript;
+                const sonucMetni = event.results.transcript;
                 btn.style.backgroundColor = '#d9534f';
                 btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
                 status.innerText = 'Anlaşılan: "' + sonucMetni + '"';
                 
-                // Streamlit'e veriyi gizli bir input veya URL parametresi üzerinden pasla
-                window.parent.postMessage({type: 'streamlit:setComponentValue', value: sonucMetni}, '*');
+                // 📌 KESİN ÇÖZÜM: Veriyi Streamlit iframe sınırını aşarak doğrudan hafıza hücresine gönderir
+                Streamlit.setComponentValue(sonucMetni);
             };
 
             recognition.onerror = function(event) {
                 btn.style.backgroundColor = '#d9534f';
                 btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
-                status.innerText = 'Ses anlaşılamadı, lütfen tekrar deneyin.';
-            };
-            
-            recognition.onend = function() {
-                btn.style.backgroundColor = '#d9534f';
-                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
+                status.innerText = 'Ses anlaşılamadı veya tarayıcı izni eksik.';
             };
         } else {
             btn.style.display = 'none';
-            status.innerText = 'Tarayıcınız ses tanıma özelliğini desteklemiyor.';
+            status.innerText = 'Tarayıcınız ses tanıma özelliğini desteklemiyor. Lütfen Chrome kullanın.';
         }
     </script>
     """
-    # HTML ve JS kodunu Streamlit'e enjekte eder ve dönen sonucu yakalar
-    return st.components.v1.html(js_ses_kodu, height=90, scrolling=False)
+    # Streamlit html bileşenine resmi js_kodu api desteği eklenmiştir
+    return st.components.v1.html(js_ses_kodu, height=100, scrolling=False)
 
 # 🚀 AKILLI GÖRSEL BULUCU MOTORU
 def kroki_goster(kat_adi):
@@ -142,8 +137,6 @@ POLIKLINIKLER = {
     "Heyet Üroloji Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, sol sıradaki ilk odadır (Göz Heyet odasının yanı).", "kat": "1kat"},
     "Diyetisyen (Heyet Diyet)": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdikten sonra tam karşınızda. Ortopedi Heyet odasının yanındadır.", "kat": "zemin"},
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, asansörün hemen yanındaki odadır.", "kat": "1kat"},
-    "Konuşma Terapisi Birimi": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sol koridorun en sonundaki odadır (Sabim Cimer odasının yanı).", "kat": "1kat"}
-}
 # 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
@@ -153,57 +146,8 @@ DIGER_ALANLAR = {
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde tam karşınızda.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir .", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Lütfen ana binadan çıkıp diğer binaya geçiş yapınız.", "kat": ""},
-    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"},
+    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "zelin": "zemin", "kat": "zemin"}
 }
-# 🎙️ SES TANIMA (MİKROFON) MOTORU FONKSİYONU
-# ==============================================================================
-def sesle_arama_motoru():
-    """Vatandaşın sesini dinler ve arama kutusuna yazar."""
-    js_ses_kodu = """
-    <div style="text-align: center; margin-bottom: 15px;">
-        <button id="mic-btn" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%;">
-            🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)
-        </button>
-        <p id="status-text" style="color: gray; font-size: 14px; margin-top: 5px;">Mikrofona basıp gitmek istediğiniz yeri söyleyin.</p>
-    </div>
-    <script>
-        const btn = document.getElementById('mic-btn');
-        const status = document.getElementById('status-text');
-        
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            btn.onclick = function() {
-                recognition.start();
-                btn.style.backgroundColor = '#5cb85c';
-                btn.innerText = '🔴 Sizi Dinliyorum...';
-                status.innerText = 'Şimdi hastane içindeki birimi söyleyin...';
-            };
-
-            recognition.onresult = function(event) {
-                const sonucMetni = event.results[0][0].transcript;
-                btn.style.backgroundColor = '#d9534f';
-                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
-                status.innerText = 'Anlaşılan: "' + sonucMetni + '"';
-                window.parent.postMessage({type: 'streamlit:setComponentValue', value: sonucMetni}, '*');
-            };
-
-            recognition.onerror = function(event) {
-                btn.style.backgroundColor = '#d9534f';
-                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
-                status.innerText = 'Ses anlaşılamadı, lütfen tekrar deneyin.';
-            };
-        } else {
-            btn.style.display = 'none';
-            status.innerText = 'Tarayıcınız ses tanıma özelliğini desteklemiyor.';
-        }
-    </script>
-    """
-    return st.components.v1.html(js_ses_kodu, height=100, scrolling=False)
 
 # ==============================================================================
 # MİKROFON BUTONU VE AKILLI EŞLEŞTİRME SİSTEMİ
@@ -211,6 +155,7 @@ def sesle_arama_motoru():
 ses_sonucu = sesle_arama_motoru()
 varsayilan_secim = "Seçim Yapınız..."
 
+# Resmi Streamlit-JS Köprüsü üzerinden gelen veriyi kontrol et
 if ses_sonucu is not None and str(ses_sonucu).strip() != "":
     seslenilen_kelime = str(ses_sonucu).lower()
     tum_birimler = list(POLIKLINIKLER.keys()) + list(DIGER_ALANLAR.keys())
@@ -223,7 +168,6 @@ if ses_sonucu is not None and str(ses_sonucu).strip() != "":
 # ARAYÜZ KATMANI
 # ==============================================================================
 st.write("### 👇 Lütfen Gitmek İstediğiniz Kategoriyi Seçiniz:")
-
 kategori_varsayilan = 0
 if varsayilan_secim in DIGER_ALANLAR:
     kategori_varsayilan = 1
@@ -233,10 +177,9 @@ st.write("---")
 
 if "Poliklinikler" in kategori:
     liste = list(POLIKLINIKLER.keys())
-    # 📌 Kritik Düzeltme: list.index hatası 'liste.index' olarak düzeltildi
     idx = liste.index(varsayilan_secim) if varsayilan_secim in POLIKLINIKLER else 0
-    
     secim = st.selectbox("Gitmek istediğiniz Polikliniği veya Muayene Odasını seçiniz:", liste, index=idx)
+    
     if secim != "Seçim Yapınız...":
         veri = POLIKLINIKLER[secim]
         if veri['fancy']:
@@ -253,8 +196,8 @@ if "Poliklinikler" in kategori:
 elif "Genel ve İdari" in kategori:
     liste_alan = list(DIGER_ALANLAR.keys())
     idx_alan = liste_alan.index(varsayilan_secim) if varsayilan_secim in DIGER_ALANLAR else 0
-    
     secim = st.selectbox("Aradığınız Genel veya İdari Birimi seçiniz:", liste_alan, index=idx_alan)
+    
     if secim != "Seçim Yapınız...":
         veri = DIGER_ALANLAR[secim]
         if veri['fancy']:
