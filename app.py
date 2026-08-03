@@ -31,7 +31,7 @@ POLIKLINIKLER = {
     "Heyet Göz Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sola dönün. Sağ taraftanızda yer alır. (Göz Ölçüm odasının yanı).", "kat": "1kat"},
     "Heyet Kardiyoloji Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun sonunda sol tarafta yer alır.", "kat": "1kat"},
     "Heyet K.B.B. Polikliniği (Oda 1 ve 2)": {"fancy": False, "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Sağ tarafta yer alır.", "kat": "zemin"},
-    "Nöroloji Polikliniği / Heyet Nöroloji": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora yönelin. Sol sırada, Göğüs Hastalıkları ile Genel Cerrahi odalarının arasındadır.", "kat": "1kat"},
+    "Nöroloji Polikliniği / Heyet Nöroloji": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora yönelin. Sol sırada, Heyet Göğüs Hastalıkları ile Genel Cerrahi odalarının arasındadır.", "kat": "1kat"},
     "Heyet Ortopedi Polikliniği": {"fancy": False, "tarif": "Zemin Kat - Ana girişten girdikten sonra tam sola doğru karşınızda yer alır. ", "kat": "zemin"},
     "Heyet Psikiyatri Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağ dönün. koridorun ortasında, Heyet Genel Cerrahi Polikliniği yanında yer alır. .", "kat": "1kat"},
     "Heyet Üroloji Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sola dönün, sol sıradaki ilk odadır. (Göz Heyet Polikliniğinin karşısı).", "kat": "1kat"},
@@ -42,13 +42,13 @@ POLIKLINIKLER = {
 
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
-    "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Giriş kapısından sola dönüp ilerleyin koridorun sonunda yer alır.", "kat": "zemin"},
-    "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdiğinizde sağ tarafınızda yer almaktadır.", "kat": "zemin"},
-    "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde hemen sağ köşededir.", "kat": "zemin"},
-    "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde tam karşınızda.", "kat": "zemin"},
+    "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
+    "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Koridorun sonunda yer almaktadır.", "kat": "zemin"},
+    "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Sağ tarafta ilk odadır.", "kat": "zemin"},
+    "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Ana girişten tam karşınızda.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Lütfen ana binadan çıkıp diğer binaya geçiş yapınız.", "kat": ""},
-    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "kat": "zemin"}
+    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - 1. katta Binanın tam orta kesiminde, zemin katta bankonun hemen yanında yer alır.", "kat": "zemin"}
 }
 
 # Session State Başlatma
