@@ -128,10 +128,10 @@ with col3:
         birim_sec("Evrak Kayıt / Vezne")
 with col4:
     if st.button("ASANSÖR", use_container_width=True):
-        birim_sec("Tuvaletler / Lavabolar (WC)")
+        birim_sec("Asansör")
 with col5:
     if st.button("🚻 WC", use_container_width=True):
-        birim_sec("Asansör")
+        birim_sec("Tuvaletler / Lavabolar (WC)")
 # ==============================================================================
 # 🔍 AKILLI ARAMA MOTORU
 # ==============================================================================
