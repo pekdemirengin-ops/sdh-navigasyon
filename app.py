@@ -108,7 +108,7 @@ if "karsilandi" not in st.session_state:
 # 🚀 HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3, col4, col5, = st.columns(5)
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
