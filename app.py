@@ -55,7 +55,7 @@ DIGER_ALANLAR = {
 if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
-    st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+    st.session_state["kategori"] = "🏥 POLİKLİNİKLER"
 
 # ==============================================================================
 # 🚀 SES BİLEŞENİ & KROKİ
