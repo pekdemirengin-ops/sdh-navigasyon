@@ -3,12 +3,12 @@ import os
 from PIL import Image
 
 # ==============================================================================
-# ⚙️ SAYFA AYARLARI (SHKS Standartlarına Uygun)
+# ⚙️ SAYFA AYARLARI
 # ==============================================================================
-st.set_page_config(page_title="SDH Navigasyon (SHKS)", page_icon="🏥", layout="centered")
+st.set_page_config(page_title="SDH Navigasyon", page_icon="🏥", layout="centered")
 
 # ==============================================================================
-# 🗄️ VERİ TABANI (SHKS VE POLİKLİNİKLER)
+# 🗄️ VERİ TABANI
 # ==============================================================================
 POLIKLINIKLER = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
@@ -17,7 +17,7 @@ POLIKLINIKLER = {
     "Göz-OCT / Göz Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora yönelin. Koridorun ortasında, sol taraftaki odadır (Fizik Tedavi 2 polikliniğinin hemen yanında).", "kat": "1kat"},
     "Solunum Fonksiyon Testi Odası": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca tam sol koridorun en başında, sağ taraftaki odadır.", "kat": "1kat"},
     "İşitme Testi Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sağ taraftaki odadır (Emzirme Odası yanı).", "kat": "1kat"},
-    "Emzirme Odası (SHKS Hijyen Odası)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sağ taraftaki odadır (İşitme Testi yanı).", "kat": "1kat"},
+    "Emzirme Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sağ taraftaki odadır (İşitme Testi yanı).", "kat": "1kat"},
     "Cildiye Heyet Polikliniği (Oda 1 ve 2)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden sağa dönün, sağ tarafta yan yanadır veya asansörden çıkınca sola dönün, sol tarafta yan yanadır.", "kat": "1kat"},
     "Çocuk Hastalıkları Polikliniği (DİĞER BİNA GİRİŞİ)": {"fancy": True, "tarif": "🚨 DİĞER BİNA GİRİŞİNDEDİR! Çocuk hastalıkları poliklinik muayeneleri için lütfen diğer bina girişini kullanınız.", "kat": ""},
     "Heyet Çocuk Polk. (Çözger)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında sol taraftadır (Görme Alanı odasının hemen yanındadır).", "kat": "1kat"},
@@ -42,26 +42,23 @@ POLIKLINIKLER = {
 
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
-    "Hasta Hakları Birimi (SHKS)": {"fancy": False, "tarif": "Zemin Kat - Ana giriş kapısından girdikten sonra sağ koridorda, Danışma arkasındadır.", "kat": "zemin"},
-    "Kalite Yönetim Birimi (SHKS)": {"fancy": False, "tarif": "1. Kat - Asansörden çıkınca sol koridor sonundaki idari alanda yer alır.", "kat": "1kat"},
-    "Engelli WC / Erişilebilir Lavabo (SHKS)": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından sola dönüp koridor boyunca ilerleyin, standart lavaboların hemen yanındadır.", "kat": "zemin"},
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Giriş kapısından sola dönüp ilerleyin koridorun sonunda yer alır.", "kat": "zemin"},
     "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından girdiğinizde sağ tarafınızda yer almaktadır.", "kat": "zemin"},
     "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde hemen sağ köşededir.", "kat": "zemin"},
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Giriş kapısından içeri girdiğinizde tam karşınızda.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Lütfen ana binadan çıkıp diğer binaya geçiş yapınız.", "kat": ""},
-    "Asansör (Engelli & Hasta Uyumlu)": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "kat": "zemin"}
+    "Asansör": {"fancy": False, "tarif": "Zemin ve 1. Kat - Binanın tam orta kesiminde, bankonun hemen yanında yer alır.", "kat": "zemin"}
 }
 
-# Session State Yönetimi
+# Session State Başlatma
 if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 # ==============================================================================
-# 🚀 SES BİLEŞENİ & KROKİ MOTORU
+# 🚀 SES BİLEŞENİ & KROKİ
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
@@ -90,36 +87,25 @@ def kroki_goster(kat_adi):
     if bulunan_dosya:
         try:
             image = Image.open(bulunan_dosya)
-            st.image(image, caption=f"🗺️ SHKS Uyumlu Resmi {kat_adi.upper()} Krokisi", use_container_width=True)
+            st.image(image, caption=f"🗺️ Resmi {kat_adi.upper()} Krokisi", use_container_width=True)
         except Exception as e:
             st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
     else:
         st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
 
 # ==============================================================================
-# 📱 BAŞLIK & KARŞILAMA (SHKS ETİKETLİ)
+# 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
 st.title("🏥 SDH Barajyolu Ek Hizmet Binası")
-st.caption("✅ Sağlıkta Kalite Standartları (SHKS) Sesli Yönlendirme Modülü")
 st.subheader("SDH Yapay Zeka Navigasyonu")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Sağlıkta Kalite Standartlarına uygun dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # ==============================================================================
-# ♿ SHKS BİLGİ & ERİŞİLEBİLİRLİK PANOLARI
-# ==============================================================================
-with st.expander("♿ SHKS Erişilebilirlik ve Hasta Hizmetleri"):
-    st.markdown("""
-    * **♿ Engelli Erişimi:** Binamızda engelli rampsı, engelli asansörü ve zemin katta erişilebilir lavabo mevcuttur.
-    * **🤝 Hasta Hakları:** Şikayet, öneri ve bilgi talepleri için Zemin Kat Hasta Hakları Birimi'ne başvurabilirsiniz.
-    * **🛗 Hasta & Engelli Asansörü:** Ana bina girişinde bankonun sol tarafındadır.
-    """)
-
-# ==============================================================================
-# 🚀 HIZLI ERİŞİM BUTONLARI (SHKS KRİTİK LOKASYONLAR)
+# 🚀 HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
 col1, col2, col3, col4 = st.columns(4)
@@ -127,23 +113,22 @@ col1, col2, col3, col4 = st.columns(4)
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler (SHKS)"
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     else:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 with col1:
-    if st.button("🩸 Kan Alma", use_container_width=True):
+    if st.button("🩸 KAN ALMA", use_container_width=True):
         birim_sec("Kan Alma")
 with col2:
-    if st.button("♿ Engelli WC", use_container_width=True):
-        birim_sec("Engelli WC / Erişilebilir Lavabo (SHKS)")
-with col3:
-    if st.button("🤝 Hasta Hakları", use_container_width=True):
-        birim_sec("Hasta Hakları Birimi (SHKS)")
-with col4:
-    if st.button("🏥 Heyet Odası", use_container_width=True):
+    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
         birim_sec("Sağlık Kurulu / Heyet Odası")
-
+with col3:
+    if st.button("📋 EVRAK KAYIT/VEZNE", use_container_width=True):
+        birim_sec("Evrak Kayıt / Vezne")
+with col4:
+    if st.button("🚻 WC", use_container_width=True):
+        birim_sec("Tuvaletler / Lavabolar (WC)")
 # ==============================================================================
 # 🔍 AKILLI ARAMA MOTORU
 # ==============================================================================
@@ -161,19 +146,18 @@ def arama_yapildi():
 
 st.text_input(
     "Aramak istediğiniz birimi yazın veya mikrofona söyleyin:",
-    placeholder="Örn: Hasta Hakları, Dahiliye, Kan Alma, Engelli WC...",
+    placeholder="Örn: Dahiliye, Göz, Kan Alma, WC...",
     key="arama_kutusu",
     on_change=arama_yapildi
 )
-
 # ==============================================================================
-# 🖥️ ARAYÜZ KATMANI
+# 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
 # ==============================================================================
 st.write("---")
 
 kategori = st.radio(
     "Navigasyon Modu", 
-    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler (SHKS)"], 
+    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
     key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
@@ -181,6 +165,8 @@ kategori = st.radio(
 
 if "Poliklinikler" in kategori:
     liste = list(POLIKLINIKLER.keys())
+    
+    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -192,11 +178,13 @@ if "Poliklinikler" in kategori:
 
 else:
     liste_alan = list(DIGER_ALANLAR.keys())
+    
+    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste_alan:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
     secim = st.selectbox(
-        "Aradığınız Genel, İdari veya Kalite Birimini seçiniz:", 
+        "Aradığınız Genel veya İdari Birimi seçiniz:", 
         liste_alan, 
         key="secilen_birim"
     )
@@ -214,9 +202,9 @@ if secim != "Seçim Yapınız...":
         otomatik_sesli_oku(f"Dikkat. {veri['tarif']}")
     else:
         st.success(f"🎯 **Hedef Birim:** {secim}")
-        st.warning(f"🚶 **SHKS Standardı Yol Tarifi:** {veri['tarif']}")
+        st.warning(f"🚶 **Resmi Plan Yol Tarifi:** {veri['tarif']}")
         otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
         if veri['kat']:
             kroki_goster(veri['kat'])
 
-st.caption("🤖 Barajyolu Ek Hizmet Binası SHKS Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
+st.caption("🤖 Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
