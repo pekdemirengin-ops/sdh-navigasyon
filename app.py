@@ -1,6 +1,7 @@
 ﻿import streamlit as st
 import os
 from PIL import Image
+from streamlit_mic_recorder import speech_to_text
 
 # Sayfa Ayarları
 st.set_page_config(page_title="SDH Navigasyon", page_icon="🏥", layout="centered")
@@ -10,7 +11,7 @@ st.subheader("SDH Yapay Zeka Navigasyonu")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 # ==============================================================================
-# 🚀 OTOMATİK SESLİ TARİF MOTORU
+# 🚀 OTOMATİK SESLİ TARİF MOTORU (Text-to-Speech)
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     """Tarayıcı üzerinden belirtilen metni otomatik olarak seslendirir."""
@@ -32,63 +33,11 @@ def otomatik_sesli_oku(metin):
 # İlk açılışta tek seferlik karşılama anonsu
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi navigasyon sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya sesle arama butonunu kullanınız.")
 
 # ==============================================================================
-# 🎙️ SES TANIMA (MİKROFON) MOTORU
+# 🖼️ AKILLI GÖRSEL BULUCU MOTORU
 # ==============================================================================
-def sesle_arama_motoru():
-    """Vatandaşın sesini dinler ve HTML5 bileşeni üzerinden arayüze aktarır."""
-    js_ses_kodu = """
-    <div style="text-align: center; margin-bottom: 15px;">
-        <button id="mic-btn" style="background-color: #d9534f; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%;">
-            🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)
-        </button>
-        <p id="status-text" style="color: gray; font-size: 14px; margin-top: 5px;">Mikrofona basıp gitmek istediğiniz yeri söyleyin.</p>
-    </div>
-    <script>
-        const btn = document.getElementById('mic-btn');
-        const status = document.getElementById('status-text');
-        
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            btn.onclick = function() {
-                recognition.start();
-                btn.style.backgroundColor = '#5cb85c';
-                btn.innerText = '🔴 Sizi Dinliyorum...';
-                status.innerText = 'Şimdi hastane içindeki birimi söyleyin...';
-            };
-
-            recognition.onresult = function(event) {
-                const sonucMetni = event.results[0][0].transcript;
-                btn.style.backgroundColor = '#d9534f';
-                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
-                status.innerText = 'Anlaşılan: "' + sonucMetni + '"';
-                
-                if (window.Streamlit) {
-                    Streamlit.setComponentValue(sonucMetni);
-                }
-            };
-
-            recognition.onerror = function(event) {
-                btn.style.backgroundColor = '#d9534f';
-                btn.innerText = '🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)';
-                status.innerText = 'Ses anlaşılamadı veya tarayıcı izni eksik.';
-            };
-        } else {
-            btn.style.display = 'none';
-            status.innerText = 'Tarayıcınız ses tanıma özelliğini desteklemiyor. Lütfen Chrome kullanın.';
-        }
-    </script>
-    """
-    return st.components.v1.html(js_ses_kodu, height=100, scrolling=False)
-
-# 🚀 AKILLI GÖRSEL BULUCU MOTORU
 def kroki_goster(kat_adi):
     """Klasörde kat_adi ile başlayan (png, jpg, jpeg vb.) herhangi bir resmi bulur."""
     hedef_prefix = "zemin_kat" if kat_adi == "zemin" else "birinci_kat"
@@ -109,7 +58,10 @@ def kroki_goster(kat_adi):
     else:
         st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı. Lütfen resim ismini kontrol edin.")
 
-# 1. RESMİ PLAN POLİKLİNİKLER VE TIBBİ ODALAR VERİ TABANI
+# ==============================================================================
+# 🗄️ VERİ TABANI
+# ==============================================================================
+# 1. RESMİ PLAN POLİKLİNİKLER VE TIBBİ ODALAR
 POLIKLINIKLER = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Görme Alanı Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkıp sağa dönün. Koridorun ortasında, sol sıradaki odadır (Heyet Çocuk - ÇÖZGER polikliniğinin hemen yanındadır).", "kat": "1kat"},
@@ -139,7 +91,7 @@ POLIKLINIKLER = {
     "Heyet Psikolog": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sol koridorda, asansörün hemen yanındaki odadır.", "kat": "1kat"},
 }    
 
-# 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR VERİ TABANI
+# 2. RESMİ PLAN DİĞER BİRİMLER VE GENEL ALANLAR
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Giriş kapısından sola dönüp ilerleyin koridorun sonunda yer alır.", "kat": "zemin"},
@@ -152,26 +104,54 @@ DIGER_ALANLAR = {
 }
 
 # ==============================================================================
-# MİKROFON BUTONU VE AKILLI EŞLEŞTİRME SİSTEMİ
+# 🎙️ KESİN ÇÖZÜMLÜ PYTHON SES TANIMA SİSTEMİ
 # ==============================================================================
-ses_sonucu = sesle_arama_motoru()
+st.write("### 🎙️ Sesle Arama Yapın")
+
+# Mic Recorder Bileşeni (Anlaşılır Türkçe Dinleyici)
+ses_metni = speech_to_text(
+    language='tr',
+    start_prompt="🎙️ Konuşarak Poliklinik Ara (Mikrofona Basın)",
+    stop_prompt="🔴 Sizi Dinliyorum... (Durdurmak için tekrar basın)",
+    just_once=True,
+    use_container_width=True,
+    key='ses_arama'
+)
+
 varsayilan_secim = "Seçim Yapınız..."
 
-if ses_sonucu is not None and str(ses_sonucu).strip() != "":
-    seslenilen_kelime = str(ses_sonucu).lower()
+# Ses Algılandıysa Eşleştirme Yap
+if ses_metni:
+    st.info(f"🗣️ Algılanan Ses: **\"{ses_metni}\"**")
+    seslenilen_kelime = ses_metni.lower()
     tum_birimler = list(POLIKLINIKLER.keys()) + list(DIGER_ALANLAR.keys())
+    
+    eslesme_bulundu = False
     for birim in tum_birimler:
         if seslenilen_kelime in birim.lower() and birim != "Seçim Yapınız...":
             varsayilan_secim = birim
+            eslesme_bulundu = True
             break
+            
+    if not eslesme_bulundu:
+        st.warning("⚠️ Söylediğiniz birim bulunamadı. Lütfen listeden manuel seçim yapınız.")
 
 # ==============================================================================
-# ARAYÜZ KATMANI
+# 🖥️ ARAYÜZ KATMANI
 # ==============================================================================
+st.write("---")
 st.write("### 👇 Lütfen Gitmek İstediğiniz Kategoriyi Seçiniz:")
+
 kategori_varsayilan = 1 if varsayilan_secim in DIGER_ALANLAR else 0
 
-kategori = st.radio("Navigasyon Modu", ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], index=kategori_varsayilan, horizontal=True, label_visibility="collapsed")
+kategori = st.radio(
+    "Navigasyon Modu", 
+    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
+    index=kategori_varsayilan, 
+    horizontal=True, 
+    label_visibility="collapsed"
+)
+
 st.write("---")
 
 if "Poliklinikler" in kategori:
@@ -210,5 +190,5 @@ elif "Genel ve İdari" in kategori:
             if veri["kat"]:
                 kroki_goster(veri["kat"])
 
-st.caption("🤖  Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi Engin PEKDEMİR v1.7")
+st.caption("🤖 Seyhan Devlet Hastanesi Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi v1.8")
 
