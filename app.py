@@ -43,12 +43,13 @@ POLIKLINIKLER = {
 DIGER_ALANLAR = {
     "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Koridorun sonunda yer almaktadır.", "kat": "zemin"},
+    "Sağlık Kurulu Kayıt": {"fancy": False, "tarif": "Ana girişte sola dönün. Sol taraftaki ilk odadır.", "kat": "zemin"},
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Ana girişten tam karşınızda.", "kat": "zemin"},
-    "Hasta Kayıt": {"fancy": False, "tarif": "Ana girişte sol tarafta yer alır. .", "kat": "zemin"}
+    "Hasta Kayıt": {"fancy": False, "tarif": "Ana girişte sol tarafta yer alır. .", "kat": "zemin"},
     "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Sağ tarafta ilk odadır.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", "kat": "zemin"},
     "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır. ", "kat": ""},
-    "Asansör": {"fancy": False, "tarif": " 1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun hemen yanında yer alır.", "kat": "zemin"}
+    "Asansör": {"fancy": False, "tarif": " 1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun hemen yanında yer alır.", "kat": "zemin"},
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
    }
 
