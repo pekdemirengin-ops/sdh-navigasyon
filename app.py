@@ -96,8 +96,8 @@ def kroki_goster(kat_adi):
 # ==============================================================================
 # 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
-st.title("🏥 SDH Barajyolu Ek Hizmet Binası")
-st.subheader("SDH Yapay Zeka Navigasyonu")
+st.title("🏥 SDH BARAJ YOLU EK HİZMET BİNASI")
+st.subheader("SDH SESLİ DİSİTAL YÖNLENDİRME")
 st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 if "karsilandi" not in st.session_state:
