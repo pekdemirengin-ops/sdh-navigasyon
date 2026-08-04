@@ -1,6 +1,28 @@
 import streamlit as st
 import os
 import re
+import streamlit as st
+import os
+
+# Görselleri uzantısı (.png veya .jpg) ne olursa olsun otomatik bulan fonksiyon
+def kroki_goster(dosya_yolu):
+    if not dosya_yolu:
+        return
+        
+    kok_yol, _ = os.path.splitext(dosya_yolu)
+    
+    # Olası uzantıları kontrol et
+    bulunan_dosya = None
+    for uzanti in [".png", ".jpg", ".jpeg", ".PNG", ".JPG"]:
+        test_yolu = kok_yol + uzanti
+        if os.path.exists(test_yolu):
+            bulunan_dosya = test_yolu
+            break
+            
+    if bulunan_dosya:
+        st.image(bulunan_dosya, caption="Yol Tarifi Krokisi", use_container_width=True)
+    else:
+        st.warning(f"⚠️ Kroki dosyası bulunamadı: `{dosya_yolu}`")
 from PIL import Image
 from streamlit_mic_recorder import speech_to_text
 
