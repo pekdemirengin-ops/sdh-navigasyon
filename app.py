@@ -66,49 +66,49 @@ POLIKLINIKLER = {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
-        "kroki": "krokiler/kroki_heyet_fizik_zemin.png"
+        "kroki": "krokiler/kroki_heyet_fizik_zemin.jpg"
     },
     "Poliklinik Heyet KBB": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
-        "kroki": "krokiler/kroki_heyet_kbb.png"
+        "kroki": "krokiler/kroki_heyet_kbb.jpg"
     },
     "Poliklinik Heyet Ortopedi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
-        "kroki": "krokiler/kroki_heyet_ortopedi.png"
+        "kroki": "krokiler/kroki_heyet_ortopedi.jpg"
     },
     "Kan Alma Birimi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Poliklinik binası girişinden girdikten sonra düz ilerleyip sağ taraftaki Kan Alma odasına geçebilirsiniz.",
-        "kroki": "krokiler/kroki_kan_alma.png"
+        "kroki": "krokiler/kroki_kan_alma.jpg"
     },
     "Sağlık Kurulu": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sağa doğru ilerleyin. Koridorun sonundaki geniş alanda yer almaktadır.",
-        "kroki": "krokiler/kroki_saglik_kurulu.png"
+        "kroki": "krokiler/kroki_saglik_kurulu.jpg"
     },
     "Sağlık Kurulu Kayıt Birimi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten hemen sonra düz devam edin, sol taraftaki bankoda yer almaktadır.",
-        "kroki": "krokiler/kroki_saglik_kurulu_kayit.png"
+        "kroki": "krokiler/kroki_saglik_kurulu_kayit.jpg"
     },
     "Ön Merdivenler": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten girdikten sonra sola yönelin, koridor boyunca düz ilerleyerek ön merdivenlere ulaşabilirsiniz.",
-        "kroki": "krokiler/kroki_on_merdivenler.png"
+        "kroki": "krokiler/kroki_on_merdivenler.jpg"
     },
     "Arka Çıkış": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
-        "kroki": "krokiler/kroki_arka_cikis.png"
+        "kroki": "krokiler/kroki_arka_cikis.jpg"
     },
 
     # ==================== 1. KAT BİRİMLERİ ====================
@@ -116,79 +116,79 @@ POLIKLINIKLER = {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
-        "kroki": "krokiler/kroki_heyet_genel.png"
+        "kroki": "krokiler/kroki_heyet_genel.jpg"
     },
     "Poliklinik Heyet Fizik Tedavi (1. Kat)": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sol tarafta kalmaktadır.",
-        "kroki": "krokiler/kroki_heyet_fizik_1kat.png"
+        "kroki": "krokiler/kroki_heyet_fizik_1kat.jpg"
     },
     "Poliklinik Heyet Nöroloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru son noktaya kadar ilerleyin, sol taraftaki oda.",
-        "kroki": "krokiler/kroki_heyet_noroloji.png"
+        "kroki": "krokiler/kroki_heyet_noroloji.jpg"
     },
     "Görme Alanı Ölçüm Odası": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridorda düz devam edin, sağa dönmeden önceki sol hizada bulunan Alan Görme odasıdır.",
-        "kroki": "krokiler/kroki_alan_gorme.png"
+        "kroki": "krokiler/kroki_alan_gorme.jpg"
     },
     "Poliklinik Heyet Dahiliye": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
-        "kroki": "krokiler/kroki_heyet_dahiliye.png"
+        "kroki": "krokiler/kroki_heyet_dahiliye.jpg"
     },
     "Olgu Göğüs Hastalıkları": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
-        "kroki": "krokiler/kroki_olgu_gogus.png"
+        "kroki": "krokiler/kroki_olgu_gogus.jpg"
     },
     "Poliklinik Heyet Göğüs Hastalıkları": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca hemen sol tarafta yer almaktadır.",
-        "kroki": "krokiler/kroki_heyet_gogus.png"
+        "kroki": "krokiler/kroki_heyet_gogus.jpg"
     },
     "Poliklinik Heyet Göz": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
-        "kroki": "krokiler/kroki_heyet_goz.png"
+        "kroki": "krokiler/kroki_heyet_goz.jpg"
     },
     "Poliklinik Heyet Çocuk": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
-        "kroki": "krokiler/kroki_heyet_cocuk.png"
+        "kroki": "krokiler/kroki_heyet_cocuk.jpg"
     },
     "Konuşma Terapisti Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Arka merdiven koridorunu geçip güney koridoru boyunca düz ilerleyin. Koridorun en sonundaki odadır.",
-        "kroki": "krokiler/kroki_konusma_terapisi.png"
+        "kroki": "krokiler/kroki_konusma_terapisi.jpg"
     },
     "Poliklinik Heyet Kardiyoloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
-        "kroki": "krokiler/kroki_heyet_kardiyoloji.png"
+        "kroki": "krokiler/kroki_heyet_kardiyoloji.jpg"
     },
     "Poliklinik Heyet Üroloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün. Koridorun sonundaki sol oda.",
-        "kroki": "krokiler/kroki_heyet_uroloji.png"
+        "kroki": "krokiler/kroki_heyet_uroloji.jpg"
     },
     "İşitme Testi (ODİO)": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
-        "kroki": "krokiler/kroki_isitme_testi.png"
+        "kroki": "krokiler/kroki_isitme_testi.jpg"
     },
     "Göz OCT Odası": {
         "fancy": False,
@@ -206,28 +206,27 @@ POLIKLINIKLER = {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.",
-        "kroki": "krokiler/kroki_noroloji.png"
+        "kroki": "krokiler/kroki_noroloji.jpg"
     },
     "Poliklinik Psikiyatri": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
-        "kroki": "krokiler/kroki_psikiyatri.png"
+        "kroki": "krokiler/kroki_psikiyatri.jpg"
     },
     "Sabim Cimer Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne (sola) dönün, koridoru takip edin.",
-        "kroki": "krokiler/kroki_cimer.png"
+        "kroki": "krokiler/kroki_cimer.jpg"
     },
     "Solunum Fonksiyon (SFT) Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
-        "kroki": "krokiler/kroki_sft.png"
+        "kroki": "krokiler/kroki_sft.jpg"
     }
 }
-
 ES_ANLAMLILAR = {
     "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu", "kurul": "Sağlık Kurulu",
