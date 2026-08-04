@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import re
 from PIL import Image
 from streamlit_mic_recorder import speech_to_text
 
@@ -91,6 +92,45 @@ DIGER_ALANLAR = {
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
 }
 
+# 🔤 EŞ ANLAMLI VE ARAMA KOLAYLAŞTIRICI SÖZLÜK
+ES_ANLAMLILAR = {
+    "kan": "Kan Alma",
+    "tahlil": "Kan Alma",
+    "laboratuvar": "Kan Alma",
+    "tahlili": "Kan Alma",
+    "wc": "Tuvaletler / Lavabolar (WC)",
+    "lavabo": "Tuvaletler / Lavabolar (WC)",
+    "tuvalet": "Tuvaletler / Lavabolar (WC)",
+    "w.c": "Tuvaletler / Lavabolar (WC)",
+    "heyet": "Sağlık Kurulu / Heyet Odası",
+    "rapor": "Sağlık Kurulu / Heyet Odası",
+    "kulak": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
+    "kbb": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
+    "göz": "Heyet Göz Polikliniği",
+    "kalp": "Heyet Kardiyoloji Polikliniği",
+    "kardiyoloji": "Heyet Kardiyoloji Polikliniği",
+    "cilt": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
+    "cildiye": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
+    "deri": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
+    "çocuk": "Heyet Çocuk Polk. (Çözger)",
+    "fizik": "Fizik Tedavi Polikliniği 1",
+    "akciğer": "Heyet Göğüs Hastalıkları Polikliniği",
+    "göğüs": "Heyet Göğüs Hastalıkları Polikliniği",
+    "beslenme": "Diyetisyen (Heyet Diyet)",
+    "diyet": "Diyetisyen (Heyet Diyet)",
+    "diyetisyen": "Diyetisyen (Heyet Diyet)",
+    "üroloji": "Heyet Üroloji Polikliniği",
+    "beze": "Heyet Üroloji Polikliniği",
+    "kanser": "Heyet Genel Cerrahi Polikliniği",
+    "cerrahi": "Heyet Genel Cerrahi Polikliniği",
+    "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "filim": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "film": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "işitme": "ODİO-İşitme Testi Odası",
+    "udio": "ODİO-İşitme Testi Odası",
+    "odio": "ODİO-İşitme Testi Odası"
+}
+
 # Session State Başlatma
 if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
@@ -133,7 +173,6 @@ def kroki_goster(kat_adi):
     else:
         st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
 
-# 🎯 SENKRONİZASYON DÜZELTMESİ (Kategori ve Seçim Çakışmasını Önler)
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
@@ -141,14 +180,41 @@ def birim_sec(birim_adi):
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
-def arama_isle(aranan_metin):
-    aranan = aranan_metin.lower().strip()
-    if aranan:
-        tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
-        for birim in tum_birimler:
-            if aranan in birim.lower():
-                birim_sec(birim)
-                break
+# 🧠 AKILLI SES ALMA VE KELİME YAKALAMA MOTORU
+def akilli_arama_isle(gelen_metin):
+    if not gelen_metin:
+        return
+    
+    # Metni küçük harfe çevir ve noktalama işaretlerini sil
+    temiz_metin = gelen_metin.lower()
+    temiz_metin = re.sub(r'[^\w\s]', '', temiz_metin)
+    kelimeler = temiz_metin.split()
+
+    tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
+
+    # 1. Aşama: Eş Anlamlı / Anahtar Kelime Yakalama
+    for kelime in kelimeler:
+        if kelime in ES_ANLAMLILAR:
+            birim_sec(ES_ANLAMLILAR[kelime])
+            return
+
+    # 2. Aşama: Cümle İçi Alt Metin Arama
+    for birim in tum_birimler:
+        birim_kucuk = birim.lower()
+        if temiz_metin in birim_kucuk or birim_kucuk in temiz_metin:
+            birim_sec(birim)
+            return
+
+    # 3. Aşama: Kelime Kelime Arama (En az 3 harfli kelimeler)
+    for kelime in kelimeler:
+        if len(kelime) >= 3:
+            for birim in tum_birimler:
+                if kelime in birim.lower():
+                    birim_sec(birim)
+                    return
+
+    # Bulunamadıysa Anons Et
+    otomatik_sesli_oku(f"Üzgünüm, {gelen_metin} anlaşılamadı. Lütfen listeden seçiniz.")
 
 # ==============================================================================
 # 📱 BAŞLIK & KARŞILAMA
@@ -159,7 +225,7 @@ st.info(f"📍 **Bulunduğunuz Nokta:** {baslangic_noktasi}")
 
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya mikrofon butonuna basarak konuşunuz.")
 
 # ==============================================================================
 # 🚀 MOBİL UYUMLU HIZLI ERİŞİM BUTONLARI
@@ -206,13 +272,16 @@ with col_input:
     metin_girisi = st.text_input(
         "Aramak istediğiniz birim:",
         value=ses_metni if ses_metni else "",
-        placeholder="Örn: Dahiliye, Kan Alma...",
+        placeholder="Örn: Dahiliye, Kan tahlili...",
         key="arama_input"
     )
 
-aktif_arama = ses_metni if ses_metni else metin_girisi
-if aktif_arama:
-    arama_isle(aktif_arama)
+# Sesli Komut Geldiğinde Çalıştır
+if ses_metni:
+    akilli_arama_isle(ses_metni)
+elif metin_girisi and metin_girisi != st.session_state.get("son_metin", ""):
+    st.session_state["son_metin"] = metin_girisi
+    akilli_arama_isle(metin_girisi)
 
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (DİNAMİK KATEGORİ VE LİSTE)
@@ -229,8 +298,6 @@ kategori = st.radio(
 
 if "Poliklinikler" in kategori:
     liste = ["Seçim Yapınız..."] + list(POLIKLINIKLER.keys())
-    
-    # Seçilen birim bu listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -242,8 +309,6 @@ if "Poliklinikler" in kategori:
 
 else:
     liste_alan = ["Seçim Yapınız..."] + list(DIGER_ALANLAR.keys())
-    
-    # Seçilen birim bu listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste_alan:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
