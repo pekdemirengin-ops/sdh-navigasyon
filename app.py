@@ -272,14 +272,40 @@ def otomatik_sesli_oku(metin):
         st.components.v1.html(js_kodu, height=0)
 
 def kroki_goster_dosya(kroki_dosya_adi):
-    if os.path.exists(kroki_dosya_adi):
+    if not kroki_dosya_adi:
+        st.warning("⚠️ Bu birim için kroki tanımlanmamış.")
+        return
+
+    # 1. Kod dosyasının bulunduğu tam klasör yolunu al (Tam Yol Tespiti)
+    mevcut_klasor = os.path.dirname(os.path.abspath(__file__))
+    
+    # Resmin tam dosya yolu (Örn: C:/Projeniz/kroki_kan_alma.png)
+    tam_dosya_yolu = os.path.join(mevcut_klasor, kroki_dosya_adi)
+    
+    bulunan_dosya = None
+
+    # Doğrudan tam yoldan kontrol et
+    if os.path.exists(tam_dosya_yolu):
+        bulunan_dosya = tam_dosya_yolu
+    else:
+        # Klasördeki dosyaları büyük/küçük harf veya ekstra uzantı ihtimaline karşı tara
+        temel_isim = os.path.splitext(kroki_dosya_adi)[0].lower()
+        for dosya in os.listdir(mevcut_klasor):
+            dosya_kucuk = dosya.lower()
+            if temel_isim in dosya_kucuk and dosya_kucuk.endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                bulunan_dosya = os.path.join(mevcut_klasor, dosya)
+                break
+
+    # Görseli Ekranda Göster
+    if bulunan_dosya:
         try:
-            image = Image.open(kroki_dosya_adi)
-            st.image(image, caption=f"🗺️ Konum Krokisi ({kroki_dosya_adi})", use_container_width=True)
+            image = Image.open(bulunan_dosya)
+            st.image(image, caption=f"🗺️ Konum Krokisi ({os.path.basename(bulunan_dosya)})", use_container_width=True)
         except Exception as e:
             st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
     else:
-        st.warning(f"📸 Dizin içerisinde '{kroki_dosya_adi}' isimli kroki dosyası bulunamadı.")
+        st.error(f"❌ Kroki Dosyası Bulunamadı: **{kroki_dosya_adi}**")
+        st.info(f"💡 Aranan Tam Klasör Yolu: **{mevcut_klasor}**\n\nLütfen `{kroki_dosya_adi}` görselinin tam olarak bu klasörün içinde olduğundan emin olun.")
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
