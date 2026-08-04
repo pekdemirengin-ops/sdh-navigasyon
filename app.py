@@ -4,9 +4,55 @@ from PIL import Image
 from streamlit_mic_recorder import speech_to_text
 
 # ==============================================================================
-# ⚙️ SAYFA AYARLARI
+# ⚙️ SAYFA & MOBİL VIEWPORT AYARLARI
 # ==============================================================================
-st.set_page_config(page_title="SDH Navigasyon", page_icon="🏥", layout="centered")
+st.set_page_config(
+    page_title="SDH Mobil Navigasyon", 
+    page_icon="🏥", 
+    layout="centered",
+    initial_sidebar_state="collapsed"
+)
+
+# ==============================================================================
+# 📱 MOBİL ÖZEL CSS İYİLEŞTİRMELERİ
+# ==============================================================================
+st.markdown("""
+    <style>
+    /* Mobil Konteynır Marjin Düzenlemesi */
+    .block-container {
+        padding-top: 1.5rem !important;
+        padding-bottom: 2rem !important;
+        padding-left: 0.8rem !important;
+        padding-right: 0.8rem !important;
+    }
+    
+    /* Mobil Dokunmatik Buton Büyüklükleri (Touch-Friendly) */
+    .stButton > button {
+        width: 100% !important;
+        min-height: 48px !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        border-radius: 10px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    /* iPhone/Android Input Yazı Boyutu (Otomatik Zoom Engelleyici) */
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+    
+    /* Mobil Radio & Selectbox Düzenlemeleri */
+    div[role="radiogroup"] {
+        gap: 8px !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# ==============================================================================
+# 📌 DİNAMİK QR KOD KONUM ALGILAMA
+# ==============================================================================
+query_params = st.query_params
+baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 # ==============================================================================
 # 🗄️ VERİ TABANI
@@ -115,69 +161,65 @@ def arama_isle(aranan_metin):
 # ==============================================================================
 # 📱 BAŞLIK & KARŞILAMA
 # ==============================================================================
-st.title("🏥 SDH BARAJ YOLU EK HİZMET BİNASI")
-st.subheader("SDH SESLİ DİJİTAL YÖNLENDİRME")
-st.info("📍 Başlangıç Noktası: Poliklinik Binası Ana Girişi (Zemin Kat)")
+st.title("🏥 SDH BARAJ YOLU EK BİNASI")
+st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
+st.info(f"📍 **Bulunduğunuz Nokta:** {baslangic_noktasi}")
 
 if "karsilandi" not in st.session_state:
     st.session_state["karsilandi"] = True
     otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # ==============================================================================
-# 🚀 HIZLI ERİŞİM BUTONLARI
+# 🚀 MOBİL UYUMLU HIZLI ERİŞİM BUTONLARI (2'li Mobil Grid)
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
-col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
 
-with col1:
+# Mobil ekranlar için 2'li düzen
+m_col1, m_col2 = st.columns(2)
+
+with m_col1:
     if st.button("🩸 KAN ALMA", use_container_width=True):
         birim_sec("Kan Alma")
-with col2:
-    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
-        birim_sec("Sağlık Kurulu / Heyet Odası")
-with col3:
     if st.button("📋 EVRAK KAYIT", use_container_width=True):
         birim_sec("Evrak Kayıt / Vezne")
-with col4:
-    if st.button("🛗 ASANSÖR", use_container_width=True):
-        birim_sec("Asansör")
-with col5:
-    if st.button("🚻 WC", use_container_width=True):
+    if st.button("🚻 WC / LAVABO", use_container_width=True):
         birim_sec("Tuvaletler / Lavabolar (WC)")
-with col6:
-    if st.button("S.K. KAYIT", use_container_width=True):
-        birim_sec("Sağlık Kurulu Kayıt")
-with col7:
-    if st.button("HASTA KAYIT", use_container_width=True):
+    if st.button("🗂️ HASTA KAYIT", use_container_width=True):
         birim_sec("Hasta Kayıt")
 
+with m_col2:
+    if st.button("🏥 SAĞLIK KURULU", use_container_width=True):
+        birim_sec("Sağlık Kurulu / Heyet Odası")
+    if st.button("🛗 ASANSÖR", use_container_width=True):
+        birim_sec("Asansör")
+    if st.button("📝 S.K. KAYIT", use_container_width=True):
+        birim_sec("Sağlık Kurulu Kayıt")
+
 # ==============================================================================
-# 🎙️ SESLİ ARAMA VE ARAMA MOTORU (YENİ EKLENEN BÖLÜM)
+# 🎙️ SESLİ ARAMA VE ARAMA MOTORU
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Ara")
 
-col_input, col_mic = st.columns([3, 1])
+col_input, col_mic = st.columns([2.5, 1.2])
 
 with col_mic:
-    st.write("🎙️ **Sesle Ara:**")
-    # Mikrofon kaydedici ses tanıma bileşeni
+    st.write("🎙️ **Sesli Ara:**")
     ses_metni = speech_to_text(
         language='tr', 
-        start_prompt="🔴 Konuşun", 
+        start_prompt="🔴 Konuş", 
         stop_prompt="⏹️ Bitti", 
         key='speech_search'
     )
 
 with col_input:
     metin_girisi = st.text_input(
-        "Aramak istediğiniz birimi yazın:",
+        "Aramak istediğiniz birim:",
         value=ses_metni if ses_metni else "",
-        placeholder="Örn: Dahiliye, Kan Alma, Asansör...",
+        placeholder="Örn: Dahiliye, Kan Alma...",
         key="arama_input"
     )
 
-# Ses veya metin girdisi değiştiğinde otomatik arama yap
 aktif_arama = ses_metni if ses_metni else metin_girisi
 if aktif_arama:
     arama_isle(aktif_arama)
@@ -197,8 +239,6 @@ kategori = st.radio(
 
 if "Poliklinikler" in kategori:
     liste = list(POLIKLINIKLER.keys())
-    
-    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -210,8 +250,6 @@ if "Poliklinikler" in kategori:
 
 else:
     liste_alan = list(DIGER_ALANLAR.keys())
-    
-    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste_alan:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -238,6 +276,11 @@ if secim != "Seçim Yapınız...":
         otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
         if veri['kat']:
             kroki_goster(veri['kat'])
+            
+    # 🔄 MOBİL SIFIRLAMA BUTONU
+    st.write("---")
+    if st.button("🔄 Yeni Aramaya Geç / Seçimi Sıfırla", use_container_width=True):
+        st.session_state["secilen_birim"] = "Seçim Yapınız..."
+        st.rerun()
 
-st.caption("🤖 Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
-
+st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
