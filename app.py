@@ -18,15 +18,12 @@ st.set_page_config(
 # ==============================================================================
 st.markdown("""
     <style>
-    /* Mobil Konteynır Marjin Düzenlemesi */
     .block-container {
         padding-top: 1.5rem !important;
         padding-bottom: 2rem !important;
         padding-left: 0.8rem !important;
         padding-right: 0.8rem !important;
     }
-    
-    /* Mobil Dokunmatik Buton Büyüklükleri (Touch-Friendly) */
     .stButton > button {
         width: 100% !important;
         min-height: 48px !important;
@@ -35,13 +32,9 @@ st.markdown("""
         border-radius: 10px !important;
         margin-bottom: 4px !important;
     }
-    
-    /* iPhone/Android Input Yazı Boyutu (Otomatik Zoom Engelleyici) */
     input, select, textarea {
         font-size: 16px !important;
     }
-    
-    /* Mobil Radio & Selectbox Düzenlemeleri */
     div[role="radiogroup"] {
         gap: 8px !important;
     }
@@ -58,7 +51,6 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ VERİ TABANI
 # ==============================================================================
 POLIKLINIKLER = {
-    "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Görme Alanı Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde, sol tarafta yer alır. (Heyet Çocuk - ÇÖZGER polikliniğinin hemen yanındadır).", "kat": "1kat"},
     "Çocuk Gelişimi Birimi": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca tam karşınızdadır.", "kat": "1kat"},
     "Göz-OCT / Göz Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağa dönün. Koridorun ilerisinde, sol tarafta yer alır. (Fizik Tedavi 2 polikliniğinin hemen yanında).", "kat": "1kat"},
@@ -88,7 +80,6 @@ POLIKLINIKLER = {
 }
 
 DIGER_ALANLAR = {
-    "Seçim Yapınız...": {"fancy": False, "tarif": "", "kat": ""},
     "Sağlık Kurulu / Heyet Odası": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Koridorun sonunda yer almaktadır.", "kat": "zemin"},
     "Sağlık Kurulu Kayıt": {"fancy": False, "tarif": "Ana girişte sola dönün. Sol taraftaki ilk odadır.", "kat": "zemin"},
     "Evrak Kayıt / Vezne": {"fancy": False, "tarif": "Zemin Kat - Ana girişten tam karşınızda.", "kat": "zemin"},
@@ -142,11 +133,12 @@ def kroki_goster(kat_adi):
     else:
         st.warning(f"📸 Klasörde [{hedef_prefix}] ile başlayan bir kroki görseli bulunamadı.")
 
+# 🎯 SENKRONİZASYON DÜZELTMESİ (Kategori ve Seçim Çakışmasını Önler)
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
         st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
-    else:
+    elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 def arama_isle(aranan_metin):
@@ -154,7 +146,7 @@ def arama_isle(aranan_metin):
     if aranan:
         tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
         for birim in tum_birimler:
-            if aranan in birim.lower() and birim != "Seçim Yapınız...":
+            if aranan in birim.lower():
                 birim_sec(birim)
                 break
 
@@ -170,11 +162,9 @@ if "karsilandi" not in st.session_state:
     otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # ==============================================================================
-# 🚀 MOBİL UYUMLU HIZLI ERİŞİM BUTONLARI (2'li Mobil Grid)
+# 🚀 MOBİL UYUMLU HIZLI ERİŞİM BUTONLARI
 # ==============================================================================
 st.write("### 🚀 Sık Kullanılan Birimler")
-
-# Mobil ekranlar için 2'li düzen
 m_col1, m_col2 = st.columns(2)
 
 with m_col1:
@@ -204,7 +194,7 @@ st.write("### 🔍 Birim Arama / Sesle Ara")
 col_input, col_mic = st.columns([2.5, 1.2])
 
 with col_mic:
-    st.write("🎙️ **Sesli Ara:**")
+    st.write("🎙️ **Sesle Ara:**")
     ses_metni = speech_to_text(
         language='tr', 
         start_prompt="🔴 Konuş", 
@@ -225,7 +215,7 @@ if aktif_arama:
     arama_isle(aktif_arama)
 
 # ==============================================================================
-# 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
+# 🖥️ ARAYÜZ KATMANI (DİNAMİK KATEGORİ VE LİSTE)
 # ==============================================================================
 st.write("---")
 
@@ -238,7 +228,9 @@ kategori = st.radio(
 )
 
 if "Poliklinikler" in kategori:
-    liste = list(POLIKLINIKLER.keys())
+    liste = ["Seçim Yapınız..."] + list(POLIKLINIKLER.keys())
+    
+    # Seçilen birim bu listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -249,7 +241,9 @@ if "Poliklinikler" in kategori:
     )
 
 else:
-    liste_alan = list(DIGER_ALANLAR.keys())
+    liste_alan = ["Seçim Yapınız..."] + list(DIGER_ALANLAR.keys())
+    
+    # Seçilen birim bu listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste_alan:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
