@@ -1,23 +1,7 @@
 import streamlit as st
 import os
 import re
-import os
-import streamlit as st
 
-st.subheader("🔍 Klasör Teşhis Paneli")
-
-# 1. Mevcut çalışma dizinini kontrol et
-st.write(f"**Uygulamanın çalıştığı klasör:** `{os.getcwd()}`")
-
-# 2. 'krokiler' klasörü var mı?
-if os.path.exists("krokiler"):
-    st.success("✅ 'krokiler' klasörü bulundu!")
-    # Klasör içindeki tüm dosyaları listele
-    dosyalar = os.listdir("krokiler")
-    st.write("**`krokiler` klasöründeki dosyaların GERÇEK adları:**")
-    st.json(dosyalar)
-else:
-    st.error("❌ 'krokiler' klasörü uygulamanın çalıştığı ana dizinde BULUNAMADI!")
 
 # --- 2. VERİTABANI (POLIKLINIKLER) ---
 POLIKLINIKLER = {
