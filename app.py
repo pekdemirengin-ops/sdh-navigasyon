@@ -168,14 +168,6 @@ with col_mic:
         key='speech_search'
     )
 
-with col_input:
-    metin_girisi = st.text_input(
-        "Aramak istediğiniz birimi yazın:",
-        value=ses_metni if ses_metni else "",
-        placeholder="Örn: Dahiliye, Kan Alma, Asansör...",
-        key="arama_input"
-    )
-
 aktif_arama = ses_metni if ses_metni else metin_girisi
 if aktif_arama:
     arama_isle(aktif_arama)
