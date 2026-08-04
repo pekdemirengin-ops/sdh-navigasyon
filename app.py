@@ -61,14 +61,14 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ VERİ TABANI
 # ==============================================================================
 POLIKLINIKLER = {
-    "Görme Alanı Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde, sol tarafta yer alır. (Heyet Çocuk - ÇÖZGER polikliniğinin hemen yanındadır).", "kat": "1kat"},
+    "Görme Alanı Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde, sol tarafta yer alır. (Heyet Çocuk - Çözger polikliniğinin hemen yanındadır).", "kat": "1kat"},
     "Çocuk Gelişimi Birimi": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca tam karşınızdadır.", "kat": "1kat"},
     "Göz-OCT / Göz Ölçüm Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağa dönün. Koridorun ilerisinde, sol tarafta yer alır. (Fizik Tedavi 2 polikliniğinin hemen yanında).", "kat": "1kat"},
     "Solunum Fonksiyon Testi Odası": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca tam sola dönün, hemen sağ tarafta yer alır.", "kat": "1kat"},
     "ODİO-İşitme Testi Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde, sağ tarafta yer alır. (Emzirme Odası yanı).", "kat": "1kat"},
     "Emzirme Odası": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde, sağ tarafta yer alır. (İşitme Testi yanı).", "kat": "1kat"},
     "Heyet Cildiye Polikliniği (Oda 1 ve 2)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağa dönün, sağ tarafta yer alır veya asansörden çıkınca sola dönün, sol tarafta yer alır..", "kat": "1kat"},
-    "Çocuk Hastalıkları Polikliniği (DİĞER BİNA GİRİŞİ)": {"fancy": True, "tarif": "🚨 DİĞER BİNA GİRİŞİNDEDİR! Çocuk hastalıkları poliklinik muayeneleri için lütfen diğer bina girişini kullanınız.", "kat": ""},
+    "Çocuk Hastalıkları Polikliniği (DİĞER BİNA GİRİŞİ)": {"fancy": True, "tarif": "Diğer bina girişindedir! Çocuk hastalıkları poliklinik muayeneleri için lütfen diğer bina girişini kullanınız.", "kat": ""},
     "Heyet Çocuk Polk. (Çözger)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde sol tarafta yer alır. (Görme Alanı odasının hemen yanındadır).", "kat": "1kat"},
     "Heyet Çocuk Psikiyatri Polk.": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sola dönün. Koridorun ilerisinde, sol tarafta yer alır. (Çocuk Evde Sağlık odasının yanı).", "kat": "1kat"},
     "Dahiliye Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden ve asansörden çıkınca sağa dönün. Koridorun sonındaki sağ tarafta yer alır. (Fizik Tedavi 2 polikliniğinin yanı).", "kat": "1kat"},
@@ -96,14 +96,14 @@ DIGER_ALANLAR = {
     "Hasta Kayıt": {"fancy": False, "tarif": "Ana girişte sol tarafta yer alır. .", "kat": "zemin"},
     "Kan Alma": {"fancy": False, "tarif": "Zemin Kat - Ana girişten sonra sağa dönün. Sağ tarafta ilk odadır.", "kat": "zemin"},
     "Evde Sağlık Hizmetleri Birimi": {"fancy": False, "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", "kat": "zemin"},
-    "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "🚨 DİĞER BİNADADIR! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır. ", "kat": ""},
+    "Röntgen / Görüntüleme (DİĞER BİNA)": {"fancy": True, "tarif": "diğer binadadır.! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır. ", "kat": ""},
     "Asansör": {"fancy": False, "tarif": " 1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.", "kat": "zemin"},
-    "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
+    "Tuvaletler / Lavabolar": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
 }
 
 ES_ANLAMLILAR = {
     "kan": "Kan Alma", "tahlil": "Kan Alma", "laboratuvar": "Kan Alma", "tahlili": "Kan Alma",
-    "wc": "Tuvaletler / Lavabolar (WC)", "lavabo": "Tuvaletler / Lavabolar (WC)", "tuvalet": "Tuvaletler / Lavabolar (WC)",
+    "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
     "heyet": "Sağlık Kurulu / Heyet Odası", "rapor": "Sağlık Kurulu / Heyet Odası",
     "kulak": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)", "kbb": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
     "göz": "Heyet Göz Polikliniği", "kalp": "Heyet Kardiyoloji Polikliniği", "kardiyoloji": "Heyet Kardiyoloji Polikliniği",
