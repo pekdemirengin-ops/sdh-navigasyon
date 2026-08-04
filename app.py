@@ -58,7 +58,7 @@ query_params = st.query_params
 baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Zemin Kat)")
 
 # ==============================================================================
-# 🗄️ GÜNCELLENMİŞ HASTANE POLİKLİNİK VE BİRİM VERİTABANI
+# 🗄️ HASTANE POLİKLİNİK VE BİRİM VERİTABANI (KLASÖR YOLLARI GÜNCELLENDİ)
 # ==============================================================================
 POLIKLINIKLER = {
     # ==================== ZEMİN KAT BİRİMLERİ ====================
@@ -66,49 +66,49 @@ POLIKLINIKLER = {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
-        "kroki": "kroki_heyet_fizik_zemin.png"
+        "kroki": "krokiler/kroki_heyet_fizik_zemin.png"
     },
     "Poliklinik Heyet KBB": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
-        "kroki": "kroki_heyet_kbb.png"
+        "kroki": "krokiler/kroki_heyet_kbb.png"
     },
     "Poliklinik Heyet Ortopedi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
-        "kroki": "kroki_heyet_ortopedi.png"
+        "kroki": "krokiler/kroki_heyet_ortopedi.png"
     },
     "Kan Alma Birimi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Poliklinik binası girişinden girdikten sonra düz ilerleyip sağ taraftaki Kan Alma odasına geçebilirsiniz.",
-        "kroki": "kroki_kan_alma.png"
+        "kroki": "krokiler/kroki_kan_alma.png"
     },
     "Sağlık Kurulu": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sağa doğru ilerleyin. Koridorun sonundaki geniş alanda yer almaktadır.",
-        "kroki": "kroki_saglik_kurulu.png"
+        "kroki": "krokiler/kroki_saglik_kurulu.png"
     },
     "Sağlık Kurulu Kayıt Birimi": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten hemen sonra düz devam edin, sol taraftaki bankoda yer almaktadır.",
-        "kroki": "kroki_saglik_kurulu_kayit.png"
+        "kroki": "krokiler/kroki_saglik_kurulu_kayit.png"
     },
     "Ön Merdivenler": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Girişten girdikten sonra sola yönelin, koridor boyunca düz ilerleyerek ön merdivenlere ulaşabilirsiniz.",
-        "kroki": "kroki_on_merdivenler.png"
+        "kroki": "krokiler/kroki_on_merdivenler.png"
     },
     "Arka Çıkış": {
         "fancy": False,
         "kat": "zemin",
         "tarif": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
-        "kroki": "kroki_arka_cikis.png"
+        "kroki": "krokiler/kroki_arka_cikis.png"
     },
 
     # ==================== 1. KAT BİRİMLERİ ====================
@@ -116,115 +116,115 @@ POLIKLINIKLER = {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
-        "kroki": "kroki_heyet_genel.png"
+        "kroki": "krokiler/kroki_heyet_genel.png"
     },
     "Poliklinik Heyet Fizik Tedavi (1. Kat)": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sol tarafta kalmaktadır.",
-        "kroki": "kroki_heyet_fizik_1kat.png"
+        "kroki": "krokiler/kroki_heyet_fizik_1kat.png"
     },
     "Poliklinik Heyet Nöroloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru son noktaya kadar ilerleyin, sol taraftaki oda.",
-        "kroki": "kroki_heyet_noroloji.png"
+        "kroki": "krokiler/kroki_heyet_noroloji.png"
     },
     "Görme Alanı Ölçüm Odası": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridorda düz devam edin, sağa dönmeden önceki sol hizada bulunan Alan Görme odasıdır.",
-        "kroki": "kroki_alan_gorme.png"
+        "kroki": "krokiler/kroki_alan_gorme.png"
     },
     "Poliklinik Heyet Dahiliye": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
-        "kroki": "kroki_heyet_dahiliye.png"
+        "kroki": "krokiler/kroki_heyet_dahiliye.png"
     },
     "Olgu Göğüs Hastalıkları": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
-        "kroki": "kroki_olgu_gogus.png"
+        "kroki": "krokiler/kroki_olgu_gogus.png"
     },
     "Poliklinik Heyet Göğüs Hastalıkları": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca hemen sol tarafta yer almaktadır.",
-        "kroki": "kroki_heyet_gogus.png"
+        "kroki": "krokiler/kroki_heyet_gogus.png"
     },
     "Poliklinik Heyet Göz": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
-        "kroki": "kroki_heyet_goz.png"
+        "kroki": "krokiler/kroki_heyet_goz.png"
     },
     "Poliklinik Heyet Çocuk": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
-        "kroki": "kroki_heyet_cocuk.png"
+        "kroki": "krokiler/kroki_heyet_cocuk.png"
     },
     "Konuşma Terapisti Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Arka merdiven koridorunu geçip güney koridoru boyunca düz ilerleyin. Koridorun en sonundaki odadır.",
-        "kroki": "kroki_konusma_terapisi.png"
+        "kroki": "krokiler/kroki_konusma_terapisi.png"
     },
     "Poliklinik Heyet Kardiyoloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
-        "kroki": "kroki_heyet_kardiyoloji.png"
+        "kroki": "krokiler/kroki_heyet_kardiyoloji.png"
     },
     "Poliklinik Heyet Üroloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün. Koridorun sonundaki sol oda.",
-        "kroki": "kroki_heyet_uroloji.png"
+        "kroki": "krokiler/kroki_heyet_uroloji.png"
     },
     "İşitme Testi (ODİO)": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
-        "kroki": "kroki_isitme_testi.png"
+        "kroki": "krokiler/kroki_isitme_testi.png"
     },
     "Göz OCT Odası": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, İşitme Testi odasının hemen yanında sağda yer alır.",
-        "kroki": "Göz OCT Yol Tarifi.jpg"
+        "kroki": "krokiler/goz_oct_yol_tarifi.jpg"
     },
     "Göz Ölçüm Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola yönelin, ilk sol kapıdan girin.",
-        "kroki": "Göz Ölçüm Birimi Yol Tarifi.jpg"
+        "kroki": "krokiler/goz_olcum_birimi_yol_tarifi.jpg"
     },
     "Poliklinik Nöroloji": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.",
-        "kroki": "kroki_noroloji.png"
+        "kroki": "krokiler/kroki_noroloji.png"
     },
     "Poliklinik Psikiyatri": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
-        "kroki": "kroki_psikiyatri.png"
+        "kroki": "krokiler/kroki_psikiyatri.png"
     },
     "Sabim Cimer Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne (sola) dönün, koridoru takip edin.",
-        "kroki": "kroki_cimer.png"
+        "kroki": "krokiler/kroki_cimer.png"
     },
     "Solunum Fonksiyon (SFT) Birimi": {
         "fancy": False,
         "kat": "1kat",
         "tarif": "1. Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
-        "kroki": "kroki_sft.png"
+        "kroki": "krokiler/kroki_sft.png"
     }
 }
 
@@ -250,7 +250,7 @@ if "gecmis_aramalar" not in st.session_state:
     st.session_state["gecmis_aramalar"] = []
 
 # ==============================================================================
-# 🚀 SES BİLEŞENİ & KROKİ GÖSTERİMİ
+# 🚀 SES BİLEŞENİ & AKILLI KROKİ YÜKLEME
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
@@ -271,41 +271,52 @@ def otomatik_sesli_oku(metin):
         """
         st.components.v1.html(js_kodu, height=0)
 
-def kroki_goster_dosya(kroki_dosya_adi):
-    if not kroki_dosya_adi:
+def kroki_goster_dosya(kroki_dosya_yolu):
+    """
+    Krokiyi hem verilen yoldan hem de alternatif dosya uzantılarından bulup gösterir.
+    """
+    if not kroki_dosya_yolu:
         st.warning("⚠️ Bu birim için kroki tanımlanmamış.")
         return
 
-    # 1. Kod dosyasının bulunduğu tam klasör yolunu al (Tam Yol Tespiti)
     mevcut_klasor = os.path.dirname(os.path.abspath(__file__))
-    
-    # Resmin tam dosya yolu (Örn: C:/Projeniz/kroki_kan_alma.png)
-    tam_dosya_yolu = os.path.join(mevcut_klasor, kroki_dosya_adi)
+    tam_yol = os.path.join(mevcut_klasor, kroki_dosya_yolu)
     
     bulunan_dosya = None
 
-    # Doğrudan tam yoldan kontrol et
-    if os.path.exists(tam_dosya_yolu):
-        bulunan_dosya = tam_dosya_yolu
+    # 1. Doğrudan tam yolu kontrol et
+    if os.path.exists(tam_yol):
+        bulunan_dosya = tam_yol
     else:
-        # Klasördeki dosyaları büyük/küçük harf veya ekstra uzantı ihtimaline karşı tara
-        temel_isim = os.path.splitext(kroki_dosya_adi)[0].lower()
-        for dosya in os.listdir(mevcut_klasor):
-            dosya_kucuk = dosya.lower()
-            if temel_isim in dosya_kucuk and dosya_kucuk.endswith(('.png', '.jpg', '.jpeg', '.webp')):
-                bulunan_dosya = os.path.join(mevcut_klasor, dosya)
+        # 2. 'krokiler' klasörünü veya ana klasörü tarayarak eşleşen görseli ara
+        dosya_adi = os.path.basename(kroki_dosya_yolu)
+        temel_isim = os.path.splitext(dosya_adi)[0].lower()
+        
+        arama_klasorleri = [
+            os.path.join(mevcut_klasor, "krokiler"),
+            mevcut_klasor
+        ]
+        
+        for hedef_klasor in arama_klasorleri:
+            if os.path.exists(hedef_klasor):
+                for dosya in os.listdir(hedef_klasor):
+                    dosya_kucuk = dosya.lower()
+                    if temel_isim in dosya_kucuk and dosya_kucuk.endswith(('.png', '.jpg', '.jpeg', '.webp')):
+                        bulunan_dosya = os.path.join(hedef_klasor, dosya)
+                        break
+            if bulunan_dosya:
                 break
 
-    # Görseli Ekranda Göster
+    # Ekrana Bas
     if bulunan_dosya:
         try:
             image = Image.open(bulunan_dosya)
-            st.image(image, caption=f"🗺️ Konum Krokisi ({os.path.basename(bulunan_dosya)})", use_container_width=True)
+            st.image(image, caption=f"🗺️ Konum Krokisi", use_container_width=True)
         except Exception as e:
-            st.error(f"🚨 Görsel açılırken hata oluştu: {e}")
+            st.error(f"🚨 Görsel dosyası bozuk veya açılamadı: {e}")
     else:
-        st.error(f"❌ Kroki Dosyası Bulunamadı: **{kroki_dosya_adi}**")
-        st.info(f"💡 Aranan Tam Klasör Yolu: **{mevcut_klasor}**\n\nLütfen `{kroki_dosya_adi}` görselinin tam olarak bu klasörün içinde olduğundan emin olun.")
+        st.error(f"❌ Kroki Dosyası Bulunamadı: **{kroki_dosya_yolu}**")
+        st.info(f"💡 Lütfen GitHub deponuzdaki `krokiler` klasöründe `{os.path.basename(kroki_dosya_yolu)}` dosyasının yüklü olduğundan emin olun.")
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
@@ -440,7 +451,7 @@ secim = st.selectbox(
 )
 
 # ==============================================================================
-# 📣 YÖNLENDİRME SONUCU VEYA KROKİ GÖSTERİMİ
+# 📣 YÖNLENDİRME SONUCU VE KROKİ GÖSTERİMİ
 # ==============================================================================
 if secim != "Seçim Yapınız...":
     veri = POLIKLINIKLER[secim]
