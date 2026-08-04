@@ -152,21 +152,35 @@ with col7:
         birim_sec("Hasta Kayıt")
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA VE ARAMA MOTORU
+# 🎙️ SESLİ ARAMA VE ARAMA MOTORU (YENİ EKLENEN BÖLÜM)
 # ==============================================================================
 st.write("---")
-st.write("### 🔍 Sesle Ara")
+st.write("### 🔍 Birim Arama / Sesle Ara")
 
 col_input, col_mic = st.columns([3, 1])
 
 with col_mic:
     st.write("🎙️ **Sesle Ara:**")
+    # Mikrofon kaydedici ses tanıma bileşeni
     ses_metni = speech_to_text(
         language='tr', 
         start_prompt="🔴 Konuşun", 
         stop_prompt="⏹️ Bitti", 
         key='speech_search'
     )
+
+with col_input:
+    metin_girisi = st.text_input(
+        "Aramak istediğiniz birimi yazın:",
+        value=ses_metni if ses_metni else "",
+        placeholder="Örn: Dahiliye, Kan Alma, Asansör...",
+        key="arama_input"
+    )
+
+# Ses veya metin girdisi değiştiğinde otomatik arama yap
+aktif_arama = ses_metni if ses_metni else metin_girisi
+if aktif_arama:
+    arama_isle(aktif_arama)
 
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
@@ -183,6 +197,8 @@ kategori = st.radio(
 
 if "Poliklinikler" in kategori:
     liste = list(POLIKLINIKLER.keys())
+    
+    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -194,6 +210,8 @@ if "Poliklinikler" in kategori:
 
 else:
     liste_alan = list(DIGER_ALANLAR.keys())
+    
+    # Seçilen birim geçerli listede yoksa sıfırla
     if st.session_state["secilen_birim"] not in liste_alan:
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
         
@@ -204,7 +222,7 @@ else:
     )
 
 # ==============================================================================
-# 📣 YÖNLENDİRME SONUCU, SESLENDİRME VE SEÇİMİ SIFIRLAMA
+# 📣 YÖNLENDİRME SONUCU VE SESLENDİRME
 # ==============================================================================
 if secim != "Seçim Yapınız...":
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
@@ -220,11 +238,6 @@ if secim != "Seçim Yapınız...":
         otomatik_sesli_oku(f"{secim} için yol tarifi. {veri['tarif']}")
         if veri['kat']:
             kroki_goster(veri['kat'])
-            
-    # 🔄 SEÇİMİ BOŞA ÇIKARMA / SIFIRLAMA BUTONU
-    st.write("---")
-    if st.button("🔄 Yeni Aramaya Geç / Seçimi Sıfırla", use_container_width=True):
-        st.session_state["secilen_birim"] = "Seçim Yapınız..."
-        st.rerun()
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Sesli Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
+
