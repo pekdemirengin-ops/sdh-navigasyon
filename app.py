@@ -4,14 +4,9 @@ import re
 import streamlit as st
 import os
 
-# Görselleri uzantısı (.png veya .jpg) ne olursa olsun otomatik bulan fonksiyon
+# --- 1. FONKSİYONLAR ---
 def kroki_goster(dosya_yolu):
-    if not dosya_yolu:
-        return
-        
     kok_yol, _ = os.path.splitext(dosya_yolu)
-    
-    # Olası uzantıları kontrol et
     bulunan_dosya = None
     for uzanti in [".png", ".jpg", ".jpeg", ".PNG", ".JPG"]:
         test_yolu = kok_yol + uzanti
@@ -20,9 +15,31 @@ def kroki_goster(dosya_yolu):
             break
             
     if bulunan_dosya:
-        st.image(bulunan_dosya, caption="Yol Tarifi Krokisi", use_container_width=True)
+        st.image(bulunan_dosya, use_container_width=True)
     else:
-        st.warning(f"⚠️ Kroki dosyası bulunamadı: `{dosya_yolu}`")
+        st.warning(f"⚠️ Görsel bulunamadı: {dosya_yolu}")
+
+# --- 2. VERİTABANI (POLIKLINIKLER) ---
+POLIKLINIKLER = {
+    "Kan Alma Birimi": {
+        "kat": "zemin",
+        "tarif": "Zemin Kat - Girişten düz ilerleyin...",
+        "kroki": "krokiler/kroki_kan_alma.png"
+    },
+    # ... diğer birimler ...
+}
+
+# --- 3. STREAMLIT ARAYÜZÜ ---
+st.title("Hastane İçi Navigasyon")
+
+secim = st.selectbox("Gitmek istediğiniz polikliniği seçin:", list(POLIKLINIKLER.keys()))
+
+if secim:
+    bilgi = POLIKLINIKLER[secim]
+    st.write(bilgi["tarif"])
+    
+    # Krokiyi burada gösteriyoruz:
+    kroki_goster(bilgi["kroki"])
 from PIL import Image
 from streamlit_mic_recorder import speech_to_text
 
