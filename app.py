@@ -155,7 +155,7 @@ with col7:
 # 🎙️ SESLİ ARAMA VE ARAMA MOTORU
 # ==============================================================================
 st.write("---")
-st.write("### 🔍 Birim Arama / Sesle Ara")
+st.write("### 🔍 Sesle Ara")
 
 col_input, col_mic = st.columns([3, 1])
 
