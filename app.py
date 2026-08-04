@@ -168,10 +168,6 @@ with col_mic:
         key='speech_search'
     )
 
-aktif_arama = ses_metni if ses_metni else metin_girisi
-if aktif_arama:
-    arama_isle(aktif_arama)
-
 # ==============================================================================
 # 🖥️ ARAYÜZ KATMANI (KATEGORİ VEYA LİSTE SEÇİMİ)
 # ==============================================================================
