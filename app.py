@@ -39,6 +39,15 @@ st.markdown("""
     div[role="radiogroup"] {
         gap: 8px !important;
     }
+    .ses-uyari {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -62,7 +71,7 @@ POLIKLINIKLER = {
     "Çocuk Hastalıkları Polikliniği (DİĞER BİNA GİRİŞİ)": {"fancy": True, "tarif": "🚨 DİĞER BİNA GİRİŞİNDEDİR! Çocuk hastalıkları poliklinik muayeneleri için lütfen diğer bina girişini kullanınız.", "kat": ""},
     "Heyet Çocuk Polk. (Çözger)": {"fancy": False, "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Koridorun ilerisinde sol tarafta yer alır. (Görme Alanı odasının hemen yanındadır).", "kat": "1kat"},
     "Heyet Çocuk Psikiyatri Polk.": {"fancy": False, "tarif": "1. Kat - Arka merdivenlerden çıkınca sola dönün. Koridorun ilerisinde, sol tarafta yer alır. (Çocuk Evde Sağlık odasının yanı).", "kat": "1kat"},
-    "Dahiliye Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden ve asansörden çıkınca sağa dönün. Koridorun sonundaki sağ tarafta yer alır. (Fizik Tedavi 2 polikliniğinin yanı).", "kat": "1kat"},
+    "Dahiliye Polikliniği": {"fancy": False, "tarif": "1. Kat - Merdivenlerden ve asansörden çıkınca sağa dönün. Koridorun sonındaki sağ tarafta yer alır. (Fizik Tedavi 2 polikliniğinin yanı).", "kat": "1kat"},
     "Fizik Tedavi Polikliniği 1": {"fancy": False, "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorda sol tarafta yer alır.", "kat": "zemin"},
     "Fizik Tedavi Polikliniği 2": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağa dönün. Koridorun sonuna doğru sağ tarafta yer alır. (Dahiliye yanındadır).", "kat": "1kat"},
     "Fizik Tedavi Polikliniği 3": {"fancy": False, "tarif": "1. Kat - Merdivenlerden çıkınca sağa dönün. Koridorun ilerisinde sol tarafta yer alır.", "kat": "1kat"},
@@ -92,43 +101,18 @@ DIGER_ALANLAR = {
     "Tuvaletler / Lavabolar (WC)": {"fancy": False, "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", "kat": "zemin"},
 }
 
-# 🔤 EŞ ANLAMLI VE ARAMA KOLAYLAŞTIRICI SÖZLÜK
 ES_ANLAMLILAR = {
-    "kan": "Kan Alma",
-    "tahlil": "Kan Alma",
-    "laboratuvar": "Kan Alma",
-    "tahlili": "Kan Alma",
-    "wc": "Tuvaletler / Lavabolar (WC)",
-    "lavabo": "Tuvaletler / Lavabolar (WC)",
-    "tuvalet": "Tuvaletler / Lavabolar (WC)",
-    "w.c": "Tuvaletler / Lavabolar (WC)",
-    "heyet": "Sağlık Kurulu / Heyet Odası",
-    "rapor": "Sağlık Kurulu / Heyet Odası",
-    "kulak": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
-    "kbb": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
-    "göz": "Heyet Göz Polikliniği",
-    "kalp": "Heyet Kardiyoloji Polikliniği",
-    "kardiyoloji": "Heyet Kardiyoloji Polikliniği",
-    "cilt": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
-    "cildiye": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
-    "deri": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
-    "çocuk": "Heyet Çocuk Polk. (Çözger)",
-    "fizik": "Fizik Tedavi Polikliniği 1",
-    "akciğer": "Heyet Göğüs Hastalıkları Polikliniği",
-    "göğüs": "Heyet Göğüs Hastalıkları Polikliniği",
-    "beslenme": "Diyetisyen (Heyet Diyet)",
-    "diyet": "Diyetisyen (Heyet Diyet)",
-    "diyetisyen": "Diyetisyen (Heyet Diyet)",
-    "üroloji": "Heyet Üroloji Polikliniği",
-    "beze": "Heyet Üroloji Polikliniği",
-    "kanser": "Heyet Genel Cerrahi Polikliniği",
-    "cerrahi": "Heyet Genel Cerrahi Polikliniği",
-    "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "filim": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "film": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "işitme": "ODİO-İşitme Testi Odası",
-    "udio": "ODİO-İşitme Testi Odası",
-    "odio": "ODİO-İşitme Testi Odası"
+    "kan": "Kan Alma", "tahlil": "Kan Alma", "laboratuvar": "Kan Alma", "tahlili": "Kan Alma",
+    "wc": "Tuvaletler / Lavabolar (WC)", "lavabo": "Tuvaletler / Lavabolar (WC)", "tuvalet": "Tuvaletler / Lavabolar (WC)",
+    "heyet": "Sağlık Kurulu / Heyet Odası", "rapor": "Sağlık Kurulu / Heyet Odası",
+    "kulak": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)", "kbb": "Heyet K.B.B. Polikliniği (Oda 1 ve 2)",
+    "göz": "Heyet Göz Polikliniği", "kalp": "Heyet Kardiyoloji Polikliniği", "kardiyoloji": "Heyet Kardiyoloji Polikliniği",
+    "cilt": "Heyet Cildiye Polikliniği (Oda 1 ve 2)", "cildiye": "Heyet Cildiye Polikliniği (Oda 1 ve 2)",
+    "çocuk": "Heyet Çocuk Polk. (Çözger)", "fizik": "Fizik Tedavi Polikliniği 1",
+    "göğüs": "Heyet Göğüs Hastalıkları Polikliniği", "diyet": "Diyetisyen (Heyet Diyet)",
+    "üroloji": "Heyet Üroloji Polikliniği", "cerrahi": "Heyet Genel Cerrahi Polikliniği",
+    "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)", "film": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "işitme": "ODİO-İşitme Testi Odası", "odio": "ODİO-İşitme Testi Odası"
 }
 
 # Session State Başlatma
@@ -136,6 +120,8 @@ if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+if "ses_izni" not in st.session_state:
+    st.session_state["ses_izni"] = False
 
 # ==============================================================================
 # 🚀 SES BİLEŞENİ & KROKİ
@@ -146,12 +132,14 @@ def otomatik_sesli_oku(metin):
         temiz_metin = okunacak_metin.replace("'", "\\'").replace('"', '\\"')
         js_kodu = f"""
         <script>
-            var msg = new SpeechSynthesisUtterance('{temiz_metin}');
-            msg.lang = 'tr-TR';
-            msg.rate = 1.0; 
-            msg.pitch = 1.0; 
-            window.speechSynthesis.cancel();
-            window.speechSynthesis.speak(msg);
+            if ('speechSynthesis' in window) {{
+                window.speechSynthesis.cancel();
+                var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+                msg.lang = 'tr-TR';
+                msg.rate = 1.0; 
+                msg.pitch = 1.0; 
+                window.speechSynthesis.speak(msg);
+            }}
         </script>
         """
         st.components.v1.html(js_kodu, height=0)
@@ -180,32 +168,25 @@ def birim_sec(birim_adi):
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
-# 🧠 AKILLI SES ALMA VE KELİME YAKALAMA MOTORU
 def akilli_arama_isle(gelen_metin):
     if not gelen_metin:
         return
-    
-    # Metni küçük harfe çevir ve noktalama işaretlerini sil
     temiz_metin = gelen_metin.lower()
     temiz_metin = re.sub(r'[^\w\s]', '', temiz_metin)
     kelimeler = temiz_metin.split()
-
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
-    # 1. Aşama: Eş Anlamlı / Anahtar Kelime Yakalama
     for kelime in kelimeler:
         if kelime in ES_ANLAMLILAR:
             birim_sec(ES_ANLAMLILAR[kelime])
             return
 
-    # 2. Aşama: Cümle İçi Alt Metin Arama
     for birim in tum_birimler:
         birim_kucuk = birim.lower()
         if temiz_metin in birim_kucuk or birim_kucuk in temiz_metin:
             birim_sec(birim)
             return
 
-    # 3. Aşama: Kelime Kelime Arama (En az 3 harfli kelimeler)
     for kelime in kelimeler:
         if len(kelime) >= 3:
             for birim in tum_birimler:
@@ -213,19 +194,27 @@ def akilli_arama_isle(gelen_metin):
                     birim_sec(birim)
                     return
 
-    # Bulunamadıysa Anons Et
     otomatik_sesli_oku(f"Üzgünüm, {gelen_metin} anlaşılamadı. Lütfen listeden seçiniz.")
 
 # ==============================================================================
-# 📱 BAŞLIK & KARŞILAMA
+# 📱 BAŞLIK & KARŞILAMA Mimarisi
 # ==============================================================================
 st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Nokta:** {baslangic_noktasi}")
 
-if "karsilandi" not in st.session_state:
-    st.session_state["karsilandi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya mikrofon butonuna basarak konuşunuz.")
+# 🔔 DOKUNMA İZNİ BİLEŞENİ (Tarayıcı Ses Engellerini Aşan Kısım)
+if not st.session_state["ses_izni"]:
+    st.markdown("""
+        <div class="ses-uyari">
+            ⚠️ <b>Sesli anlatımı duymak için:</b> Lütfen telefonunuzun sessiz anahtarını (Ringer Switch) kapatın ve sesini açın.
+        </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("🔊 Sesli Yönlendirmeyi Başlat (Tıklayınız)", use_container_width=True):
+        st.session_state["ses_izni"] = True
+        otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya mikrofon butonuna basarak konuşunuz.")
+        st.rerun()
 
 # ==============================================================================
 # 🚀 MOBİL UYUMLU HIZLI ERİŞİM BUTONLARI
@@ -276,7 +265,6 @@ with col_input:
         key="arama_input"
     )
 
-# Sesli Komut Geldiğinde Çalıştır
 if ses_metni:
     akilli_arama_isle(ses_metni)
 elif metin_girisi and metin_girisi != st.session_state.get("son_metin", ""):
@@ -336,7 +324,6 @@ if secim != "Seçim Yapınız...":
         if veri['kat']:
             kroki_goster(veri['kat'])
             
-    # 🔄 MOBİL SIFIRLAMA BUTONU
     st.write("---")
     if st.button("🔄 Yeni Aramaya Geç / Seçimi Sıfırla", use_container_width=True):
         st.session_state["secilen_birim"] = "Seçim Yapınız..."
