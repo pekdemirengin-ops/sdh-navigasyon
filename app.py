@@ -1,23 +1,23 @@
 import streamlit as st
 import os
 import re
-import streamlit as st
 import os
+import streamlit as st
 
-# --- 1. FONKSİYONLAR ---
-def kroki_goster(dosya_yolu):
-    kok_yol, _ = os.path.splitext(dosya_yolu)
-    bulunan_dosya = None
-    for uzanti in [".png", ".jpg", ".jpeg", ".PNG", ".JPG"]:
-        test_yolu = kok_yol + uzanti
-        if os.path.exists(test_yolu):
-            bulunan_dosya = test_yolu
-            break
-            
-    if bulunan_dosya:
-        st.image(bulunan_dosya, use_container_width=True)
-    else:
-        st.warning(f"⚠️ Görsel bulunamadı: {dosya_yolu}")
+st.subheader("🔍 Klasör Teşhis Paneli")
+
+# 1. Mevcut çalışma dizinini kontrol et
+st.write(f"**Uygulamanın çalıştığı klasör:** `{os.getcwd()}`")
+
+# 2. 'krokiler' klasörü var mı?
+if os.path.exists("krokiler"):
+    st.success("✅ 'krokiler' klasörü bulundu!")
+    # Klasör içindeki tüm dosyaları listele
+    dosyalar = os.listdir("krokiler")
+    st.write("**`krokiler` klasöründeki dosyaların GERÇEK adları:**")
+    st.json(dosyalar)
+else:
+    st.error("❌ 'krokiler' klasörü uygulamanın çalıştığı ana dizinde BULUNAMADI!")
 
 # --- 2. VERİTABANI (POLIKLINIKLER) ---
 POLIKLINIKLER = {
