@@ -255,15 +255,20 @@ def otomatik_sesli_oku(metin):
         temiz_metin = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
         js_kodu = f"""
         <script>
-            try {{
-                if ('speechSynthesis' in window) {{
-                    window.speechSynthesis.cancel();
-                    var msg = new SpeechSynthesisUtterance('{temiz_metin}');
-                    msg.lang = 'tr-TR';
-                    msg.rate = 1.0;
-                    window.speechSynthesis.speak(msg);
-                }}
-            }} catch(e) {{}}
+            function konus() {{
+                try {{
+                    if ('speechSynthesis' in window) {{
+                        window.speechSynthesis.cancel();
+                        var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+                        msg.lang = 'tr-TR';
+                        msg.rate = 1.0;
+                        window.speechSynthesis.speak(msg);
+                    }}
+                }} catch(e) {{}}
+            }}
+            // Sayfa yüklendiğinde ses motorunu tetikle
+            setTimeout(konus, 300);
+            document.addEventListener('click', konus, {{once: true}});
         </script>
         """
         st.components.v1.html(js_kodu, height=0)
@@ -322,7 +327,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -389,7 +394,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU - TARAYICI ÜZERİNDEN DOĞRUDAN SESLİ YANITLI)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -432,7 +437,6 @@ with col_mic:
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 
-                // Tarayıcı üzerinden doğrudan sayfayı yenilemeden query parametresi ekleyip tetikle
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
