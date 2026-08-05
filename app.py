@@ -67,7 +67,7 @@ POLIKLINIKLER = {
     "Poliklinik Heyet KBB": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
-        "kroki": "heyet_kbb_yol_tarifi.png"
+        "kroki": "heyet_kbb_polk_yol_tarifi.png"
     },
     "Poliklinik Heyet Ortopedi": {
         "fancy": False, "kat": "zemin",
