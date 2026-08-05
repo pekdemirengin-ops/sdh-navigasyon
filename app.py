@@ -109,7 +109,7 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
         "kroki": "heyet_genel_cerrahi_polk_yol_tarifi.png"
     },
-    "Poliklinik Fizik Tedavi 2": {
+    "Fizik Tedavi 2 Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sağ tarafta kalmaktadır.",
         "kroki": "fizik_tedavi_polk2_yol_tarifi.png"
@@ -195,7 +195,7 @@ DIGER_ALANLAR = {
     "Evrak Kayıt / Vezne": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Kat - Ana girişten tam karşınızda.", 
-        "kroki": "evrak_kayit_yol_tarifi.png"
+        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
     },
     "Hasta Kayıt": {
         "fancy": False, "kat": "zemin", 
