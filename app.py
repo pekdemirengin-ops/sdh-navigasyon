@@ -336,18 +336,15 @@ def akilli_arama_isle(gelen_metin):
     temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower()).strip()
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
-    # 1. Tam eş anlamlı kelime kontrolü
     if temiz in ES_ANLAMLILAR:
         birim_sec(ES_ANLAMLILAR[temiz])
         return
 
-    # 2. Tam birim adı eşleşmesi
     for birim in tum_birimler:
         if temiz == birim.lower():
             birim_sec(birim)
             return
 
-    # 3. Kelime bazlı en iyi eşleşme (Skorlama mantığı)
     kelimeler = temiz.split()
     en_iyi_eslesme = None
     max_ortak_kelime = 0
@@ -363,7 +360,6 @@ def akilli_arama_isle(gelen_metin):
         birim_sec(en_iyi_eslesme)
         return
 
-    # 4. Kısmi eş anlamlı kelime arama
     for k in kelimeler:
         if k in ES_ANLAMLILAR:
             birim_sec(ES_ANLAMLILAR[k])
@@ -508,7 +504,7 @@ with col_mic:
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
@@ -521,7 +517,6 @@ with col_mic:
                 } else if (tarifVeritabani[speechResult]) {
                     bulunanBirim = speechResult;
                 } else {
-                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
                     let kelimeler = speechResult.split(" ");
                     let maxOrtak = 0;
                     for (let birim in tarifVeritabani) {
@@ -612,7 +607,7 @@ else:
         st.rerun()
 
 # ==============================================================================
-# 🎯 SONUÇ GÖSTERİMİ & SESLENDİRME
+# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME & KROKİ
 # ==============================================================================
 aktif_secim = st.session_state["secilen_birim"]
 
@@ -630,7 +625,10 @@ if aktif_secim != "Seçim Yapınız...":
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
-            if bilgi.get('kroki'):
-                kroki_goster(bilgi['kroki'])
+        # Krokiyi hem butonla hem de otomatik olarak garanti göster
+        if bilgi.get('kroki'):
+            st.write("---")
+            st.write("### 🗺️ Rota Krokisi")
+            kroki_goster(bilgi['kroki'])
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
