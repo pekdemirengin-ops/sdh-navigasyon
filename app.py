@@ -177,7 +177,7 @@ POLIKLINIKLER = {
     "Heyet Psikolog": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat -Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun solunda yer alır.",
-        "kroki": ""
+        "kroki": "heyet_psikolog_yol_tarifi.png"
     },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
