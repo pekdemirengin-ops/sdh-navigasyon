@@ -164,6 +164,21 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun sonunda sağ tarafınızda yer alır.",
         "kroki": "cocuk_evde_bakım_yol_tarifi.png"
     },
+    "Konuşma Terapisti": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. İleride Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
+        "kroki": "konusma_terapisti_yol_tarifi.png"
+    },
+    "Sabim Cimer Birimi": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
+        "kroki": "sabim_cimer_yol_tarifi.png"
+    },
+    "Heyet Psikolog": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat -Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun solunda yer alır.",
+        "kroki": ""
+    },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sol tarafında yer alır.",
@@ -178,12 +193,6 @@ POLIKLINIKLER = {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliğinin yanında yer alır.",
         "kroki": "heyet_ortopedi_polk_yol_tarifi.png"
-    },
-    
-    "Konuşma Terapisti": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
-        "kroki": "konusma_terapisti_yol_tarifi.png"
     },
     "Kan Alma Birimi": {
         "fancy": False, "kat": "zemin",
@@ -209,11 +218,6 @@ POLIKLINIKLER = {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
         "kroki": "arka_cıkıs_yol_tarifi.png"
-    },
-    "Sabim Cimer Birimi": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
-        "kroki": "sabim_cimer_yol_tarifi.png"
     }
     
 }
@@ -472,11 +476,13 @@ with col_mic:
             "heyet dahiliye poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
             "heyet göğüs hastalıkları poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliniğin yanında yer alır.",
             "heyet göz poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sağ tarafta, Göz Ölçüm odasının yanında yer alır.",
-            "konuşma terapisti": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
+            "konuşma terapisti": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. İleride Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
             "heyet kardiyoloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
             "heyet üroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sol tarafta, Heyet Göz polikliniğin karşısında yer alır",
             "işitme testi odio": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Emzirme odasının yanında yer alır.",
             "çocuk gelişim birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
+            "çocuk evde sağlık birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun sonunda sağ tarafınızda yer alır.",
+            "heyet psikolog": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun solunda yer alır.",
             "göz oct odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
             "göz ölçüm": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliniğin yanında yer alır.",
             "nöroloji poliklinik 1": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliniğin yanında yer alır.",
