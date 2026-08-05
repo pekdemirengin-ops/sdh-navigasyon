@@ -129,11 +129,6 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
         "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Göğüs Hastalıkları": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıkınca hemen sol tarafta yer almaktadır.",
-        "kroki": "heyet_gogus_yol_tarifi.png"
-    },
     "Poliklinik Heyet Göz": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
