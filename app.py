@@ -97,7 +97,7 @@ POLIKLINIKLER = {
     "Arka Çıkış": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
-        "kroki": "arka_cikis_yol_tarifi.png"
+        "kroki": "arka_cıkıs_yol_tarifi.png"
     },
     "Poliklinik Heyet Genel Cerrahi": {
         "fancy": False, "kat": "1kat",
