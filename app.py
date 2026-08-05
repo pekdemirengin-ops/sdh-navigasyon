@@ -59,17 +59,17 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ MERKEZİ VERİ TABANI (POLİKLİNİKLER VE DİĞER BİRİMLER)
 # ==============================================================================
 POLIKLINIKLER = {
-    "Poliklinik Heyet Fizik Tedavi": {
+    "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
         "kroki": "heyet_fizik_tedavi_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet KBB": {
+    "Heyet KBB Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
         "kroki": "heyet_kbb_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Ortopedi": {
+    "Heyet Ortopedi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
         "kroki": "heyet_ortopedi_polk_yol_tarifi.png"
@@ -99,7 +99,7 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
         "kroki": "arka_cıkıs_yol_tarifi.png"
     },
-    "Poliklinik Heyet Genel Cerrahi": {
+    "Heyet Genel Cerrahi Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
         "kroki": "heyet_genel_cerrahi_polk_yol_tarifi.png"
@@ -109,7 +109,7 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sağ tarafta kalmaktadır.",
         "kroki": "fizik_tedavi_polk2_yol_tarifi.png"
     },
-    "Poliklinik Heyet Nöroloji": {
+    "Heyet Nöroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru son noktaya kadar ilerleyin, sol taraftaki oda.",
         "kroki": "heyet_noroloji_polk_yol_tarifi.png"
@@ -119,22 +119,22 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Koridorda düz devam edin, sağa dönmeden önceki sol hizada bulunan Alan Görme odasıdır.",
         "kroki": "gorme_alanı_yol_tarifi.png"
     },
-    "Poliklinik Heyet Dahiliye": {
+    "Heyet Dahiliye Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
         "kroki": "heyet_dahiliye_polk_yol_tarifi.png"
     },
-    "Heyet Göğüs Hastalıkları": {
+    "Heyet Göğüs Hastalıkları Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
         "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Göz": {
+    "Heyet Göz Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
-        "kroki": "heyet_goz_yol_tarifi.png"
+        "kroki": "heyet_goz_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Çocuk": {
+    "Heyet Çocuk Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
         "kroki": "heyet_cocuk_yol_tarifi.png"
