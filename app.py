@@ -59,6 +59,11 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ MERKEZİ VERİ TABANI (POLİKLİNİKLER VE DİĞER BİRİMLER)
 # ==============================================================================
 POLIKLINIKLER = {
+     "Heyet Çocuk (Çözger) Poliklinik": {
+        "fancy": False, "kat": "zemin",
+        "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+        "kroki": "heyet_cozger_polk_yol_tarifi.png"
+    },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
