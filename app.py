@@ -61,7 +61,7 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 POLIKLINIKLER = {
      "Heyet Çocuk (Çözger) Poliklinik": {
         "fancy": False, "kat": "zemin",
-        "taarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+        "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
         "kroki": "heyet_cozger_polk_yol_tarifi.png"
     },
     "Heyet Fizik Tedavi Poliklinik": {
@@ -527,7 +527,7 @@ if aktif_secim != "Seçim Yapınız...":
             otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
-            st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
+            st.warning(f"🚶 **Yol Taarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
             if bilgi.get('kroki'):
