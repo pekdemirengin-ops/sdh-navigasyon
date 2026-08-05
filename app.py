@@ -255,7 +255,7 @@ def otomatik_sesli_oku(metin):
         temiz_metin = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
         js_kodu = f"""
         <script>
-            function konus() {{
+            function konusData() {{
                 try {{
                     if ('speechSynthesis' in window) {{
                         window.speechSynthesis.cancel();
@@ -266,9 +266,8 @@ def otomatik_sesli_oku(metin):
                     }}
                 }} catch(e) {{}}
             }}
-            // Sayfa yüklendiğinde ses motorunu tetikle
-            setTimeout(konus, 300);
-            document.addEventListener('click', konus, {{once: true}});
+            setTimeout(konusData, 400);
+            document.addEventListener('click', konusData, {{once: true}});
         </script>
         """
         st.components.v1.html(js_kodu, height=0)
@@ -327,7 +326,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -394,7 +393,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU - DOĞRUDAN SESLİ ÇIKIŞLI)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -410,6 +409,69 @@ with col_mic:
         <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
     </div>
     <script>
+        // Python tarafındaki veri tabanı listesinin JavaScript karşılığı (sesli okumayı doğrudan tetiklemek için)
+        const tarifVeritabani = {
+            "heyet çocuk (çözger) poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+            "heyet fizik tedavi poliklinik": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
+            "heyet kbb poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
+            "heyet ortopedi poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+            "heyet çocuk psikiyatri poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+            "kan alma birimi": "Zemin Kat - Poliklinik binası girişinden girdikten sonra düz ilerleyip sağ taraftaki Kan Alma odasına geçebilirsiniz.",
+            "sağlık kurulu": "Zemin Kat - Ana girişten girdikten sonra sağa doğru ilerleyin. Koridorun sonundaki geniş alanda yer almaktadır.",
+            "sağlık kurulu kayıt birimi": "Zemin Kat - Girişten hemen sonra düz devam edin, sol taraftaki bankoda yer almaktadır.",
+            "ön merdivenler": "Zemin Kat - Girişten girdikten sonra sola yönelin, koridor boyunca düz ilerleyerek ön merdivenlere ulaşabilirsiniz.",
+            "arka çıkış": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
+            "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
+            "fizik tedavi 2 poliklinik": "Birinci Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sağ tarafta kalmaktadır.",
+            "heyet nöroloji poliklinik": "Birinci Kat - Ana koridorda sağa doğru son noktaya kadar ilerleyin, sol taraftaki oda.",
+            "görme alanı ölçüm odası": "Birinci Kat - Koridorda düz devam edin, sağa dönmeden önceki sol hizada bulunan Alan Görme odasıdır.",
+            "heyet dahiliye poliklinik": "Birinci Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
+            "heyet göğüs hastalıkları poliklinik": "Birinci Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
+            "heyet göz poliklinik": "Birinci Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
+            "konuşma terapisti": "Birinci Kat - Merdivenlerden çıkınca arka merdiven yönüne sola dönün, koridorun sonunda sol taraftadır.",
+            "heyet kardiyoloji poliklinik": "Birinci Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
+            "heyet üroloji poliklinik": "Birinci Kat - Merdivenlerden çıkıp sola dönün. Koridorun sonundaki sol oda.",
+            "işitme testi (odio)": "Birinci Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
+            "göz oct odası": "Birinci Kat - Koridorda sağa doğru ilerleyin, İşitme Testi odasının hemen yanında sağda yer alır.",
+            "göz ölçüm": "Birinci Kat - Merdivenlerden çıkıp sola yönelin, ilk sol kapıdan girin.",
+            "nöroloji poliklinik": "Birinci Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.",
+            "heyet psikiyatri poliklinik": "Birinci Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
+            "sabim cimer birimi": "Birinci Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne sola dönün, koridoru takip edin.",
+            "solunum fonksiyon (sft) birimi": "Birinci Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
+            "evrak kayıt / vezne": "Zemin Kat - Ana girişten tam karşınızda.",
+            "hasta kayıt": "Ana girişte sol tarafta yer alır.",
+            "evde sağlık hizmetleri birimi": "Zemin Katta olup girişi binanın kuzey yönündedir.",
+            "röntgen / görüntüleme (diğer bina)": "Diğer binadadır! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır.",
+            "asansör": "Birinci katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.",
+            "emzirme odası": "Birinci Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
+            "tuvaletler / lavabolar": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır."
+        };
+
+        const esAnlamlilar = {
+            "kan": "kan alma birimi", "tahlil": "kan alma birimi", "laboratuvar": "kan alma birimi",
+            "wc": "tuvaletler / lavabolar", "lavabo": "tuvaletler / lavabolar", "tuvalet": "tuvaletler / lavabolar",
+            "heyet": "sağlık kurulu", "rapor": "sağlık kurulu",
+            "kulak": "heyet kbb poliklinik", "kbb": "heyet kbb poliklinik",
+            "göz": "heyet göz poliklinik", "kalp": "heyet kardiyoloji poliklinik", "kardiyoloji": "heyet kardiyoloji poliklinik",
+            "çocuk": "heyet çocuk çözger poliklinik", "fizik": "heyet fizik tedavi poliklinik",
+            "göğüs": "heyet göğüs hastalıkları poliklinik", "üroloji": "heyet üroloji poliklinik",
+            "cerrahi": "heyet genel cerrahi poliklinik", "röntgen": "röntgen / görüntüleme (diğer bina)",
+            "film": "röntgen / görüntüleme (diğer bina)", "işitme": "işitme testi (odio)",
+            "odio": "işitme testi (odio)", "dahiliye": "heyet dahiliye poliklinik",
+            "nöroloji": "heyet nöroloji poliklinik", "ortopedi": "heyet ortopedi poliklinik",
+            "psikiyatri": "heyet psikiyatri poliklinik", "cimer": "sabim cimer birimi", "sft": "solunum fonksiyon (sft) birimi"
+        };
+
+        function sesliOkuyucu(metin) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                var msg = new SpeechSynthesisUtterance(metin);
+                msg.lang = 'tr-TR';
+                msg.rate = 1.0;
+                window.speechSynthesis.speak(msg);
+            }
+        }
+
         function sesliAramaBaslat() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const statusEl = document.getElementById('mic-status');
@@ -432,11 +494,41 @@ with col_mic:
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript;
+                const speechResult = event.results[0][0].transcript.toLowerCase().trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 
+                // Sesli arama yanıt metnini bul ve anında tarayıcı üzerinden seslendir
+                let bulunanBirim = "";
+                let tarif = "";
+
+                // Eş anlamlı kelime kontrolü
+                for (let kelime in esAnlamlilar) {
+                    if (speechResult.includes(kelime)) {
+                        bulunanBirim = esAnlamlilar[kelime];
+                        break;
+                    }
+                }
+
+                // Tam eşleşme veya kısmi eşleşme kontrolü
+                if (!bulunanBirim) {
+                    for (let birim in tarifVeritabani) {
+                        if (speechResult.includes(birim) || birim.includes(speechResult)) {
+                            bulunanBirim = birim;
+                            break;
+                        }
+                    }
+                }
+
+                if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
+                    tarif = bulunanBirim + " için yol tarifi. " + tarifVeritabani[bulunanBirim];
+                    sesliOkuyucu(tarif);
+                } else {
+                    sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
+                }
+
+                // Sayfayı güncellemek üzere query parametresi ekle
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
