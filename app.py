@@ -205,7 +205,7 @@ DIGER_ALANLAR = {
     "Hasta Kayıt": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Ana girişte sol tarafta yer alır.", 
-        "kroki": "hasta_kayit_yol_tarifi.png"
+        "kroki": "hasta_kayıt_yol_tarifi.png"
     },
     "Evde Sağlık Hizmetleri Birimi": {
         "fancy": False, "kat": "zemin", 
