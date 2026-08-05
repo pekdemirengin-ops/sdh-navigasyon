@@ -104,7 +104,7 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra koridordan sağa yönelin. Koridorun solunda yer almaktadır.",
         "kroki": "heyet_genel_cerrahi_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Fizik Tedavi (1. Kat)": {
+    "Poliklinik Heyet Fizik Tedavi": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sol tarafta kalmaktadır.",
         "kroki": "heyet_fizik_tedavi_polk_yol_tarifi.png"
