@@ -59,7 +59,7 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ MERKEZİ VERİ TABANI (POLİKLİNİKLER VE DİĞER BİRİMLER)
 # ==============================================================================
 POLIKLINIKLER = {
-    "Poliklinik Heyet Fizik Tedavi (Zemin)": {
+    "Poliklinik Heyet Fizik Tedavi": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
         "kroki": "heyet_fizik_tedavi_polk_yol_tarifi.png"
