@@ -139,17 +139,17 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
         "kroki": "konusma_terapisti_yol_tarifi.png"
     },
-    "Poliklinik Heyet Kardiyoloji": {
+    "Heyet Kardiyoloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
-        "kroki": "heyet_kardiyoloji_yol_tarifi.png"
+        "kroki": "heyet_kardiyoloji_polk_yol_tarifi.png"
     },
-    "Poliklinik Heyet Üroloji": {
+    "Heyet Üroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün. Koridorun sonundaki sol oda.",
-        "kroki": "heyet_uroloji_yol_tarifi.png"
+        "kroki": "heyet_uroloji_polk_yol_tarifi.png"
     },
-    "İşitme Testi (ODİO)": {
+    "İşitme Testi (Odio)": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
         "kroki": "isitme_testi_yol_tarifi.png"
