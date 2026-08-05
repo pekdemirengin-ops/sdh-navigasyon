@@ -159,30 +159,30 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, İşitme Testi odasının hemen yanında sağda yer alır.",
         "kroki": "goz_oct_yol_tarifi.png"
     },
-    "Göz Ölçüm Birimi": {
+    "Göz Ölçüm": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sola yönelin, ilk sol kapıdan girin.",
-        "kroki": "goz_olcum_birimi_yol_tarifi.png"
+        "kroki": "goz_olcum_yol_tarifi.png"
     },
-    "Poliklinik Nöroloji": {
+    "Nöroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.",
-        "kroki": "noroloji_yol_tarifi.png"
+        "kroki": "noroloji_polk_yol_tarifi.png"
     },
-    "Poliklinik Psikiyatri": {
+    "Heyet Psikiyatri Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
-        "kroki": "psikiyatri_yol_tarifi.png"
+        "kroki": "heyet_psikiyatri_yol_tarifi.png"
     },
     "Sabim Cimer Birimi": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne (sola) dönün, koridoru takip edin.",
-        "kroki": "cimer_yol_tarifi.png"
+        "kroki": "sabim_cimer_yol_tarifi.png"
     },
     "Solunum Fonksiyon (SFT) Birimi": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
-        "kroki": "sft_yol_tarifi.png"
+        "kroki": "solunum_fonksiyon_yol_tarifi.png"
     }
 }
 
