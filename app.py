@@ -49,10 +49,80 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ MERKEZİ VERİ TABANI (POLİKLİNİKLER VE DİĞER BİRİMLER)
 # ==============================================================================
 POLIKLINIKLER = {
+    "Heyet Göz Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sağ tarafta, Göz Ölçüm odasının yanında yer alır.",
+        "kroki": "heyet_goz_polk_yol_tarifi.png"
+    },
+    "Göz Ölçüm": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliğinin yanında yer alır.",
+        "kroki": "goz_olcum_yol_tarifi.png"
+    },
+    "Heyet Göğüs Hastalıkları Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliğinin yanında yer alır.",
+        "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
+    },
+    "Nöroloji Poliklinik 1": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliğinin yanında yer alır.",
+        "kroki": "noroloji_polk_yol_tarifi.png"
+    },
+    "Heyet Genel Cerrahi Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Nöroloji polikliğinin yanında yer alır.",
+        "kroki": "heyet_genel_cerrahi_polk_yol_tarifi.png"
+    },
+    "Heyet Psikiyatri Poliklinikleri": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır. ",
+        "kroki": "heyet_psikiyatri_polk_yol_tarifi.png"
+    },
     "Heyet Çocuk (Çözger) Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sol tarafta görme alanının yanında yer alır.",
         "kroki": "heyet_cozger_polk_yol_tarifi.png"
+    },
+    "Görme Alanı Ölçüm Odası": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliğinin yanında yer alır.",
+        "kroki": "gorme_alanı_yol_tarifi.png"
+    },
+    "Fizik Tedavi 3 Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Nöroloji polikliğinin yanında yer alır.",
+        "kroki": "fizik_tedavi_polk2_yol_tarifi.png"
+    },
+    "Heyet Kardiyoloji Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sol tarafta Heyet Nöroloji polikliğinin yanında yer alır.",
+        "kroki": "heyet_kardiyoloji_polk_yol_tarifi.png"
+    },
+    "Heyet Dahiliye Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliğinin yanında yer alır.",
+        "kroki": "heyet_dahiliye_polk_yol_tarifi.png"
+    },
+    "Fizik Tedavi 2 Poliklinik": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliğinin yanında yer alır.",
+        "kroki": "fizik_tedavi_polk2_yol_tarifi.png"
+    },
+    "Göz OCT Odası": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliğinin yanında yer alır.",
+        "kroki": "goz_oct_yol_tarifi.png"
+    },
+    "İşitme Testi (Odio)": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Emzirme odasının yanında yer alır.",
+        "kroki": "isitme_testi_birimi_yol_tarifi.png"
+    },
+    "Emzirme Odası": {
+        "fancy": False, "kat": "1kat", 
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır.", 
+        "kroki": "emzirme_odası_yol_tarifi.png"
     },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
@@ -64,6 +134,7 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında Heyet Ortopedi Polikliniğin yanında yer alır.",
         "kroki": "heyet_kbb_polk_yol_tarifi.png"
     },
+    
     "Heyet Ortopedi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliğinin yanında yer alır.",
@@ -73,6 +144,11 @@ POLIKLINIKLER = {
         "fancy": False, "kat": "zemin",
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
         "kroki": "heyet_cocuk_psikiyatri_polk_yol_tarifi.png"
+    },
+    "Konuşma Terapisti": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
+        "kroki": "konusma_terapisti_yol_tarifi.png"
     },
     "Kan Alma Birimi": {
         "fancy": False, "kat": "zemin",
@@ -99,80 +175,20 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
         "kroki": "arka_cıkıs_yol_tarifi.png"
     },
-    "Heyet Genel Cerrahi Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
-        "kroki": "heyet_genel_cerrahi_polk_yol_tarifi.png"
-    },
-    "Fizik Tedavi 2 Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliğinin yanında yer alır.",
-        "kroki": "fizik_tedavi_polk2_yol_tarifi.png"
-    },
     "Heyet Nöroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
         "kroki": "heyet_noroloji_polk_yol_tarifi.png"
-    },
-    "Görme Alanı Ölçüm Odası": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliğinin yanında yer alır.",
-        "kroki": "gorme_alanı_yol_tarifi.png"
-    },
-    "Heyet Dahiliye Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliğinin yanında yer alır.",
-        "kroki": "heyet_dahiliye_polk_yol_tarifi.png"
-    },
-    "Heyet Göğüs Hastalıkları Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliğinin yanında yer alır.",
-        "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
-    },
-    "Heyet Göz Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sağ tarafta, Göz Ölçüm odasının yanında yer alır.",
-        "kroki": "heyet_goz_polk_yol_tarifi.png"
-    },
-    "Konuşma Terapisti": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
-        "kroki": "konusma_terapisti_yol_tarifi.png"
-    },
-    "Heyet Kardiyoloji Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sol tarafta Heyet Nöroloji polikliğinin yanında yer alır.",
-        "kroki": "heyet_kardiyoloji_polk_yol_tarifi.png"
     },
     "Heyet Üroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sol tarafta, Heyet Göz polikliğinin karşısında yer alır.",
         "kroki": "heyet_uroloji_polk_yol_tarifi.png"
     },
-    "İşitme Testi (Odio)": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Emzirme odasının yanında yer alır.",
-        "kroki": "isitme_testi_birimi_yol_tarifi.png"
-    },
-    "Göz OCT Odası": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliğinin yanında yer alır.",
-        "kroki": "goz_oct_yol_tarifi.png"
-    },
     "Göz Ölçüm": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliğinin yanında yer alır.",
         "kroki": "goz_olcum_yol_tarifi.png"
-    },
-    "Nöroloji Poliklinik 1": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Heyet Genel Cerrahi polikliğinin yanında yer alır.",
-        "kroki": "noroloji_polk_yol_tarifi.png"
-    },
-    "Heyet Psikiyatri Poliklinik": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır. ",
-        "kroki": "heyet_psikiyatri_polk_yol_tarifi.png"
     },
     "Sabim Cimer Birimi": {
         "fancy": False, "kat": "1kat",
@@ -192,10 +208,15 @@ DIGER_ALANLAR = {
         "tarif": "Zemin Kat - Ana girişten tam karşınızda.", 
         "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
     },
+    "Ekg Birimi": {
+        "fancy": False, "kat": "zemin", 
+        "tarif": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır.", 
+        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
+    },
     "Hasta Kayıt": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Ana girişte sol tarafta yer alır.", 
-        "kroki": "hasta_kayıt_yol_tarifi.png"
+        "kroki": "ekg_yol_tarifi.png"
     },
     "Evde Sağlık Hizmetleri Birimi": {
         "fancy": False, "kat": "zemin", 
@@ -212,11 +233,7 @@ DIGER_ALANLAR = {
         "tarif": "Zemin katta Hasta Kayıt bankosunu geçince sol tarafta, 1. katta binanın tam orta kesiminde yer alır.", 
         "kroki": "asansor_yol_tarifi.png"
     },
-    "Emzirme Odası": {
-        "fancy": False, "kat": "1kat", 
-        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır.", 
-        "kroki": "emzirme_odası_yol_tarifi.png"
-    },
+    
     "Tuvaletler / Lavabolar": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", 
@@ -237,6 +254,7 @@ ES_ANLAMLILAR = {
     "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
     "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
     "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
+    "ekg": "Ekg", "dahiliye": "Heyet Dahiliye Poliklinik",
 }
 
 # ==============================================================================
@@ -437,6 +455,7 @@ with col_mic:
             "arka çıkış": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
             "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
             "fizik tedavi 2 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliniğin yanında yer alır.",
+            "fizik tedavi 3 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
             "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
             "görme alanı ölçüm odası": "Birinci Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliniğin yanında yer alır.",
             "heyet dahiliye poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
@@ -459,6 +478,7 @@ with col_mic:
             "asansör": "Zemin katta Hasta Kayıt bankosunu geçince sol tarafta, 1. katta binanın tam orta kesiminde yer alır.",
             "emzirme odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır. ",
             "tuvaletler lavabolar": "Zemin Katta - Ana girişten sonra sola dönün. Koridorun sonunda yer alır."
+            "ekg birimi": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır."
         };
 
         const esAnlamlilar = {
