@@ -222,6 +222,11 @@ DIGER_ALANLAR = {
         "tarif": "1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.", 
         "kroki": "asansor_yol_tarifi.png"
     },
+    "Emzirme Odası": {
+        "fancy": False, "kat": "1kat", 
+        "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.", 
+        "kroki": "emzirme_odası_yol_tarifi.png"
+    },
     "Tuvaletler / Lavabolar": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", 
