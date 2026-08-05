@@ -87,7 +87,7 @@ POLIKLINIKLER = {
     "Sağlık Kurulu Kayıt Birimi": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten hemen sonra düz devam edin, sol taraftaki bankoda yer almaktadır.",
-        "kroki": "saglik_kurulu_kayit_yol_tarifi.png"
+        "kroki": "saglık_kurulu_kayıt_yol_tarifi.png"
     },
     "Ön Merdivenler": {
         "fancy": False, "kat": "zemin",
