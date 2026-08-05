@@ -74,6 +74,11 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
         "kroki": "heyet_ortopedi_polk_yol_tarifi.png"
     },
+    "Heyet Çocuk Psikiyatri Poliklinik": {
+        "fancy": False, "kat": "zemin",
+        "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+        "kroki": "heyet_cocuk_psikiyatri_polk_yol_tarifi.png"
+    },
     "Kan Alma Birimi": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Poliklinik binası girişinden girdikten sonra düz ilerleyip sağ taraftaki Kan Alma odasına geçebilirsiniz.",
