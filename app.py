@@ -139,11 +139,6 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
         "kroki": "konusma_terapisti_yol_tarifi.png"
     },
-    "Konuşma Terapisti Birimi": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Arka merdiven koridorunu geçip güney koridoru boyunca düz ilerleyin. Koridorun en sonundaki odadır.",
-        "kroki": "konusma_terapisi_yol_tarifi.png"
-    },
     "Poliklinik Heyet Kardiyoloji": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
