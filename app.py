@@ -230,7 +230,7 @@ DIGER_ALANLAR = {
     "Tuvaletler / Lavabolar": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", 
-        "kroki": "tuvalet_yol_tarifi.png"
+        "kroki": "tuvaletler_yol_tarifi.png"
     }
 }
 
