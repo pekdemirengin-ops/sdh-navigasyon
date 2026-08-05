@@ -127,7 +127,7 @@ POLIKLINIKLER = {
     "Ekg Birimi": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır.", 
-        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
+        "kroki": ".png"
     },
     "Heyet Cildiye Poliklinikleri": {
         "fancy": False, "kat": "zemin",
@@ -237,7 +237,6 @@ DIGER_ALANLAR = {
         "tarif": "Zemin katta Hasta Kayıt bankosunu geçince sol tarafta, 1. katta binanın tam orta kesiminde yer alır.", 
         "kroki": "asansor_yol_tarifi.png"
     },
-    
     "Tuvaletler / Lavabolar": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.", 
