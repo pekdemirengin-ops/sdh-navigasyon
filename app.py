@@ -72,7 +72,7 @@ POLIKLINIKLER = {
     "Poliklinik Heyet Ortopedi": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
-        "kroki": "heyet_ortopedi_yol_tarifi.png"
+        "kroki": "heyet_ortopedi_polk_yol_tarifi.png"
     },
     "Kan Alma Birimi": {
         "fancy": False, "kat": "zemin",
