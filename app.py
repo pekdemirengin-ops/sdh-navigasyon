@@ -253,8 +253,8 @@ ES_ANLAMLILAR = {
     "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (Odio)",
     "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
     "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
-    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
-    "ekg": "Ekg", "dahiliye": "Heyet Dahiliye Poliklinik",
+    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi",
+    "ekg": "Ekg Birimi", "dahiliye": "Heyet Dahiliye Poliklinik"
 }
 
 # ==============================================================================
