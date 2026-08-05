@@ -285,7 +285,7 @@ def kroki_goster(kroki_dosya_adi):
         return
 
     aranan_tam = kroki_dosya_adi.strip().lower()
-    aranan_govde = Path(aranan_tam).stem.lower()
+    aranan_govde = Path(aranan_tam).stem.lower() 
     
     su_an = Path(__file__).resolve().parent
     calisma_dizini = Path.cwd()
@@ -405,34 +405,79 @@ with col2:
         birim_sec("Sağlık Kurulu Kayıt Birimi")
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (STREAMLIT AUDIO INPUT ENTEGRASYONU)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
 
-# Streamlit'in yerleşik ses giriş aracı (mobilde ve tarayıcılarda en kararlı çalışan yöntem)
-ses_dosyasi = st.audio_input("🎙️ Konuşarak aramak için mikrofona dokunun")
-
-if ses_dosyasi is not None:
-    try:
-        import speech_recognition as sr
-        with open("temp_audio.wav", "wb") as f:
-            f.write(ses_dosyasi.getbuffer())
-        
-        r = sr.Recognizer()
-        with sr.AudioFile("temp_audio.wav") as source:
-            audio_data = r.record(source)
-            gelen_ses = r.recognize_google(audio_data, language="tr-TR")
-            if gelen_ses:
-                st.success(f"🎯 Algılanan: {gelen_ses}")
-                akilli_arama_isle(gelen_ses)
-        
-        if os.path.exists("temp_audio.wav"):
-            os.remove("temp_audio.wav")
-    except Exception as e:
-        st.warning("⚠️ Ses algılanamadı veya metne dönüştürülemedi. Lütfen tekrar deneyin ya da metin kutusunu kullanın.")
+if "ses_arama" in st.query_params:
+    gelen_ses = st.query_params["ses_arama"]
+    del st.query_params["ses_arama"]
+    if gelen_ses:
+        akilli_arama_isle(gelen_ses)
 
 col_input, col_mic = st.columns([3, 1])
+
+with col_mic:
+    st.components.v1.html("""
+    <div style="text-align: center; font-family: sans-serif; padding-top: 5px;">
+        <button id="mic-btn" onclick="sesliAramaBaslat()" style="background-color: #ff4b4b; color: white; border: none; padding: 12px 10px; font-size: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            🎙️ Konuş
+        </button>
+        <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
+    </div>
+    <script>
+        function sesliAramaBaslat() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const statusEl = document.getElementById('mic-status');
+            const btnEl = document.getElementById('mic-btn');
+
+            if (!SpeechRecognition) {
+                alert("Tarayıcınız sesli aramayı desteklemiyor.");
+                return;
+            }
+
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onstart = function() {
+                btnEl.style.backgroundColor = '#28a745';
+                btnEl.innerText = " Dinliyor...";
+                statusEl.innerText = "Konuşun...";
+            };
+
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript;
+                statusEl.innerText = "Bulundu: " + speechResult;
+                btnEl.style.backgroundColor = '#ff4b4b';
+                btnEl.innerText = "🎙️ Konuş";
+                
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('ses_arama', speechResult);
+                window.parent.location.href = url.toString();
+            };
+
+            recognition.onerror = function(event) {
+                btnEl.style.backgroundColor = '#ff4b4b';
+                btnEl.innerText = "🎙️ Konuş";
+                statusEl.innerText = "Hata: " + event.error;
+            };
+
+            recognition.onend = function() {
+                btnEl.style.backgroundColor = '#ff4b4b';
+                btnEl.innerText = "🎙️ Konuş";
+            };
+
+            try {
+                recognition.start();
+            } catch(e) {
+                statusEl.innerText = "İzin hatası.";
+            }
+        }
+    </script>
+    """, height=70)
 
 with col_input:
     metin_input = st.text_input("Birim arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen...", key="arama_input", label_visibility="collapsed")
@@ -481,11 +526,13 @@ if aktif_secim != "Seçim Yapınız...":
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
             st.error(f"🚶 **Yönlendirme:** {bilgi['tarif']}")
-            otomatik_sesli_oku(bilgi['tarif'])
+            if st.session_state.get("ses_izni", False):
+                otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
-            otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
+            if st.session_state.get("ses_izni", False):
+                otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
             if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
