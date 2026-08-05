@@ -111,7 +111,7 @@ POLIKLINIKLER = {
     },
     "Heyet Nöroloji Poliklinik": {
         "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Heyet Genel Cerrahi polikliğinin yanında yer alır.",
+        "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
         "kroki": "heyet_noroloji_polk_yol_tarifi.png"
     },
     "Görme Alanı Ölçüm Odası": {
@@ -437,7 +437,7 @@ with col_mic:
             "arka çıkış": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
             "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
             "fizik tedavi 2 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliniğin yanında yer alır.",
-            "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliniğin yanında yer alır.",
+            "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
             "görme alanı ölçüm odası": "Birinci Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliniğin yanında yer alır.",
             "heyet dahiliye poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
             "heyet göğüs hastalıkları poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliniğin yanında yer alır.",
