@@ -82,7 +82,7 @@ POLIKLINIKLER = {
     "Sağlık Kurulu": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sağa doğru ilerleyin. Koridorun sonundaki geniş alanda yer almaktadır.",
-        "kroki": "saglik_kurulu_yol_tarifi.png"
+        "kroki": "saglık_kurulu_yol_tarifi.png"
     },
     "Sağlık Kurulu Kayıt Birimi": {
         "fancy": False, "kat": "zemin",
