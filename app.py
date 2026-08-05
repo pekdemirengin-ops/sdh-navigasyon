@@ -152,7 +152,7 @@ POLIKLINIKLER = {
     "İşitme Testi (Odio)": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
-        "kroki": "isitme_testi_yol_tarifi.png"
+        "kroki": "isitme_testi_birimi_yol_tarifi.png"
     },
     "Göz OCT Odası": {
         "fancy": False, "kat": "1kat",
