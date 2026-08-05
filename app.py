@@ -337,7 +337,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -408,19 +408,38 @@ with col2:
         birim_sec("Sağlık Kurulu Kayıt Birimi")
 
 # ==============================================================================
-# 🎙️ YEREL SESLİ ARAMA (STREAMLIT YENİ NESİL MİKROFON GİRİŞİ)
+# 🎙️ YEREL SESLİ ARAMA (PYTHON DESTEKLİ)
 # ==============================================================================
 st.write("---")
-st.write("### 🎙️ Sesle Arama Yapın")
-st.caption("Mikrofon simgesine basıp gitmek istediğiniz yeri söyleyebilirsiniz (Örn: Dahiliye, Röntgen, Kan Alma...)")
+st.write("### 🎙️ Konuşarak Arama Yapın")
+st.caption("Mikrofon butonuna basıp gitmek istediğiniz yeri söyleyin (Örn: Dahiliye, Röntgen, Kan Alma...)")
 
-# Streamlit'in yerleşik ve mobilde en kararlı çalışan ses kaydı bileşeni
-ses_dosyasi = st.audio_input("Gitmek istediğiniz yeri sesli söyleyin")
+# Streamlit'in yerel ses kayıt aracı
+ses_dosyasi = st.audio_input("Gitmek istediğiniz yeri sesli söyleyin", key="mikrofon_giris")
 
 if ses_dosyasi is not None:
-    # Not: Gerçek ses çözümleme için OpenAI Whisper veya benzeri bir API entegre edilebilir. 
-    # Alternatif olarak pratik bir sesli arama alternatifi için akıllı arama çubuğunu da kullanabilirsiniz.
-    st.success("Ses kaydı alındı! (Sesinizi metne dönüştürmek için projenize OpenAI Whisper API ekleyebilir veya aşağıdaki arama çubuğunu kullanabilirsiniz.)")
+    try:
+        import speech_recognition as sr
+        
+        # Geçici olarak kaydedilen sesi dosyaya yaz
+        with open("temp_audio.wav", "wb") as f:
+            f.write(ses_dosyasi.getbuffer())
+            
+        r = sr.Recognizer()
+        with sr.AudioFile("temp_audio.wav") as source:
+            audio_data = r.record(source)
+            # Google'ın ücretsiz Türkçe konuşma tanıma servisi
+            metin_ sonuc = r.recognize_google(audio_data, language="tr-TR")
+            
+            st.success(f"🎯 Algılanan Konuşma: **{metin_sonuc}**")
+            akilli_arama_isle(metin_sonuc)
+            
+            # Geçici dosyayı temizle
+            if os.path.exists("temp_audio.wav"):
+                os.remove("temp_audio.wav")
+                
+    except Exception as e:
+        st.warning("⚠️ Ses yazıya dönüştürülemedi. Lütfen daha net konuşun veya aşağıdaki arama çubuğunu kullanın.")
 
 # ==============================================================================
 # 🔍 AKILLI METİN ARAMA ÇUBUĞU
