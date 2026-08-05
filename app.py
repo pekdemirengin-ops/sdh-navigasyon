@@ -225,18 +225,22 @@ DIGER_ALANLAR = {
 }
 
 ES_ANLAMLILAR = {
-    "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
+    "kan": "Kan Alma Birimi", "kan alma": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
-    "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu",
-    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik",
+    "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu", "sağlık kurulu": "Sağlık Kurulu",
+    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik", "kulak burun boğaz": "Heyet KBB Poliklinik",
     "göz": "Heyet Göz Poliklinik", "kalp": "Heyet Kardiyoloji Poliklinik", "kardiyoloji": "Heyet Kardiyoloji Poliklinik",
-    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "fizik": "Heyet Fizik Tedavi Poliklinik",
+    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "çözger": "Heyet Çocuk (Çözger) Poliklinik",
+    "fizik": "Heyet Fizik Tedavi Poliklinik", "fizik tedavi": "Heyet Fizik Tedavi Poliklinik",
     "göğüs": "Heyet Göğüs Hastalıkları Poliklinik", "üroloji": "Heyet Üroloji Poliklinik",
-    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (Odio)",
-    "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
-    "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
-    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
+    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "genel cerrahi": "Heyet Genel Cerrahi Poliklinik",
+    "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)", "film": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "işitme": "İşitme Testi (Odio)", "odio": "İşitme Testi (Odio)", "işitme testi": "İşitme Testi (Odio)",
+    "dahiliye": "Heyet Dahiliye Poliklinik", "nöroloji": "Heyet Nöroloji Poliklinik",
+    "ortopedi": "Heyet Ortopedi Poliklinik", "psikiyatri": "Heyet Psikiyatri Poliklinik",
+    "cimer": "Sabim Cimer Birimi", "sabim": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi",
+    "asansör": "Asansör", "vezne": "Evrak Kayıt / Vezne", "evrak kayıt": "Evrak Kayıt / Vezne",
+    "hasta kayıt": "Hasta Kayıt"
 }
 
 # ==============================================================================
@@ -336,15 +340,24 @@ def akilli_arama_isle(gelen_metin):
     temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower()).strip()
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
+    # 1. Doğrudan es anlamlılar sözlüğünde var mı?
     if temiz in ES_ANLAMLILAR:
         birim_sec(ES_ANLAMLILAR[temiz])
         return
 
+    # 2. Tam birim adı eşleşmesi
     for birim in tum_birimler:
         if temiz == birim.lower():
             birim_sec(birim)
             return
 
+    # 3. Kısmi kelime içeren es anlamlı kontrolü
+    for anahtar, hedef in ES_ANLAMLILAR.items():
+        if anahtar in temiz or temiz in anahtar:
+            birim_sec(hedef)
+            return
+
+    # 4. En iyi kelime eşleşmesi skoru
     kelimeler = temiz.split()
     en_iyi_eslesme = None
     max_ortak_kelime = 0
@@ -359,11 +372,6 @@ def akilli_arama_isle(gelen_metin):
     if en_iyi_eslesme and max_ortak_kelime > 0:
         birim_sec(en_iyi_eslesme)
         return
-
-    for k in kelimeler:
-        if k in ES_ANLAMLILAR:
-            birim_sec(ES_ANLAMLILAR[k])
-            return
 
 # ==============================================================================
 # 🖥️ ARAYÜZ BAŞLIK VE KARŞILAMA
@@ -404,7 +412,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN EŞLEŞME MİMARİSİ)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -625,7 +633,6 @@ if aktif_secim != "Seçim Yapınız...":
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
-        # Krokiyi hem butonla hem de otomatik olarak garanti göster
         if bilgi.get('kroki'):
             st.write("---")
             st.write("### 🗺️ Rota Krokisi")
