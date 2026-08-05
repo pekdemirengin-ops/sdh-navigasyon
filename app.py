@@ -107,7 +107,7 @@ POLIKLINIKLER = {
     "Poliklinik Heyet Fizik Tedavi (1. Kat)": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridorda sağa doğru ilerleyin, koridorun sonuna doğru sol tarafta kalmaktadır.",
-        "kroki": "heyet_fizik_1kat_yol_tarifi.png"
+        "kroki": "heyet_fizik_tedavi_polk_yol_tarifi.png"
     },
     "Poliklinik Heyet Nöroloji": {
         "fancy": False, "kat": "1kat",
