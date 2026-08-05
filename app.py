@@ -127,7 +127,7 @@ POLIKLINIKLER = {
     "Ekg Birimi": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır.", 
-        "kroki": ".png"
+        "kroki": "ekg_yol_tarifi.png"
     },
     "Heyet Cildiye Poliklinikleri": {
         "fancy": False, "kat": "zemin",
