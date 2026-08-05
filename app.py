@@ -153,7 +153,7 @@ POLIKLINIKLER = {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
         "kroki": "solunum_fonksiyon_yol_tarifi.png"
-    }
+    },
     "Heyet Çocuk Psikiyatri Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
