@@ -59,7 +59,7 @@ baslangic_noktasi = query_params.get("konum", "Poliklinik Binası Ana Girişi (Z
 # 🗄️ MERKEZİ VERİ TABANI (POLİKLİNİKLER VE DİĞER BİRİMLER)
 # ==============================================================================
 POLIKLINIKLER = {
-     "Heyet Çocuk (Çözger) Poliklinik": {
+    "Heyet Çocuk (Çözger) Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
         "kroki": "heyet_cozger_polk_yol_tarifi.png"
@@ -92,12 +92,12 @@ POLIKLINIKLER = {
     "Sağlık Kurulu": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sağa doğru ilerleyin. Koridorun sonundaki geniş alanda yer almaktadır.",
-        "kroki": "saglık_kurulu_yol_tarifi.png"
+        "kroki": "saglik_kurulu_yol_tarifi.png"
     },
     "Sağlık Kurulu Kayıt Birimi": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten hemen sonra düz devam edin, sol taraftaki bankoda yer almaktadır.",
-        "kroki": "saglık_kurulu_kayıt_yol_tarifi.png"
+        "kroki": "saglik_kurulu_kayit_yol_tarifi.png"
     },
     "Ön Merdivenler": {
         "fancy": False, "kat": "zemin",
@@ -107,7 +107,7 @@ POLIKLINIKLER = {
     "Arka Çıkış": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Koridordan sola ilerleyin, ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
-        "kroki": "arka_cıkıs_yol_tarifi.png"
+        "kroki": "arka_cikis_yol_tarifi.png"
     },
     "Heyet Genel Cerrahi Poliklinik": {
         "fancy": False, "kat": "1kat",
@@ -127,7 +127,7 @@ POLIKLINIKLER = {
     "Görme Alanı Ölçüm Odası": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridorda düz devam edin, sağa dönmeden önceki sol hizada bulunan Alan Görme odasıdır.",
-        "kroki": "gorme_alanı_yol_tarifi.png"
+        "kroki": "gorme_alani_yol_tarifi.png"
     },
     "Heyet Dahiliye Poliklinik": {
         "fancy": False, "kat": "1kat",
@@ -137,7 +137,7 @@ POLIKLINIKLER = {
     "Heyet Göğüs Hastalıkları Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
-        "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
+        "kroki": "heyet_gogus_hastaliklari_polk_yol_tarifi.png"
     },
     "Heyet Göz Poliklinik": {
         "fancy": False, "kat": "1kat",
@@ -200,17 +200,17 @@ DIGER_ALANLAR = {
     "Evrak Kayıt / Vezne": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Kat - Ana girişten tam karşınızda.", 
-        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
+        "kroki": "evrak_kayit_vezne_yol_tarifi.png"
     },
     "Hasta Kayıt": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Ana girişte sol tarafta yer alır.", 
-        "kroki": "hasta_kayıt_yol_tarifi.png"
+        "kroki": "hasta_kayit_yol_tarifi.png"
     },
     "Evde Sağlık Hizmetleri Birimi": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", 
-        "kroki": "evde_saglık_hizmetleri_yol_tarifi"
+        "kroki": "evde_saglik_hizmetleri_yol_tarifi.png"
     },
     "Röntgen / Görüntüleme (DİĞER BİNA)": {
         "fancy": True, "kat": "", 
@@ -225,7 +225,7 @@ DIGER_ALANLAR = {
     "Emzirme Odası": {
         "fancy": False, "kat": "1kat", 
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.", 
-        "kroki": "emzirme_odası_yol_tarifi.png"
+        "kroki": "emzirme odasi_yol_tarifi.png"
     },
     "Tuvaletler / Lavabolar": {
         "fancy": False, "kat": "zemin", 
@@ -238,15 +238,15 @@ ES_ANLAMLILAR = {
     "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
     "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu",
-    "kulak": "Poliklinik Heyet KBB", "kbb": "Poliklinik Heyet KBB",
-    "göz": "Poliklinik Heyet Göz", "kalp": "Poliklinik Heyet Kardiyoloji", "kardiyoloji": "Poliklinik Heyet Kardiyoloji",
-    "çocuk": "Poliklinik Heyet Çocuk", "fizik": "Poliklinik Heyet Fizik Tedavi (Zemin)",
-    "göğüs": "Poliklinik Heyet Göğüs Hastalıkları", "üroloji": "Poliklinik Heyet Üroloji",
-    "cerrahi": "Poliklinik Heyet Genel Cerrahi", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (ODİO)",
-    "odio": "İşitme Testi (ODİO)", "dahiliye": "Poliklinik Heyet Dahiliye",
-    "nöroloji": "Poliklinik Heyet Nöroloji", "ortopedi": "Poliklinik Heyet Ortopedi",
-    "psikiyatri": "Poliklinik Psikiyatri", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
+    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik",
+    "göz": "Heyet Göz Poliklinik", "kalp": "Heyet Kardiyoloji Poliklinik", "kardiyoloji": "Heyet Kardiyoloji Poliklinik",
+    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "fizik": "Heyet Fizik Tedavi Poliklinik",
+    "göğüs": "Heyet Göğüs Hastalıkları Poliklinik", "üroloji": "Heyet Üroloji Poliklinik",
+    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (Odio)",
+    "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
+    "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
+    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
 }
 
 # ==============================================================================
@@ -260,7 +260,7 @@ if "ses_izni" not in st.session_state:
     st.session_state["ses_izni"] = False
 
 # ==============================================================================
-# 🛠️ YARDIMCI FONKSİYONLAR (ÇOK ESNEK KROKİ BULUCU)
+# 🛠️ YARDIMCI FONKSİYONLAR
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
@@ -285,7 +285,7 @@ def kroki_goster(kroki_dosya_adi):
         return
 
     aranan_tam = kroki_dosya_adi.strip().lower()
-    aranan_govde = Path(aranan_tam).stem.lower() # Uzantısız hali (örn: heyet_ortopedi_yol_tarifi)
+    aranan_govde = Path(aranan_tam).stem.lower()
     
     su_an = Path(__file__).resolve().parent
     calisma_dizini = Path.cwd()
@@ -302,22 +302,22 @@ def kroki_goster(kroki_dosya_adi):
     bulunan_dosya = None
     gecerli_uzantilar = {'.png', '.jpg', '.jpeg', '.webp'}
 
-    # Tüm olası dizinleri ve alt klasörleri tara
     for dizin in arama_dizinleri:
         if dizin.exists():
             try:
                 for dosya in dizin.rglob("*"):
                     if dosya.is_file() and dosya.suffix.lower() in gecerli_uzantilar:
-                        dosya_adi_lower = dosya.name.lower()
-                        dosya_govde_lower = dosya.stem.lower()
+                        d_ad = dosya.name.lower()
+                        d_govde = dosya.stem.lower()
                         
-                        # 1. Tam ad eşleşmesi veya gövde eşleşmesi
-                        if dosya_adi_lower == aranan_tam or dosya_govde_lower == aranan_govde:
+                        if d_ad == aranan_tam or d_govde == aranan_govde:
                             bulunan_dosya = dosya
                             break
                         
-                        # 2. İçerik esnek eşleşmesi (örn: dosya adında 'ortopedi' geçiyorsa)
-                        if aranan_govde in dosya_govde_lower or dosya_govde_lower in aranan_govde:
+                        clean_aranan = aranan_govde.replace('ç','c').replace('ğ','g').replace('ı','i').replace('ö','o').replace('ş','s').replace('ü','u').replace('_','')
+                        clean_dosya = d_govde.replace('ç','c').replace('ğ','g').replace('ı','i').replace('ö','o').replace('ş','s').replace('ü','u').replace('_','')
+                        
+                        if clean_aranan in clean_dosya or clean_dosya in clean_aranan:
                             bulunan_dosya = dosya
                             break
             except Exception:
@@ -332,12 +332,12 @@ def kroki_goster(kroki_dosya_adi):
         except Exception as e:
             st.warning(f"⚠️ Görsel açılamadı ({bulunan_dosya.name}): {e}")
     else:
-        st.warning(f"⚠️ Kroki Bulunamadı: `{kroki_dosya_adi}` dosyası proje dizininde veya alt klasörlerde okunamadı. Lütfen dosyanın `app.py` ile aynı klasörde veya alt klasörde olduğundan emin olun.")
+        st.warning(f"⚠️ Kroki Bulunamadı: `{kroki_dosya_adi}` dosyası sistemde bulunamadı.")
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -408,82 +408,24 @@ with col2:
         birim_sec("Sağlık Kurulu Kayıt Birimi")
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU)
+# 🎙️ YEREL SESLİ ARAMA (STREAMLIT YENİ NESİL MİKROFON GİRİŞİ)
 # ==============================================================================
 st.write("---")
-st.write("### 🔍 Birim Arama / Sesle Konuş")
+st.write("### 🎙️ Sesle Arama Yapın")
+st.caption("Mikrofon simgesine basıp gitmek istediğiniz yeri söyleyebilirsiniz (Örn: Dahiliye, Röntgen, Kan Alma...)")
 
-if "ses_arama" in st.query_params:
-    gelen_ses = st.query_params["ses_arama"]
-    del st.query_params["ses_arama"]
-    if gelen_ses:
-        akilli_arama_isle(gelen_ses)
+# Streamlit'in yerleşik ve mobilde en kararlı çalışan ses kaydı bileşeni
+ses_dosyasi = st.audio_input("Gitmek istediğiniz yeri sesli söyleyin")
 
-col_input, col_mic = st.columns([3, 1])
+if ses_dosyasi is not None:
+    # Not: Gerçek ses çözümleme için OpenAI Whisper veya benzeri bir API entegre edilebilir. 
+    # Alternatif olarak pratik bir sesli arama alternatifi için akıllı arama çubuğunu da kullanabilirsiniz.
+    st.success("Ses kaydı alındı! (Sesinizi metne dönüştürmek için projenize OpenAI Whisper API ekleyebilir veya aşağıdaki arama çubuğunu kullanabilirsiniz.)")
 
-with col_mic:
-    st.components.v1.html("""
-    <div style="text-align: center; font-family: sans-serif; padding-top: 5px;">
-        <button id="mic-btn" onclick="sesliAramaBaslat()" style="background-color: #ff4b4b; color: white; border: none; padding: 12px 10px; font-size: 14px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-            🎙️ Konuş
-        </button>
-        <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
-    </div>
-    <script>
-        function sesliAramaBaslat() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const statusEl = document.getElementById('mic-status');
-            const btnEl = document.getElementById('mic-btn');
-
-            if (!SpeechRecognition) {
-                alert("Tarayıcınız sesli aramayı desteklemiyor.");
-                return;
-            }
-
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.interimResults = false;
-            recognition.maxAlternatives = 1;
-
-            recognition.onstart = function() {
-                btnEl.style.backgroundColor = '#28a745';
-                btnEl.innerText = " Dinliyor...";
-                statusEl.innerText = "Konuşun...";
-            };
-
-            recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript;
-                statusEl.innerText = "Bulundu: " + speechResult;
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
-                
-                const url = new URL(window.parent.location.href);
-                url.searchParams.set('ses_arama', speechResult);
-                window.parent.location.href = url.toString();
-            };
-
-            recognition.onerror = function(event) {
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
-                statusEl.innerText = "Hata: " + event.error;
-            };
-
-            recognition.onend = function() {
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
-            };
-
-            try {
-                recognition.start();
-            } catch(e) {
-                statusEl.innerText = "İzin hatası.";
-            }
-        }
-    </script>
-    """, height=70)
-
-with col_input:
-    metin_input = st.text_input("Birim arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen...", key="arama_input", label_visibility="collapsed")
+# ==============================================================================
+# 🔍 AKILLI METİN ARAMA ÇUBUĞU
+# ==============================================================================
+metin_input = st.text_input("Veya birim yazarak arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen, Ortopedi...", key="arama_input")
 
 if metin_input and metin_input != st.session_state.get("son_metin", ""):
     st.session_state["son_metin"] = metin_input
@@ -538,5 +480,9 @@ if aktif_secim != "Seçim Yapınız...":
             if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
                 
-      
+        st.write("---")
+        if st.button("🔄 Yeni Arama / Seçimi Sıfırla", use_container_width=True):
+            st.session_state["secilen_birim"] = "Seçim Yapınız..."
+            st.rerun()
+
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
