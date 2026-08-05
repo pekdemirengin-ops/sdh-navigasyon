@@ -372,7 +372,7 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
-    if not st.session_state["ses_izni"]:
+if not st.session_state["ses_izni"]:
     st.markdown("""
         <div class="ses-uyari">
             ⚠️ <b>Sesli anlatımı aktifleştirmek için:</b> Lütfen aşağıdaki butona dokunarak ses motorunu başlatın.
