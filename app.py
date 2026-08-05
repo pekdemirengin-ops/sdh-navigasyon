@@ -36,16 +36,6 @@ st.markdown("""
     input, select {
         font-size: 16px !important;
     }
-    .ses-uyari {
-        background-color: #fff3cd;
-        color: #856404;
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 13px;
-        text-align: center;
-        margin-bottom: 10px;
-        border: 1px solid #ffeeba;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -256,8 +246,6 @@ if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
-if "ses_izni" not in st.session_state:
-    st.session_state["ses_izni"] = False
 
 # ==============================================================================
 # 🛠️ YARDIMCI FONKSİYONLAR
@@ -368,17 +356,6 @@ def akilli_arama_isle(gelen_metin):
 st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
-
-if not st.session_state["ses_izni"]:
-    st.markdown("""
-        <div class="ses-uyari">
-            ⚠️ <b>Sesli anlatımı aktifleştirmek için:</b> Lütfen aşağıdaki butona dokunarak ses motorunu başlatın.
-        </div>
-    """, unsafe_allow_html=True)
-    if st.button("🔊 Sesli Yönlendirmeyi Başlat", use_container_width=True):
-        st.session_state["ses_izni"] = True
-        otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası navigasyon sistemine hoş geldiniz.")
-        st.rerun()
 
 # ==============================================================================
 # 🚀 HIZLI ERİŞİM BUTONLARI
