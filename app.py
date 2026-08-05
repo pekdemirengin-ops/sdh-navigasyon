@@ -122,7 +122,7 @@ POLIKLINIKLER = {
     "Poliklinik Heyet Dahiliye": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
-        "kroki": "heyet_dahiliye_yol_tarifi.png"
+        "kroki": "heyet_dahiliye_polk_yol_tarifi.png"
     },
     "Olgu Göğüs Hastalıkları": {
         "fancy": False, "kat": "1kat",
