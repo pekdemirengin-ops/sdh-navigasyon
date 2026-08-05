@@ -372,12 +372,7 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
-if not st.session_state["ses_izni"]:
-    st.markdown("""
-        <div class="ses-uyari">
-            ⚠️ <b>Sesli anlatımı aktifleştirmek için:</b> Lütfen aşağıdaki butona dokunarak ses motorunu başlatın.
-        </div>
-    """, unsafe_allow_html=True)
+
     if st.button("🔊 Sesli Yönlendirmeyi Başlat", use_container_width=True):
         st.session_state["ses_izni"] = True
         otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası navigasyon sistemine hoş geldiniz.")
