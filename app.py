@@ -149,6 +149,21 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
         "kroki": "cocuk_gelisim_yol_tarifi.png"
     },
+    "Solunum Fonksiyon (SFT) Birimi": {
+        "fancy": False, "kat": "1kat",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
+        "kroki": "solunum_fonksiyon_yol_tarifi.png"
+    }
+    "Heyet Çocuk Psikiyatri Poliklinik": {
+        "fancy": False, "kat": "zemin",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
+        "kroki": "heyet_cocuk_psikiyatri_polk_yol_tarifi.png"
+    },
+    "Çocuk Evde Sağlık Birimi": {
+        "fancy": False, "kat": "zemin",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun sonunda sağ tarafınızda yer alır.",
+        "kroki": "cocuk_evde_bakım_yol_tarifi.png"
+    },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sol tarafında yer alır.",
@@ -164,11 +179,7 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliğinin yanında yer alır.",
         "kroki": "heyet_ortopedi_polk_yol_tarifi.png"
     },
-    "Heyet Çocuk Psikiyatri Poliklinik": {
-        "fancy": False, "kat": "zemin",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
-        "kroki": "heyet_cocuk_psikiyatri_polk_yol_tarifi.png"
-    },
+    
     "Konuşma Terapisti": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
@@ -203,12 +214,8 @@ POLIKLINIKLER = {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
         "kroki": "sabim_cimer_yol_tarifi.png"
-    },
-    "Solunum Fonksiyon (SFT) Birimi": {
-        "fancy": False, "kat": "1kat",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
-        "kroki": "solunum_fonksiyon_yol_tarifi.png"
     }
+    
 }
 
 DIGER_ALANLAR = {
