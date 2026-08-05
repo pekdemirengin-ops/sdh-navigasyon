@@ -425,7 +425,7 @@ with col_mic:
     </div>
     <script>
         const tarifVeritabani = {
-            "heyet çocuk çözger poliklinik": "1.Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sol tarafta görme alanının yanında yer alır.",
+            "heyet çocuk çözger poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sol tarafta görme alanının yanında yer alır.",
             "heyet fizik tedavi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün.  Koridorun sol tarafında yer alır.",
             "heyet kbb poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında Heyet Ortopedi Polikliniğin yanında yer alır.",
             "heyet ortopedi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliniğin yanında yer alır.",
