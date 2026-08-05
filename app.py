@@ -527,7 +527,7 @@ if aktif_secim != "Seçim Yapınız...":
             otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
-            st.warning(f"🚶 **Yol Taarifi:** {bilgi['tarif']}")
+            st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
             if bilgi.get('kroki'):
