@@ -422,7 +422,6 @@ if "ses_arama" in st.query_params:
     del st.query_params["ses_arama"]
     if gelen_ses:
         akilli_arama_isle(gelen_ses)
-        st.rerun()
 
 col_input, col_mic = st.columns([3, 1])
 
@@ -539,15 +538,13 @@ if aktif_secim != "Seçim Yapınız...":
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
             st.error(f"🚶 **Yönlendirme:** {bilgi['tarif']}")
-            if st.session_state.get("ses_izni", False):
-                otomatik_sesli_oku(bilgi['tarif'])
+            otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
-            if st.session_state.get("ses_izni", False):
-                otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
+            otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
             if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
-                
+
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
