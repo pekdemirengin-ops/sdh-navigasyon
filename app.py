@@ -238,15 +238,15 @@ ES_ANLAMLILAR = {
     "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
     "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu",
-    "kulak": "Poliklinik Heyet KBB", "kbb": "Poliklinik Heyet KBB",
-    "göz": "Poliklinik Heyet Göz", "kalp": "Poliklinik Heyet Kardiyoloji", "kardiyoloji": "Poliklinik Heyet Kardiyoloji",
-    "çocuk": "Poliklinik Heyet Çocuk", "fizik": "Poliklinik Heyet Fizik Tedavi (Zemin)",
-    "göğüs": "Poliklinik Heyet Göğüs Hastalıkları", "üroloji": "Poliklinik Heyet Üroloji",
-    "cerrahi": "Poliklinik Heyet Genel Cerrahi", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (ODİO)",
-    "odio": "İşitme Testi (ODİO)", "dahiliye": "Poliklinik Heyet Dahiliye",
-    "nöroloji": "Poliklinik Heyet Nöroloji", "ortopedi": "Poliklinik Heyet Ortopedi",
-    "psikiyatri": "Poliklinik Psikiyatri", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
+    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik",
+    "göz": "Heyet Göz Poliklinik", "kalp": "Heyet Kardiyoloji Poliklinik", "kardiyoloji": "Heyet Kardiyoloji Poliklinik",
+    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "fizik": "Heyet Fizik Tedavi Poliklinik",
+    "göğüs": "Heyet Göğüs Hastalıkları Poliklinik", "üroloji": "Heyet Üroloji Poliklinik",
+    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (Odio)",
+    "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
+    "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
+    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
 }
 
 # ==============================================================================
@@ -260,7 +260,7 @@ if "ses_izni" not in st.session_state:
     st.session_state["ses_izni"] = False
 
 # ==============================================================================
-# 🛠️ YARDIMCI FONKSİYONLAR (ÇOK ESNEK KROKİ BULUCU)
+# 🛠️ YARDIMCI FONKSİYONLAR
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
@@ -492,7 +492,7 @@ if metin_input and metin_input != st.session_state.get("son_metin", ""):
 st.write("---")
 kategori = st.radio(
     "Kategori", 
-    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel ve İdari Birimler"], 
+    ["🏥 Resmi Poliklinikler / Odalar", "⚙️ Genel dan İdari Birimler"], 
     key="kategori",
     horizontal=True, 
     label_visibility="collapsed"
@@ -526,13 +526,11 @@ if aktif_secim != "Seçim Yapınız...":
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
             st.error(f"🚶 **Yönlendirme:** {bilgi['tarif']}")
-            if st.session_state.get("ses_izni", False):
-                otomatik_sesli_oku(bilgi['tarif'])
+            otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
-            if st.session_state.get("ses_izni", False):
-                otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
+            otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
             if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
