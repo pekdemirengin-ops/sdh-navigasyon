@@ -389,16 +389,10 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU - TARAYICI ÜZERİNDEN DOĞRUDAN SESLİ YANITLI)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
-
-if "ses_arama" in st.query_params:
-    gelen_ses = st.query_params["ses_arama"]
-    del st.query_params["ses_arama"]
-    if gelen_ses:
-        akilli_arama_isle(gelen_ses)
 
 col_input, col_mic = st.columns([3, 1])
 
@@ -438,6 +432,7 @@ with col_mic:
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 
+                // Tarayıcı üzerinden doğrudan sayfayı yenilemeden query parametresi ekleyip tetikle
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
@@ -462,6 +457,12 @@ with col_mic:
         }
     </script>
     """, height=70)
+
+if "ses_arama" in st.query_params:
+    gelen_ses = st.query_params["ses_arama"]
+    del st.query_params["ses_arama"]
+    if gelen_ses:
+        akilli_arama_isle(gelen_ses)
 
 with col_input:
     metin_input = st.text_input("Birim arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen...", key="arama_input", label_visibility="collapsed")
