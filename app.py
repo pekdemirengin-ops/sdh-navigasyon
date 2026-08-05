@@ -225,22 +225,18 @@ DIGER_ALANLAR = {
 }
 
 ES_ANLAMLILAR = {
-    "kan": "Kan Alma Birimi", "kan alma": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
+    "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
-    "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu", "sağlık kurulu": "Sağlık Kurulu",
-    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik", "kulak burun boğaz": "Heyet KBB Poliklinik",
-    "göz": "Heyet Göz Poliklinik", "kalp": "Heyet Kardiyoloji Poliklinik", "kardiyoloji": "Heyet Kardiyoloji Poliklinik",
-    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "çözger": "Heyet Çocuk (Çözger) Poliklinik",
-    "fizik": "Heyet Fizik Tedavi Poliklinik", "fizik tedavi": "Heyet Fizik Tedavi Poliklinik",
-    "göğüs": "Heyet Göğüs Hastalıkları Poliklinik", "üroloji": "Heyet Üroloji Poliklinik",
-    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "genel cerrahi": "Heyet Genel Cerrahi Poliklinik",
-    "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)", "film": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "işitme": "İşitme Testi (Odio)", "odio": "İşitme Testi (Odio)", "işitme testi": "İşitme Testi (Odio)",
-    "dahiliye": "Heyet Dahiliye Poliklinik", "nöroloji": "Heyet Nöroloji Poliklinik",
-    "ortopedi": "Heyet Ortopedi Poliklinik", "psikiyatri": "Heyet Psikiyatri Poliklinik",
-    "cimer": "Sabim Cimer Birimi", "sabim": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi",
-    "asansör": "Asansör", "vezne": "Evrak Kayıt / Vezne", "evrak kayıt": "Evrak Kayıt / Vezne",
-    "hasta kayıt": "Hasta Kayıt"
+    "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu",
+    "kulak": "Poliklinik Heyet KBB", "kbb": "Poliklinik Heyet KBB",
+    "göz": "Poliklinik Heyet Göz", "kalp": "Poliklinik Heyet Kardiyoloji", "kardiyoloji": "Poliklinik Heyet Kardiyoloji",
+    "çocuk": "Poliklinik Heyet Çocuk", "fizik": "Poliklinik Heyet Fizik Tedavi (Zemin)",
+    "göğüs": "Poliklinik Heyet Göğüs Hastalıkları", "üroloji": "Poliklinik Heyet Üroloji",
+    "cerrahi": "Poliklinik Heyet Genel Cerrahi", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (ODİO)",
+    "odio": "İşitme Testi (ODİO)", "dahiliye": "Poliklinik Heyet Dahiliye",
+    "nöroloji": "Poliklinik Heyet Nöroloji", "ortopedi": "Poliklinik Heyet Ortopedi",
+    "psikiyatri": "Poliklinik Psikiyatri", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
 }
 
 # ==============================================================================
@@ -259,19 +255,15 @@ def otomatik_sesli_oku(metin):
         temiz_metin = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
         js_kodu = f"""
         <script>
-            function konusData() {{
-                try {{
-                    if ('speechSynthesis' in window) {{
-                        window.speechSynthesis.cancel();
-                        var msg = new SpeechSynthesisUtterance('{temiz_metin}');
-                        msg.lang = 'tr-TR';
-                        msg.rate = 1.0;
-                        window.speechSynthesis.speak(msg);
-                    }}
-                }} catch(e) {{}}
-            }}
-            setTimeout(konusData, 400);
-            document.addEventListener('click', konusData, {{once: true}});
+            try {{
+                if ('speechSynthesis' in window) {{
+                    window.speechSynthesis.cancel();
+                    var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+                    msg.lang = 'tr-TR';
+                    msg.rate = 1.0;
+                    window.speechSynthesis.speak(msg);
+                }}
+            }} catch(e) {{}}
         </script>
         """
         st.components.v1.html(js_kodu, height=0)
@@ -336,39 +328,27 @@ def birim_sec(birim_adi):
 
 def akilli_arama_isle(gelen_metin):
     if not gelen_metin:
-        return False
-    temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower()).strip()
+        return
+    temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower())
+    kelimeler = temiz.split()
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
-    if temiz in ES_ANLAMLILAR:
-        birim_sec(ES_ANLAMLILAR[temiz])
-        return True
+    for k in kelimeler:
+        if k in ES_ANLAMLILAR:
+            birim_sec(ES_ANLAMLILAR[k])
+            return
 
     for birim in tum_birimler:
-        if temiz == birim.lower():
+        if temiz in birim.lower() or birim.lower() in temiz:
             birim_sec(birim)
-            return True
+            return
 
-    for anahtar, hedef in ES_ANLAMLILAR.items():
-        if anahtar in temiz or temiz in anahtar:
-            birim_sec(hedef)
-            return True
-
-    kelimeler = temiz.split()
-    en_iyi_eslesme = None
-    max_ortak_kelime = 0
-
-    for birim in tum_birimler:
-        birim_kelimeleri = birim.lower().split()
-        ortak = sum(1 for k in kelimeler if k in birim_kelimeleri)
-        if ortak > max_ortak_kelime:
-            max_ortak_kelime = ortak
-            en_iyi_eslesme = birim
-
-    if en_iyi_eslesme and max_ortak_kelime > 0:
-        birim_sec(en_iyi_eslesme)
-        return True
-    return False
+    for k in kelimeler:
+        if len(k) >= 3:
+            for birim in tum_birimler:
+                if k in birim.lower():
+                    birim_sec(birim)
+                    return
 
 # ==============================================================================
 # 🖥️ ARAYÜZ BAŞLIK VE KARŞILAMA
@@ -376,13 +356,6 @@ def akilli_arama_isle(gelen_metin):
 st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
-
-# Sesli arama parametresi kontrolü (Sayfa yenilendiğinde çalışır)
-if "ses_arama" in st.query_params:
-    gelen_ses = st.query_params["ses_arama"]
-    del st.query_params["ses_arama"]
-    if gelen_ses:
-        akilli_arama_isle(gelen_ses)
 
 # ==============================================================================
 # 🚀 HIZLI ERİŞİM BUTONLARI
@@ -416,7 +389,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU - TARAYICI ÜZERİNDEN DOĞRUDAN SESLİ YANITLI)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -432,16 +405,6 @@ with col_mic:
         <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
     </div>
     <script>
-        function sesliOkuyucu(metin) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                var msg = new SpeechSynthesisUtterance(metin);
-                msg.lang = 'tr-TR';
-                msg.rate = 1.0;
-                window.speechSynthesis.speak(msg);
-            }
-        }
-
         function sesliAramaBaslat() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const statusEl = document.getElementById('mic-status');
@@ -464,11 +427,12 @@ with col_mic:
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
+                const speechResult = event.results[0][0].transcript;
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
-
+                
+                // Tarayıcı üzerinden doğrudan sayfayı yenilemeden query parametresi ekleyip tetikle
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
@@ -494,13 +458,19 @@ with col_mic:
     </script>
     """, height=70)
 
+if "ses_arama" in st.query_params:
+    gelen_ses = st.query_params["ses_arama"]
+    del st.query_params["ses_arama"]
+    if gelen_ses:
+        akilli_arama_isle(gelen_ses)
+
 with col_input:
     metin_input = st.text_input("Birim arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen...", key="arama_input", label_visibility="collapsed")
 
 if metin_input and metin_input != st.session_state.get("son_metin", ""):
     st.session_state["son_metin"] = metin_input
-    if akilli_arama_isle(metin_input):
-        st.rerun()
+    akilli_arama_isle(metin_input)
+    st.rerun()
 
 # ==============================================================================
 # 🗂️ KATEGORİ VE LİSTELEME
@@ -520,7 +490,7 @@ if "Poliklinikler" in kategori:
     idx = liste.index(secili_val) if secili_val in liste else 0
     
     secim = st.selectbox("POLİKLİNİK SEÇİNİZ:", liste, index=idx, key="sb_polk")
-    if secim != st.session_state.get("secilen_birim") and secim != "Seçim Yapınız...":
+    if secim != st.session_state.get("secilen_birim"):
         st.session_state["secilen_birim"] = secim
         st.rerun()
 else:
@@ -529,12 +499,12 @@ else:
     idx = liste.index(secili_val) if secili_val in liste else 0
     
     secim = st.selectbox("DİĞER BİRİMLERİ SEÇİNİZ:", liste, index=idx, key="sb_diger")
-    if secim != st.session_state.get("secilen_birim") and secim != "Seçim Yapınız...":
+    if secim != st.session_state.get("secilen_birim"):
         st.session_state["secilen_birim"] = secim
         st.rerun()
 
 # ==============================================================================
-# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME & KROKİ
+# 🎯 SONUÇ GÖSTERİMİ & SESLENDİRME
 # ==============================================================================
 aktif_secim = st.session_state["secilen_birim"]
 
@@ -552,9 +522,7 @@ if aktif_secim != "Seçim Yapınız...":
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
-        if bilgi.get('kroki'):
-            st.write("---")
-            st.write("### 🗺️ Rota Krokisi")
-            kroki_goster(bilgi['kroki'])
+            if bilgi.get('kroki'):
+                kroki_goster(bilgi['kroki'])
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
