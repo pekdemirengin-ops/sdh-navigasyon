@@ -228,15 +228,15 @@ ES_ANLAMLILAR = {
     "kan": "Kan Alma Birimi", "tahlil": "Kan Alma Birimi", "laboratuvar": "Kan Alma Birimi",
     "wc": "Tuvaletler / Lavabolar", "lavabo": "Tuvaletler / Lavabolar", "tuvalet": "Tuvaletler / Lavabolar",
     "heyet": "Sağlık Kurulu", "rapor": "Sağlık Kurulu",
-    "kulak": "Poliklinik Heyet KBB", "kbb": "Poliklinik Heyet KBB",
-    "göz": "Poliklinik Heyet Göz", "kalp": "Poliklinik Heyet Kardiyoloji", "kardiyoloji": "Poliklinik Heyet Kardiyoloji",
-    "çocuk": "Poliklinik Heyet Çocuk", "fizik": "Poliklinik Heyet Fizik Tedavi (Zemin)",
-    "göğüs": "Poliklinik Heyet Göğüs Hastalıkları", "üroloji": "Poliklinik Heyet Üroloji",
-    "cerrahi": "Poliklinik Heyet Genel Cerrahi", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
-    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (ODİO)",
-    "odio": "İşitme Testi (ODİO)", "dahiliye": "Poliklinik Heyet Dahiliye",
-    "nöroloji": "Poliklinik Heyet Nöroloji", "ortopedi": "Poliklinik Heyet Ortopedi",
-    "psikiyatri": "Poliklinik Psikiyatri", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
+    "kulak": "Heyet KBB Poliklinik", "kbb": "Heyet KBB Poliklinik",
+    "göz": "Heyet Göz Poliklinik", "kalp": "Heyet Kardiyoloji Poliklinik", "kardiyoloji": "Heyet Kardiyoloji Poliklinik",
+    "çocuk": "Heyet Çocuk (Çözger) Poliklinik", "fizik": "Heyet Fizik Tedavi Poliklinik",
+    "göğüs": "Heyet Göğüs Hastalıkları Poliklinik", "üroloji": "Heyet Üroloji Poliklinik",
+    "cerrahi": "Heyet Genel Cerrahi Poliklinik", "röntgen": "Röntgen / Görüntüleme (DİĞER BİNA)",
+    "film": "Röntgen / Görüntüleme (DİĞER BİNA)", "işitme": "İşitme Testi (Odio)",
+    "odio": "İşitme Testi (Odio)", "dahiliye": "Heyet Dahiliye Poliklinik",
+    "nöroloji": "Heyet Nöroloji Poliklinik", "ortopedi": "Heyet Ortopedi Poliklinik",
+    "psikiyatri": "Heyet Psikiyatri Poliklinik", "cimer": "Sabim Cimer Birimi", "sft": "Solunum Fonksiyon (SFT) Birimi"
 }
 
 # ==============================================================================
@@ -333,26 +333,41 @@ def birim_sec(birim_adi):
 def akilli_arama_isle(gelen_metin):
     if not gelen_metin:
         return
-    temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower())
-    kelimeler = temiz.split()
+    temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower()).strip()
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
+    # 1. Tam eş anlamlı kelime kontrolü
+    if temiz in ES_ANLAMLILAR:
+        birim_sec(ES_ANLAMLILAR[temiz])
+        return
+
+    # 2. Tam birim adı eşleşmesi
+    for birim in tum_birimler:
+        if temiz == birim.lower():
+            birim_sec(birim)
+            return
+
+    # 3. Kelime bazlı en iyi eşleşme (Skorlama mantığı)
+    kelimeler = temiz.split()
+    en_iyi_eslesme = None
+    max_ortak_kelime = 0
+
+    for birim in tum_birimler:
+        birim_kelimeleri = birim.lower().split()
+        ortak = sum(1 for k in kelimeler if k in birim_kelimeleri)
+        if ortak > max_ortak_kelime:
+            max_ortak_kelime = ortak
+            en_iyi_eslesme = birim
+
+    if en_iyi_eslesme and max_ortak_kelime > 0:
+        birim_sec(en_iyi_eslesme)
+        return
+
+    # 4. Kısmi eş anlamlı kelime arama
     for k in kelimeler:
         if k in ES_ANLAMLILAR:
             birim_sec(ES_ANLAMLILAR[k])
             return
-
-    for birim in tum_birimler:
-        if temiz in birim.lower() or birim.lower() in temiz:
-            birim_sec(birim)
-            return
-
-    for k in kelimeler:
-        if len(k) >= 3:
-            for birim in tum_birimler:
-                if k in birim.lower():
-                    birim_sec(birim)
-                    return
 
 # ==============================================================================
 # 🖥️ ARAYÜZ BAŞLIK VE KARŞILAMA
@@ -393,7 +408,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API ENTEGRASYONU - DOĞRUDAN SESLİ ÇIKIŞLI)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN EŞLEŞME MİMARİSİ)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -409,9 +424,8 @@ with col_mic:
         <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
     </div>
     <script>
-        // Python tarafındaki veri tabanı listesinin JavaScript karşılığı (sesli okumayı doğrudan tetiklemek için)
         const tarifVeritabani = {
-            "heyet çocuk (çözger) poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
+            "heyet çocuk çözger poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
             "heyet fizik tedavi poliklinik": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
             "heyet kbb poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.",
             "heyet ortopedi poliklinik": "Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.",
@@ -431,35 +445,35 @@ with col_mic:
             "konuşma terapisti": "Birinci Kat - Merdivenlerden çıkınca arka merdiven yönüne sola dönün, koridorun sonunda sol taraftadır.",
             "heyet kardiyoloji poliklinik": "Birinci Kat - Ana koridorda sağa doğru sonuna kadar ilerleyin. Sağ taraftaki en son odadır.",
             "heyet üroloji poliklinik": "Birinci Kat - Merdivenlerden çıkıp sola dönün. Koridorun sonundaki sol oda.",
-            "işitme testi (odio)": "Birinci Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
+            "işitme testi odio": "Birinci Kat - Sağa doğru ilerleyin, test odası koridorun sağ tarafında kalmaktadır.",
             "göz oct odası": "Birinci Kat - Koridorda sağa doğru ilerleyin, İşitme Testi odasının hemen yanında sağda yer alır.",
             "göz ölçüm": "Birinci Kat - Merdivenlerden çıkıp sola yönelin, ilk sol kapıdan girin.",
             "nöroloji poliklinik": "Birinci Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.",
             "heyet psikiyatri poliklinik": "Birinci Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
             "sabim cimer birimi": "Birinci Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne sola dönün, koridoru takip edin.",
-            "solunum fonksiyon (sft) birimi": "Birinci Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
-            "evrak kayıt / vezne": "Zemin Kat - Ana girişten tam karşınızda.",
+            "solunum fonksiyon sft birimi": "Birinci Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.",
+            "evrak kayıt vezne": "Zemin Kat - Ana girişten tam karşınızda.",
             "hasta kayıt": "Ana girişte sol tarafta yer alır.",
             "evde sağlık hizmetleri birimi": "Zemin Katta olup girişi binanın kuzey yönündedir.",
-            "röntgen / görüntüleme (diğer bina)": "Diğer binadadır! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır.",
+            "röntgen görüntüleme diğer bina": "Diğer binadadır! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır.",
             "asansör": "Birinci katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.",
             "emzirme odası": "Birinci Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
-            "tuvaletler / lavabolar": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır."
+            "tuvaletler lavabolar": "Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır."
         };
 
         const esAnlamlilar = {
             "kan": "kan alma birimi", "tahlil": "kan alma birimi", "laboratuvar": "kan alma birimi",
-            "wc": "tuvaletler / lavabolar", "lavabo": "tuvaletler / lavabolar", "tuvalet": "tuvaletler / lavabolar",
+            "wc": "tuvaletler lavabolar", "lavabo": "tuvaletler lavabolar", "tuvalet": "tuvaletler lavabolar",
             "heyet": "sağlık kurulu", "rapor": "sağlık kurulu",
             "kulak": "heyet kbb poliklinik", "kbb": "heyet kbb poliklinik",
             "göz": "heyet göz poliklinik", "kalp": "heyet kardiyoloji poliklinik", "kardiyoloji": "heyet kardiyoloji poliklinik",
             "çocuk": "heyet çocuk çözger poliklinik", "fizik": "heyet fizik tedavi poliklinik",
             "göğüs": "heyet göğüs hastalıkları poliklinik", "üroloji": "heyet üroloji poliklinik",
-            "cerrahi": "heyet genel cerrahi poliklinik", "röntgen": "röntgen / görüntüleme (diğer bina)",
-            "film": "röntgen / görüntüleme (diğer bina)", "işitme": "işitme testi (odio)",
-            "odio": "işitme testi (odio)", "dahiliye": "heyet dahiliye poliklinik",
+            "cerrahi": "heyet genel cerrahi poliklinik", "röntgen": "röntgen görüntüleme diğer bina",
+            "film": "röntgen görüntüleme diğer bina", "işitme": "işitme testi odio",
+            "odio": "işitme testi odio", "dahiliye": "heyet dahiliye poliklinik",
             "nöroloji": "heyet nöroloji poliklinik", "ortopedi": "heyet ortopedi poliklinik",
-            "psikiyatri": "heyet psikiyatri poliklinik", "cimer": "sabim cimer birimi", "sft": "solunum fonksiyon (sft) birimi"
+            "psikiyatri": "heyet psikiyatri poliklinik", "cimer": "sabim cimer birimi", "sft": "solunum fonksiyon sft birimi"
         };
 
         function sesliOkuyucu(metin) {
@@ -494,29 +508,28 @@ with col_mic:
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().trim();
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 
-                // Sesli arama yanıt metnini bul ve anında tarayıcı üzerinden seslendir
                 let bulunanBirim = "";
                 let tarif = "";
 
-                // Eş anlamlı kelime kontrolü
-                for (let kelime in esAnlamlilar) {
-                    if (speechResult.includes(kelime)) {
-                        bulunanBirim = esAnlamlilar[kelime];
-                        break;
-                    }
-                }
-
-                // Tam eşleşme veya kısmi eşleşme kontrolü
-                if (!bulunanBirim) {
+                if (esAnlamlilar[speechResult]) {
+                    bulunanBirim = esAnlamlilar[speechResult];
+                } else if (tarifVeritabani[speechResult]) {
+                    bulunanBirim = speechResult;
+                } else {
+                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
+                    let kelimeler = speechResult.split(" ");
+                    let maxOrtak = 0;
                     for (let birim in tarifVeritabani) {
-                        if (speechResult.includes(birim) || birim.includes(speechResult)) {
+                        let birimKelimeleri = birim.split(" ");
+                        let ortak = kelimeler.filter(k => birimKelimeleri.includes(k)).length;
+                        if (ortak > maxOrtak) {
+                            maxOrtak = ortak;
                             bulunanBirim = birim;
-                            break;
                         }
                     }
                 }
@@ -528,7 +541,6 @@ with col_mic:
                     sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
                 }
 
-                // Sayfayı güncellemek üzere query parametresi ekle
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
