@@ -146,7 +146,7 @@ POLIKLINIKLER = {
     },
     "Çocuk Gelişim Birimi": {
         "fancy": False, "kat": "zemin",
-        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
+        "tarif": "1. Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
         "kroki": "cocuk_gelisim_yol_tarifi.png"
     },
     "Heyet Fizik Tedavi Poliklinik": {
