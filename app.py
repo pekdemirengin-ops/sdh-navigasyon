@@ -62,7 +62,7 @@ POLIKLINIKLER = {
     "Poliklinik Heyet Fizik Tedavi (Zemin)": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.",
-        "kroki": "heyet_fizik_yol_tarifi.png"
+        "kroki": "heyet_fizik_tedavi_polk_yol_tarifi.png"
     },
     "Poliklinik Heyet KBB": {
         "fancy": False, "kat": "zemin",
