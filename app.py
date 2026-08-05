@@ -172,7 +172,7 @@ POLIKLINIKLER = {
     "Heyet Psikiyatri Poliklinik": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.",
-        "kroki": "heyet_psikiyatri_yol_tarifi.png"
+        "kroki": "heyet_psikiyatri_polk_yol_tarifi.png"
     },
     "Sabim Cimer Birimi": {
         "fancy": False, "kat": "1kat",
