@@ -124,10 +124,10 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.",
         "kroki": "heyet_dahiliye_polk_yol_tarifi.png"
     },
-    "Olgu Göğüs Hastalıkları": {
+    "Heyet Göğüs Hastalıkları": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıktıktan hemen sonra sol çaprazda yer almaktadır.",
-        "kroki": "olgu_gogus_yol_tarifi.png"
+        "kroki": "heyet_gogus_hastalıkları_polk_yol_tarifi.png"
     },
     "Poliklinik Heyet Göğüs Hastalıkları": {
         "fancy": False, "kat": "1kat",
