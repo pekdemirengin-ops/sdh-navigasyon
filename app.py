@@ -134,10 +134,10 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden çıkıp sola dönün, en uçtaki sol odadır.",
         "kroki": "heyet_goz_polk_yol_tarifi.png"
     },
-    "Heyet Çocuk Poliklinik": {
+    "Konuşma Terapisti": {
         "fancy": False, "kat": "1kat",
         "tarif": "1. Kat - Merdivenlerden çıkınca arka merdiven yönüne (sola) dönün, koridorun sonunda sol taraftadır.",
-        "kroki": "heyet_cocuk_yol_tarifi.png"
+        "kroki": "konusma_terapisti_yol_tarifi.png"
     },
     "Konuşma Terapisti Birimi": {
         "fancy": False, "kat": "1kat",
