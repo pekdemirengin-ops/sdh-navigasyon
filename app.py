@@ -210,7 +210,7 @@ DIGER_ALANLAR = {
     "Evde Sağlık Hizmetleri Birimi": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Katta olup girişi binanın kuzey yönündedir.", 
-        "kroki": "evde_saglik_yol_tarifi.png"
+        "kroki": "evde_saglık_hizmetleri_yol_tarifi"
     },
     "Röntgen / Görüntüleme (DİĞER BİNA)": {
         "fancy": True, "kat": "", 
