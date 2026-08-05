@@ -124,6 +124,16 @@ POLIKLINIKLER = {
         "tarif": "1. Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır.", 
         "kroki": "emzirme_odası_yol_tarifi.png"
     },
+    "Ekg Birimi": {
+        "fancy": False, "kat": "zemin", 
+        "tarif": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır.", 
+        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
+    },
+    "Heyet Cildiye Poliklinikleri": {
+        "fancy": False, "kat": "zemin",
+        "tarif": "Birinci Kat - Merdivenlerden çıkınca sağa dönün, asansörden çıkınca sola dönün. Heyet Nöroloji polikliniğinin karşısında yer alır.",
+        "kroki": "heyet_cildiye_polk_yol_tarifi.png"
+    },
     "Heyet Fizik Tedavi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sol tarafında yer alır.",
@@ -134,7 +144,6 @@ POLIKLINIKLER = {
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında Heyet Ortopedi Polikliniğin yanında yer alır.",
         "kroki": "heyet_kbb_polk_yol_tarifi.png"
     },
-    
     "Heyet Ortopedi Poliklinik": {
         "fancy": False, "kat": "zemin",
         "tarif": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliğinin yanında yer alır.",
@@ -206,11 +215,6 @@ DIGER_ALANLAR = {
     "Evrak Kayıt / Vezne": {
         "fancy": False, "kat": "zemin", 
         "tarif": "Zemin Kat - Ana girişten tam karşınızda.", 
-        "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
-    },
-    "Ekg Birimi": {
-        "fancy": False, "kat": "zemin", 
-        "tarif": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır.", 
         "kroki": "evrak_kayıt_vezne_yol_tarifi.png"
     },
     "Hasta Kayıt": {
@@ -454,6 +458,7 @@ with col_mic:
             "ön merdivenler": "Zemin Kat - Girişten girdikten sonra sola dönün, koridorun sonuna doğru sol tarafta yer alır.",
             "arka çıkış": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
             "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
+            "heyet cildiye poliklinikleri": "Birinci Kat - Merdivenlerden çıkınca sağa dönün, asansörden çıkınca sola dönün. Heyet Nöroloji polikliniğinin karşısında yer alır.",
             "fizik tedavi 2 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliniğin yanında yer alır.",
             "fizik tedavi 3 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
             "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
@@ -468,7 +473,7 @@ with col_mic:
             "göz oct odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
             "göz ölçüm": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliniğin yanında yer alır.",
             "nöroloji poliklinik 1": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliniğin yanında yer alır.",
-            "heyet psikiyatri poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır.",
+            "heyet psikiyatri poliklinikleri": "Birinci Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır.",
             "sabim cimer birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
             "solunum fonksiyon sft birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
             "evrak kayıt vezne": "Zemin Kat - Ana girişten girince tam karşınızda yer alır.",
