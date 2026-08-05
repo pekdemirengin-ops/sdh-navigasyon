@@ -330,34 +330,30 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel dan ve İdari Birimler" if False else "⚙️ Genel ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
 def akilli_arama_isle(gelen_metin):
     if not gelen_metin:
-        return
+        return False
     temiz = re.sub(r'[^\w\s]', '', gelen_metin.lower()).strip()
     tum_birimler = {**POLIKLINIKLER, **DIGER_ALANLAR}
 
-    # 1. Doğrudan es anlamlılar sözlüğünde var mı?
     if temiz in ES_ANLAMLILAR:
         birim_sec(ES_ANLAMLILAR[temiz])
-        return
+        return True
 
-    # 2. Tam birim adı eşleşmesi
     for birim in tum_birimler:
         if temiz == birim.lower():
             birim_sec(birim)
-            return
+            return True
 
-    # 3. Kısmi kelime içeren es anlamlı kontrolü
     for anahtar, hedef in ES_ANLAMLILAR.items():
         if anahtar in temiz or temiz in anahtar:
             birim_sec(hedef)
-            return
+            return True
 
-    # 4. En iyi kelime eşleşmesi skoru
     kelimeler = temiz.split()
     en_iyi_eslesme = None
     max_ortak_kelime = 0
@@ -371,7 +367,8 @@ def akilli_arama_isle(gelen_metin):
 
     if en_iyi_eslesme and max_ortak_kelime > 0:
         birim_sec(en_iyi_eslesme)
-        return
+        return True
+    return False
 
 # ==============================================================================
 # 🖥️ ARAYÜZ BAŞLIK VE KARŞILAMA
@@ -379,6 +376,13 @@ def akilli_arama_isle(gelen_metin):
 st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
+
+# Sesli arama parametresi kontrolü (Sayfa yenilendiğinde çalışır)
+if "ses_arama" in st.query_params:
+    gelen_ses = st.query_params["ses_arama"]
+    del st.query_params["ses_arama"]
+    if gelen_ses:
+        akilli_arama_isle(gelen_ses)
 
 # ==============================================================================
 # 🚀 HIZLI ERİŞİM BUTONLARI
@@ -569,19 +573,13 @@ with col_mic:
     </script>
     """, height=70)
 
-if "ses_arama" in st.query_params:
-    gelen_ses = st.query_params["ses_arama"]
-    del st.query_params["ses_arama"]
-    if gelen_ses:
-        akilli_arama_isle(gelen_ses)
-
 with col_input:
     metin_input = st.text_input("Birim arayın:", placeholder="Örn: Dahiliye, Kan, Röntgen...", key="arama_input", label_visibility="collapsed")
 
 if metin_input and metin_input != st.session_state.get("son_metin", ""):
     st.session_state["son_metin"] = metin_input
-    akilli_arama_isle(metin_input)
-    st.rerun()
+    if akilli_arama_isle(metin_input):
+        st.rerun()
 
 # ==============================================================================
 # 🗂️ KATEGORİ VE LİSTELEME
@@ -601,7 +599,7 @@ if "Poliklinikler" in kategori:
     idx = liste.index(secili_val) if secili_val in liste else 0
     
     secim = st.selectbox("POLİKLİNİK SEÇİNİZ:", liste, index=idx, key="sb_polk")
-    if secim != st.session_state.get("secilen_birim"):
+    if secim != st.session_state.get("secilen_birim") and secim != "Seçim Yapınız...":
         st.session_state["secilen_birim"] = secim
         st.rerun()
 else:
@@ -610,7 +608,7 @@ else:
     idx = liste.index(secili_val) if secili_val in liste else 0
     
     secim = st.selectbox("DİĞER BİRİMLERİ SEÇİNİZ:", liste, index=idx, key="sb_diger")
-    if secim != st.session_state.get("secilen_birim"):
+    if secim != st.session_state.get("secilen_birim") and secim != "Seçim Yapınız...":
         st.session_state["secilen_birim"] = secim
         st.rerun()
 
