@@ -255,7 +255,7 @@ if "ses_izni" not in st.session_state:
     st.session_state["ses_izni"] = False
 
 # ==============================================================================
-# 🛠️ YARDIMCI FONKSİYONLAR (GELİŞMİŞ KROKİ BULUCU)
+# 🛠️ YARDIMCI FONKSİYONLAR (ÇOK ESNEK KROKİ BULUCU)
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
@@ -279,11 +279,12 @@ def kroki_goster(kroki_dosya_adi):
     if not kroki_dosya_adi:
         return
 
-    aranan_dosya = kroki_dosya_adi.strip().lower()
+    aranan_tam = kroki_dosya_adi.strip().lower()
+    aranan_govde = Path(aranan_tam).stem.lower() # Uzantısız hali (örn: heyet_ortopedi_yol_tarifi)
+    
     su_an = Path(__file__).resolve().parent
     calisma_dizini = Path.cwd()
     
-    # Tüm olası üst ve alt dizinleri taranacak konuma ekle
     arama_dizinleri = [
         su_an,
         calisma_dizini,
@@ -296,41 +297,28 @@ def kroki_goster(kroki_dosya_adi):
     bulunan_dosya = None
     gecerli_uzantilar = {'.png', '.jpg', '.jpeg', '.webp'}
 
-    # 1. Aşama: Doğrudan dosya adı eşleşmesi ve rekürsif (alt klasörler dahil) arama
+    # Tüm olası dizinleri ve alt klasörleri tara
     for dizin in arama_dizinleri:
         if dizin.exists():
-            # Önce direkt dizini kontrol et
-            hedef = dizin / aranan_dosya
-            if hedef.is_file():
-                bulunan_dosya = hedef
-                break
-            
-            # Bulunamadıysa alt klasörlerde recursive ara
             try:
                 for dosya in dizin.rglob("*"):
-                    if dosya.is_file() and dosya.name.lower() == aranan_dosya:
-                        bulunan_dosya = dosya
-                        break
+                    if dosya.is_file() and dosya.suffix.lower() in gecerli_uzantilar:
+                        dosya_adi_lower = dosya.name.lower()
+                        dosya_govde_lower = dosya.stem.lower()
+                        
+                        # 1. Tam ad eşleşmesi veya gövde eşleşmesi
+                        if dosya_adi_lower == aranan_tam or dosya_govde_lower == aranan_govde:
+                            bulunan_dosya = dosya
+                            break
+                        
+                        # 2. İçerik esnek eşleşmesi (örn: dosya adında 'ortopedi' geçiyorsa)
+                        if aranan_govde in dosya_govde_lower or dosya_govde_lower in aranan_govde:
+                            bulunan_dosya = dosya
+                            break
             except Exception:
                 pass
         if bulunan_dosya:
             break
-
-    # 2. Aşama: Eğer tam ad bulunamadıysa esnek eşleşme yap
-    if not bulunan_dosya:
-        ham_isim = Path(aranan_dosya).stem
-        for dizin in arama_dizinleri:
-            if dizin.exists():
-                try:
-                    for dosya in dizin.rglob("*"):
-                        if dosya.is_file() and dosya.suffix.lower() in gecerli_uzantilar:
-                            if dosya.stem.lower() == ham_isim or ham_isim in dosya.stem.lower():
-                                bulunan_dosya = dosya
-                                break
-                except Exception:
-                    pass
-            if bulunan_dosya:
-                break
 
     if bulunan_dosya:
         try:
@@ -545,5 +533,5 @@ if aktif_secim != "Seçim Yapınız...":
             if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
                 
-        
+      
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
