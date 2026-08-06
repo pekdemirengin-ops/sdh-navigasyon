@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ==============================================================================
-# 📱 MOBİL İYİLEŞTİRME VE STİLLER (CSS)
+# 📱 MOBİL İYİLEŞTİRME VE KROKİ ZOOM STİLLERİ (CSS)
 # ==============================================================================
 st.markdown("""
     <style>
@@ -35,6 +35,19 @@ st.markdown("""
     }
     input, select {
         font-size: 16px !important;
+    }
+    .kroki-container {
+        width: 100%;
+        overflow: auto;
+        border-radius: 12px;
+        border: 2px solid #e0e0e0;
+        background-color: #fafafa;
+        padding: 5px;
+        margin-top: 10px;
+    }
+    .kroki-container img {
+        transition: transform 0.25s ease;
+        cursor: zoom-in;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -254,6 +267,28 @@ if "kategori" not in st.session_state:
 # ==============================================================================
 # 🛠️ YARDIMCI FONKSİYONLAR
 # ==============================================================================
+def otomatik_sesli_oku(metin):
+    if metin and metin.strip():
+        temiz_metin = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
+        js_kodu = f"""
+        <script>
+            function konusData() {{
+                try {{
+                    if ('speechSynthesis' in window) {{
+                        window.speechSynthesis.cancel();
+                        var msg = new SpeechSynthesisUtterance('{temiz_metin}');
+                        msg.lang = 'tr-TR';
+                        msg.rate = 1.0;
+                        window.speechSynthesis.speak(msg);
+                    }}
+                }} catch(e) {{}}
+            }}
+            setTimeout(konusData, 300);
+            document.addEventListener('click', konusData, {{once: true}});
+        </script>
+        """
+        st.components.v1.html(js_kodu, height=0)
+
 def kroki_goster(kroki_dosya_adi):
     if not kroki_dosya_adi:
         return
@@ -294,30 +329,19 @@ def kroki_goster(kroki_dosya_adi):
 
     if bulunan_dosya and bulunan_dosya.exists():
         try:
-            import base64
-            with open(bulunan_dosya, "rb") as img_file:
-                encoded_string = base64.b64encode(img_file.read()).decode()
-            
-            uzanti = bulunan_dosya.suffix.lower().replace('.', '')
-            if uzanti == 'jpg':
-                uzanti = 'jpeg'
-            img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
-
-            # Mobil telefonlarda çift parmakla (pinch-to-zoom) ve akıcı kaydırmayı sağlayan yapı
-            zoom_html = f"""
-            <div style="text-align: center; margin-bottom: 4px; font-size: 12px; color: #555; font-weight: 500;">
-                🔍 İki parmağınızla yakınlaştırabilir, kaydırarak inceleyebilirsiniz
-            </div>
-            <div style="width: 100%; height: 380px; overflow: auto; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #f9f9f9; -webkit-overflow-scrolling: touch; display: flex; align-items: center; justify-content: center;">
-                <img src="{img_data_uri}" style="max-width: 100%; height: auto; display: block; margin: auto;" />
-            </div>
-            """
-            st.components.v1.html(zoom_html, height=430)
-
+            image = Image.open(bulunan_dosya)
+            st.markdown("""
+                <div style="text-align: center; margin-bottom: 2px; font-size: 12px; color: #555; font-weight: 500;">
+                    🔍 Görsel üzerine iki parmağınızla dokunarak büyütebilir / küçültebilirsiniz
+                </div>
+            """, unsafe_allow_html=True)
+            st.image(image, caption=f"🗺️ {st.session_state['secilen_birim']} Krokisi", use_container_width=True)
         except Exception as e:
             st.error(f"⚠️ Görsel yüklenirken hata oluştu: {e}")
     else:
         st.warning(f"⚠️ Aranan Kroki Dosyası Bulunamadı: `{aranan_dosya}`")
+        with st.expander("📂 Klasörde Tespit Edilen Dosyalar (Kontrol İçin)"):
+            st.write(list(set(bulunan_dosyalar_listesi)) if bulunan_dosyalar_listesi else "Hiç dosya bulunamadı.")
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
@@ -369,16 +393,17 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
-# Sesli arama parametresi kontrolü (URL üzerinden gelen aramayı anında işler)
+# Açılışta Sesli Karşılama Mesajı (Tarayıcı etkileşim kilidini aşmak için buton tetiklemeli veya akıllı zamanlayıcılı)
+if "karsilama_yapildi" not in st.session_state:
+    st.session_state["karsilama_yapildi"] = True
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya Konuş butonuna basarak konuşunuz.")
+
+# Sesli arama parametresi kontrolü
 if "ses_arama" in st.query_params:
     gelen_ses = st.query_params["ses_arama"]
     del st.query_params["ses_arama"]
     if gelen_ses:
         akilli_arama_isle(gelen_ses)
-
-# Açılışta Sesli Karşılama
-if "karsilama_yapildi" not in st.session_state:
-    st.session_state["karsilama_yapildi"] = True
 
 # ==============================================================================
 # 🚀 HIZLI ERİŞİM BUTONLARI
@@ -412,7 +437,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN EŞLEŞME MİMARİSİ)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -428,7 +453,73 @@ with col_mic:
         <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
     </div>
     <script>
-        let recognitionInstance = null;
+        const tarifVeritabani = {
+            "heyet çocuk çözger poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sol tarafta görme alanının yanında yer alır.",
+            "heyet fizik tedavi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün.  Koridorun sol tarafında yer alır.",
+            "heyet kbb poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında Heyet Ortopedi Polikliniğin yanında yer alır.",
+            "heyet ortopedi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliniğin yanında yer alır.",
+            "heyet çocuk psikiyatri poliklinik": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
+            "kan alma birimi": "Zemin Kat - Ana girişten girdikten sonra sağa dönün. Sağınızdaki ilk odadır.",
+            "sağlık kurulu": "Zemin Kat - Ana girişten girdikten sonra sağa dönün Koridorun sonundaki geniş alanda yer almaktadır.",
+            "sağlık kurulu kayıt birimi": "Zemin Kat - Girişten hemen sonra sola dönün. Sol taraftaki etrafı kapalı yerdir.",
+            "ön merdivenler": "Zemin Kat - Girişten girdikten sonra sola dönün, koridorun sonuna doğru sol tarafta yer alır.",
+            "arka çıkış": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
+            "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
+            "heyet cildiye poliklinikleri": "Birinci Kat - Merdivenlerden çıkınca sağa dönün, asansörden çıkınca sola dönün. Heyet Nöroloji polikliniğinin karşısında yer alır.",
+            "fizik tedavi 2 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliniğin yanında yer alır.",
+            "fizik tedavi 3 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
+            "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
+            "görme alanı ölçüm odası": "Birinci Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliniğin yanında yer alır.",
+            "heyet dahiliye poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
+            "heyet göğüs hastalıkları poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliniğin yanında yer alır.",
+            "heyet göz poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sağ tarafta, Göz Ölçüm odasının yanında yer alır.",
+            "konuşma terapisti": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. İleride Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
+            "heyet kardiyoloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
+            "heyet üroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sol tarafta, Heyet Göz polikliniğin karşısında yer alır",
+            "işitme testi odio": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Emzirme odasının yanında yer alır.",
+            "çocuk gelişim birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
+            "çocuk evde sağlık birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun sonunda sağ tarafınızda yer alır.",
+            "heyet psikolog": "Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun ilerisinde sol tarafta veya arka merdivenlerden çıkınca sola dönün koridorun solunda yer alır.",
+            "göz oct odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
+            "göz ölçüm": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliniğin yanında yer alır.",
+            "nöroloji poliklinik 1": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliniğin yanında yer alır.",
+            "heyet psikiyatri poliklinikleri": "Birinci Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır.",
+            "sabim cimer birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
+            "solunum fonksiyon sft birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
+            "evrak kayıt vezne": "Zemin Kat - Ana girişten girince tam karşınızda yer alır.",
+            "hasta kayıt": "Ana girişte sol tarafta yer alır.",
+            "evde sağlık hizmetleri birimi": "Zemin Katta olup girişi binanın kuzey yönündedir.",
+            "röntgen görüntüleme diğer bina": "Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, 30 metre sonra sağa dönün, ileride sağ tarafta yer alır.",
+            "asansör": "Zemin katta Hasta Kayıt bankosunu geçince sol tarafta, 1. katta binanın tam orta kesiminde yer alır.",
+            "emzirme odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır. ",
+            "tuvaletler lavabolar": "Zemin Katta - Ana girişten sonra sola dönün. Koridorun sonunda yer alır.",
+            "ekg birimi": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır."
+        };
+
+        const esAnlamlilar = {
+            "kan": "kan alma birimi", "tahlil": "kan alma birimi", "laboratuvar": "kan alma birimi",
+            "wc": "tuvaletler lavabolar", "lavabo": "tuvaletler lavabolar", "tuvalet": "tuvaletler lavabolar",
+            "heyet": "sağlık kurulu", "rapor": "sağlık kurulu",
+            "kulak": "heyet kbb poliklinik", "kbb": "heyet kbb poliklinik",
+            "göz": "heyet göz poliklinik", "kalp": "heyet kardiyoloji poliklinik", "kardiyoloji": "heyet kardiyoloji poliklinik",
+            "çocuk": "heyet çocuk çözger poliklinik", "fizik": "heyet fizik tedavi poliklinik",
+            "göğüs": "heyet göğüs hastalıkları poliklinik", "üroloji": "heyet üroloji poliklinik",
+            "cerrahi": "heyet genel cerrahi poliklinik", "röntgen": "röntgen görüntüleme diğer bina",
+            "film": "röntgen görüntüleme diğer bina", "işitme": "işitme testi odio",
+            "odio": "işitme testi odio", "dahiliye": "heyet dahiliye poliklinik",
+            "nöroloji": "heyet nöroloji poliklinik", "ortopedi": "heyet ortopedi poliklinik",
+            "psikiyatri": "heyet psikiyatri poliklinik", "cimer": "sabim cimer birimi", "sft": "solunum fonksiyon sft birimi"
+        };
+
+        function sesliOkuyucu(metin) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                var msg = new SpeechSynthesisUtterance(metin);
+                msg.lang = 'tr-TR';
+                msg.rate = 1.0;
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
         function sesliAramaBaslat() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -440,53 +531,71 @@ with col_mic:
                 return;
             }
 
-            if (recognitionInstance) {
-                try { recognitionInstance.stop(); } catch(e) {}
-            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
 
-            recognitionInstance = new SpeechRecognition();
-            recognitionInstance.lang = 'tr-TR';
-            recognitionInstance.interimResults = false;
-            recognitionInstance.maxAlternatives = 1;
-            recognitionInstance.continuous = false; 
-
-            recognitionInstance.onstart = function() {
+            recognition.onstart = function() {
                 btnEl.style.backgroundColor = '#28a745';
                 btnEl.innerText = " Dinliyor...";
-                statusEl.innerText = "Lütfen konuşun...";
+                statusEl.innerText = "Konuşun...";
             };
 
-            recognitionInstance.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
+                
+                let bulunanBirim = "";
+                let tarif = "";
 
-                try { recognitionInstance.stop(); } catch(e) {}
+                if (esAnlamlilar[speechResult]) {
+                    bulunanBirim = esAnlamlilar[speechResult];
+                } else if (tarifVeritabani[speechResult]) {
+                    bulunanBirim = speechResult;
+                } else {
+                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
+                    let kelimeler = speechResult.split(" ");
+                    let maxOrtak = 0;
+                    for (let birim in tarifVeritabani) {
+                        let birimKelimeleri = birim.split(" ");
+                        let ortak = kelimeler.filter(k => birimKelimeleri.includes(k)).length;
+                        if (ortak > maxOrtak) {
+                            maxOrtak = ortak;
+                            bulunanBirim = birim;
+                        }
+                    }
+                }
+
+                if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
+                    tarif = bulunanBirim + " için yol tarifi. " + tarifVeritabani[bulunanBirim];
+                    sesliOkuyucu(tarif);
+                } else {
+                    sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
+                }
 
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
             };
 
-            recognitionInstance.onerror = function(event) {
+            recognition.onerror = function(event) {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 statusEl.innerText = "Hata: " + event.error;
-                try { recognitionInstance.stop(); } catch(e) {}
             };
 
-            recognitionInstance.onend = function() {
+            recognition.onend = function() {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
             };
 
             try {
-                recognitionInstance.start();
+                recognition.start();
             } catch(e) {
-                statusEl.innerText = "İzin alınamadı.";
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
+                statusEl.innerText = "İzin hatası.";
             }
         }
     </script>
@@ -532,7 +641,7 @@ else:
         st.rerun()
 
 # ==============================================================================
-# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME BUTONU & KROKİ
+# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME & KROKİ
 # ==============================================================================
 aktif_secim = st.session_state["secilen_birim"]
 
@@ -541,40 +650,17 @@ if aktif_secim != "Seçim Yapınız...":
     if aktif_secim in tum_liste:
         bilgi = tum_liste[aktif_secim]
         
-        tarif_metni = f"{aktif_secim} için yol tarifi. {bilgi['tarif']}"
-        
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
             st.error(f"🚶 **Yönlendirme:** {bilgi['tarif']}")
+            otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
-            
-        # Tarayıcı ses güvenlik engellerini aşmak için garantili "Sesli Dinle" Butonu
-        st.components.v1.html(f"""
-        <div style="text-align: center; margin: 10px 0;">
-            <button onclick="sesliOku()" style="background-color: #007bff; color: white; border: none; padding: 12px 20px; font-size: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                🔊 Yol Tarifini Sesli Dinle
-            </button>
-        </div>
-        <script>
-            function sesliOku() {{
-                if ('speechSynthesis' in window) {{
-                    window.speechSynthesis.cancel();
-                    var utterance = new SpeechSynthesisUtterance("{tarif_metni}");
-                    utterance.lang = 'tr-TR';
-                    utterance.rate = 1.0;
-                    window.speechSynthesis.speak(utterance);
-                }} else {{
-                    alert("Tarayıcınız ses sentezini desteklemiyor.");
-                }}
-            }}
-            // Sayfa açıldığında otomatik ses çalmayı dener
-            window.onload = function() {{ setTimeout(sesliOku, 500); }};
-        </script>
-        """, height=70)
+            otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
         if bilgi.get('kroki'):
-            kroki_goster(bilgi['kroki'])
+                kroki_goster(bilgi['kroki'])
+     
+st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
 
-st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
