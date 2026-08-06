@@ -36,7 +36,6 @@ st.markdown("""
     input, select {
         font-size: 16px !important;
     }
-    /* Kroki Görselleri İçin Büyütme / Kaydırma Kapsayıcısı */
     .kroki-container {
         width: 100%;
         overflow: auto;
@@ -284,7 +283,7 @@ def otomatik_sesli_oku(metin):
                     }}
                 }} catch(e) {{}}
             }}
-            setTimeout(konusData, 400);
+            setTimeout(konusData, 300);
             document.addEventListener('click', konusData, {{once: true}});
         </script>
         """
@@ -336,7 +335,6 @@ def kroki_goster(kroki_dosya_adi):
         try:
             image = Image.open(bulunan_dosya)
             
-            # 🔍 Krokileri Büyütme, Küçültme ve Kaydırma Özelliği Eklenmiş HTML Kapsayıcı
             st.markdown(f"""
                 <div style="text-align: center; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 500;">
                     🔍 Krokiler Üzerine Dokunarak Büyütebilir / Küçültebilir ve Kaydırabilirsiniz
@@ -356,7 +354,7 @@ def kroki_goster(kroki_dosya_adi):
                             let scale = 1;
                             img.onclick = function() {
                                 scale += 0.5;
-                                if (scale > 3) scale = 1; // 1x, 1.5x, 2x, 2.5x, 3x döngüsü
+                                if (scale > 3) scale = 1;
                                 img.style.transform = `scale(${scale})`;
                                 if (scale === 1) {
                                     container.style.overflow = 'auto';
@@ -377,7 +375,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -424,7 +422,7 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
-# Sesli arama parametresi kontrolü (Sayfa yenilendiğinde çalışır ve krokiyi getirir)
+# Sesli arama parametresi kontrolü (Sayfa ilk açıldığında eşleştirmeyi yapar)
 if "ses_arama" in st.query_params:
     gelen_ses = st.query_params["ses_arama"]
     del st.query_params["ses_arama"]
@@ -463,7 +461,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API - TÜM ANDROID VE IOS CİHAZLAR İÇİN GÜVENLİ)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -491,11 +489,8 @@ with col_mic:
                 return;
             }
 
-            // Önceki aktif oturum varsa zorla sonlandır (iOS / Android mikrofon takılmasını önler)
             if (recognitionInstance) {
-                try {
-                    recognitionInstance.stop();
-                } catch(e) {}
+                try { recognitionInstance.stop(); } catch(e) {}
             }
 
             recognitionInstance = new SpeechRecognition();
@@ -516,34 +511,19 @@ with col_mic:
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
 
-                try {
-                    recognitionInstance.stop();
-                } catch(e) {}
+                try { recognitionInstance.stop(); } catch(e) {}
 
-                // Sesli karşılama metni oynatılıyor
-                if ('speechSynthesis' in window) {
-                    window.speechSynthesis.cancel();
-                    var msg = new SpeechSynthesisUtterance(speechResult + " aranıyor, lütfen bekleyin.");
-                    msg.lang = 'tr-TR';
-                    msg.rate = 1.0;
-                    window.speechSynthesis.speak(msg);
-                }
-
-                // Sayfayı sesli arama sorgusu ile yenile
-                setTimeout(function() {
-                    const url = new URL(window.parent.location.href);
-                    url.searchParams.set('ses_arama', speechResult);
-                    window.parent.location.href = url.toString();
-                }, 600);
+                // Sadece sayfayı parametreyle yeniliyoruz, seslendirme Python tarafındaki otomatik_sesli_oku ile güvenle yapılacak
+                const url = new URL(window.parent.location.href);
+                url.searchParams.set('ses_arama', speechResult);
+                window.parent.location.href = url.toString();
             };
 
             recognitionInstance.onerror = function(event) {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 statusEl.innerText = "Hata: " + event.error;
-                try {
-                    recognitionInstance.stop();
-                } catch(e) {}
+                try { recognitionInstance.stop(); } catch(e) {}
             };
 
             recognitionInstance.onend = function() {
