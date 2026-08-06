@@ -553,7 +553,48 @@ with col_mic:
             "tuvaletler lavabolar": "Zemin Katta - Ana girişten sonra sola dönün. Koridorun sonunda yer alır.",
             "ekg birimi": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır."
         };
-
+        const krokiVeritabani = {
+            "heyet goz poliklinik": "heyet_goz_polk_yol_tarifi.png",
+            "goz olcum": "goz_olcum_yol_tarifi.png",
+            "heyet gogus hastaliklari poliklinik": "heyet_gogus_hastaliklari_polk_yol_tarifi.png",
+            "noroloji poliklinik 1": "noroloji_polk_yol_tarifi.png",
+            "heyet genel cerrahi poliklinik": "heyet_genel_cerrahi_polk_yol_tarifi.png",
+            "heyet psikiyatri poliklinikleri": "heyet_psikiyatri_polk_yol_tarifi.png",
+            "heyet cocuk cozger poliklinik": "heyet_cozger_polk_yol_tarifi.png",
+            "gorme alani olcum odasi": "gorme_alani_yol_tarifi.png",
+            "fizik tedavi 3 poliklinik": "fizik_tedavi_polk3_yol_tarifi.png",
+            "heyet noroloji poliklinik": "heyet_noroloji_polk_yol_tarifi.png",
+            "heyet kardiyoloji poliklinik": "heyet_kardiyoloji_polk_yol_tarifi.png",
+            "heyet dahiliye poliklinik": "heyet_dahiliye_polk_yol_tarifi.png",
+            "fizik tedavi 2 poliklinik": "fizik_tedavi_polk2_yol_tarifi.png",
+            "goz oct odasi": "goz_oct_yol_tarifi.png",
+            "isitme testi odio": "isitme_testi_birimi_yol_tarifi.png",
+            "emzirme odasi": "emzirme_odasi_yol_tarifi.png",
+            "ekg birimi": "ekg_yol_tarifi.png",
+            "heyet cildiye poliklinikleri": "heyet_cildiye_polk_yol_tarifi.png",
+            "heyet uroloji poliklinik": "heyet_uroloji_polk_yol_tarifi.png",
+            "cocuk gelisim birimi": "cocuk_gelisim_yol_tarifi.png",
+            "solunum fonksiyon sft birimi": "solunum_fonksiyon_yol_tarifi.png",
+            "heyet cocuk psikiyatri poliklinik": "heyet_cocuk_psikiyatri_polk_yol_tarifi.png",
+            "cocuk evde saglik birimi": "cocuk_evde_bakim_yol_tarifi.png",
+            "konusma terapisti": "konusma_terapisti_yol_tarifi.png",
+            "sabim cimer birimi": "sabim_cimer_yol_tarifi.png",
+            "heyet psikolog": "heyet_psikolog_yol_tarifi.png",
+            "heyet fizik tedavi poliklinik": "heyet_fizik_tedavi_polk_yol_tarifi.png",
+            "heyet kbb poliklinik": "heyet_kbb_polk_yol_tarifi.png",
+            "heyet ortopedi poliklinik": "heyet_ortopedi_polk_yol_tarifi.png",
+            "kan alma birimi": "kan_alma_yol_tarifi.png",
+            "saglik kurulu": "saglik_kurulu_yol_tarifi.png",
+            "saglik kurulu kayit birimi": "saglik_kurulu_kayit_yol_tarifi.png",
+            "on merdivenler": "on_merdivenler_yol_tarifi.png",
+            "arka cikis": "arka_cikis_yol_tarifi.png",
+            "evrak kayit vezne": "evrak_kayit_vezne_yol_tarifi.png",
+            "hasta kayit": "hasta_kayit_yol_tarifi.png",
+            "evde saglik hizmetleri birimi": "evde_saglik_hizmetleri_yol_tarifi.png",
+            "rontgen goruntuleme diger bina": "rontgen_yol_tarifi.png",
+            "asansor": "asansor_yol_tarifi.png",
+            "tuvaletler lavabolar": "tuvaletler_yol_tarifi.png"
+        };
         const esAnlamlilar = {
             "kan": "kan alma birimi", "tahlil": "kan alma birimi", "laboratuvar": "kan alma birimi",
             "wc": "tuvaletler lavabolar", "lavabo": "tuvaletler lavabolar", "tuvalet": "tuvaletler lavabolar",
@@ -600,21 +641,22 @@ with col_mic:
                 statusEl.innerText = "Konuşun...";
             };
 
-            recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+           recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase()
+                    .replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
+                btnEl.innerText = "🎙️ Konus";
                 
                 let bulunanBirim = "";
                 let tarif = "";
+                let krokiDosyasi = "";
 
                 if (esAnlamlilar[speechResult]) {
                     bulunanBirim = esAnlamlilar[speechResult];
                 } else if (tarifVeritabani[speechResult]) {
                     bulunanBirim = speechResult;
                 } else {
-                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
                     let kelimeler = speechResult.split(" ");
                     let maxOrtak = 0;
                     for (let birim in tarifVeritabani) {
@@ -628,15 +670,22 @@ with col_mic:
                 }
 
                 if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
-                    tarif = bulunanBirim + " için yol tarifi. " + tarifVeritabani[bulunanBirim];
+                    tarif = bulunanBirim + " icin yol tarifi. " + tarifVeritabani[bulunanBirim];
+                    
+                    // KROKI BILGISINI EKLE
+                    if (krokiVeritabani[bulunanBirim]) {
+                        krokiDosyasi = krokiVeritabani[bulunanBirim];
+                        tarif += " Ekranda " + krokiDosyasi.replace(/_/g, " ").replace(".png", "") + " krokisi gosterilmektedir.";
+                    }
+                    
                     sesliOkuyucu(tarif);
                 } else {
-                    sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
+                    sesliOkuyucu("Aradiginiz birim sistemde bulunamadi. Lutfen tekrar deneyin.");
                 }
 
-                const url = new URL(window.parent.location.href);
+                const url = new URL(window.location.href);
                 url.searchParams.set('ses_arama', speechResult);
-                window.parent.location.href = url.toString();
+                window.location.href = url.toString();
             };
 
             recognition.onerror = function(event) {
