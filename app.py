@@ -641,53 +641,6 @@ with col_mic:
                 statusEl.innerText = "Konuşun...";
             };
 
-           recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase()
-                    .replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
-                statusEl.innerText = "Bulundu: " + speechResult;
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konus";
-                
-                let bulunanBirim = "";
-                let tarif = "";
-                let krokiDosyasi = "";
-
-                if (esAnlamlilar[speechResult]) {
-                    bulunanBirim = esAnlamlilar[speechResult];
-                } else if (tarifVeritabani[speechResult]) {
-                    bulunanBirim = speechResult;
-                } else {
-                    let kelimeler = speechResult.split(" ");
-                    let maxOrtak = 0;
-                    for (let birim in tarifVeritabani) {
-                        let birimKelimeleri = birim.split(" ");
-                        let ortak = kelimeler.filter(k => birimKelimeleri.includes(k)).length;
-                        if (ortak > maxOrtak) {
-                            maxOrtak = ortak;
-                            bulunanBirim = birim;
-                        }
-                    }
-                }
-
-                if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
-                    tarif = bulunanBirim + " icin yol tarifi. " + tarifVeritabani[bulunanBirim];
-                    
-                    // KROKI BILGISINI EKLE
-                    if (krokiVeritabani[bulunanBirim]) {
-                        krokiDosyasi = krokiVeritabani[bulunanBirim];
-                        tarif += " Ekranda " + krokiDosyasi.replace(/_/g, " ").replace(".png", "") + " krokisi gosterilmektedir.";
-                    }
-                    
-                    sesliOkuyucu(tarif);
-                } else {
-                    sesliOkuyucu("Aradiginiz birim sistemde bulunamadi. Lutfen tekrar deneyin.");
-                }
-
-                const url = new URL(window.location.href);
-                url.searchParams.set('ses_arama', speechResult);
-                window.location.href = url.toString();
-            };
-
             recognition.onerror = function(event) {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
