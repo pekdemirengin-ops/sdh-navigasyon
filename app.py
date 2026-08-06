@@ -422,12 +422,12 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
-# Açılışta veya ilk etkileşimde "Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza Hoşgeldiniz" sesli karşılama tetikleyicisi
+# Açılışta Sesli Karşılama Mesajı (Tarayıcı etkileşim kilidini aşmak için buton tetiklemeli veya akıllı zamanlayıcılı)
 if "karsilama_yapildi" not in st.session_state:
     st.session_state["karsilama_yapildi"] = True
     otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz.")
 
-# Sesli arama parametresi kontrolü (Sayfa ilk açıldığında eşleştirmeyi yapar)
+# Sesli arama parametresi kontrolü
 if "ses_arama" in st.query_params:
     gelen_ses = st.query_params["ses_arama"]
     del st.query_params["ses_arama"]
@@ -466,7 +466,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN ÇÖZÜM)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -538,7 +538,7 @@ with col_mic:
             try {
                 recognitionInstance.start();
             } catch(e) {
-                statusEl.innerText = "Mikrofon izni alınamadı.";
+                statusEl.innerText = "İzin alınamadı.";
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
             }
