@@ -425,7 +425,7 @@ st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 # Açılışta Sesli Karşılama Mesajı (Tarayıcı etkileşim kilidini aşmak için buton tetiklemeli veya akıllı zamanlayıcılı)
 if "karsilama_yapildi" not in st.session_state:
     st.session_state["karsilama_yapildi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
 
 # Sesli arama parametresi kontrolü
 if "ses_arama" in st.query_params:
@@ -466,7 +466,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN EŞLEŞME MİMARİSİ)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -482,7 +482,73 @@ with col_mic:
         <p id="mic-status" style="margin-top: 4px; font-size: 10px; color: #666;"></p>
     </div>
     <script>
-        let recognitionInstance = null;
+        const tarifVeritabani = {
+            "heyet çocuk çözger poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sol tarafta görme alanının yanında yer alır.",
+            "heyet fizik tedavi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün.  Koridorun sol tarafında yer alır.",
+            "heyet kbb poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında Heyet Ortopedi Polikliniğin yanında yer alır.",
+            "heyet ortopedi poliklinik": "Zemin Kat - Ana girişten girdikten sonra sola dönün. Koridorun sağ tarafında kulak burun boğaz polikliniğin yanında yer alır.",
+            "heyet çocuk psikiyatri poliklinik": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün sağ tarafınızda yer alır.",
+            "kan alma birimi": "Zemin Kat - Ana girişten girdikten sonra sağa dönün. Sağınızdaki ilk odadır.",
+            "sağlık kurulu": "Zemin Kat - Ana girişten girdikten sonra sağa dönün Koridorun sonundaki geniş alanda yer almaktadır.",
+            "sağlık kurulu kayıt birimi": "Zemin Kat - Girişten hemen sonra sola dönün. Sol taraftaki etrafı kapalı yerdir.",
+            "ön merdivenler": "Zemin Kat - Girişten girdikten sonra sola dönün, koridorun sonuna doğru sol tarafta yer alır.",
+            "arka çıkış": "Zemin Kat - Koridordan sola dönün. Ön merdivenleri geçip sola dönerek arka çıkış kapısına ulaşabilirsiniz.",
+            "heyet genel cerrahi poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün.Nöroloji polikliğinin yanında yer alır.",
+            "heyet cildiye poliklinikleri": "Birinci Kat - Merdivenlerden çıkınca sağa dönün, asansörden çıkınca sola dönün. Heyet Nöroloji polikliniğinin karşısında yer alır.",
+            "fizik tedavi 2 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sağ tarafta Heyet Dahiliye polikliniğin yanında yer alır.",
+            "fizik tedavi 3 poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
+            "heyet nöroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Kardiyoloji polikliğinin yanında yer alır.",
+            "görme alanı ölçüm odası": "Birinci Kat -  Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonuna doğru sol tarafta Heyet Çözger polikliniğin yanında yer alır.",
+            "heyet dahiliye poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
+            "heyet göğüs hastalıkları poliklinik": "Birinci Kat - Merdivenlerden çıktıysanız karşınızda, asansörden çıktıysanız sola dönün. Nöroloji polikliniğin yanında yer alır.",
+            "heyet göz poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sağ tarafta, Göz Ölçüm odasının yanında yer alır.",
+            "konuşma terapisti": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. İleride Sol tarafınızda Sabim Cimer odasını geçince yer alır.",
+            "heyet kardiyoloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun sonunda sol tarafta Heyet Nöroloji polikliniğin yanında yer alır.",
+            "heyet üroloji poliklinik": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sonunda sol tarafta, Heyet Göz polikliniğin karşısında yer alır",
+            "işitme testi odio": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Emzirme odasının yanında yer alır.",
+            "çocuk gelişim birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun hemen sağında veya arka merdivenlerden çıkınca tam karşınızda tarafınızda yer alır.",
+            "çocuk evde sağlık birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonunda sağ tarafta veya arka merdivenlerden çıkınca sola dönün koridorun sonunda sağ tarafınızda yer alır.",
+            "heyet psikolog": "Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun ilerisinde sol tarafta veya arka merdivenlerden çıkınca sola dönün koridorun solunda yer alır.",
+            "göz oct odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta Fizik Tedavi 2 polikliniğin yanında yer alır.",
+            "göz ölçüm": "Birinci Kat - Merdivenlerden veya asansörden çıktıysanız sola dönün. Koridorun sağ tarafında, Heyet Göz polikliniğin yanında yer alır.",
+            "nöroloji poliklinik 1": "Birinci Kat - Merdivenlerden çıktıysanız sağa, asansörden çıktıysanız sola dönün. Heyet Genel Cerrahi polikliniğin yanında yer alır.",
+            "heyet psikiyatri poliklinikleri": "Birinci Kat - Merdivenlerden çıktıysanız sağa dönün ileride solda, asansörden çıktıysanız tam karşınızda yer alır.",
+            "sabim cimer birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sol tarafınızda Heyet Psikolog odasını geçince yer alır.",
+            "solunum fonksiyon sft birimi": "Birinci Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri çıkınca sola dönün. Sol tarafınızdaki küçük koridorun sonuna doğru ilerleyin veya arka merdivenlerden çıkınca sola dönün. Sağ tarafınızda yer alır.",
+            "evrak kayıt vezne": "Zemin Kat - Ana girişten girince tam karşınızda yer alır.",
+            "hasta kayıt": "Ana girişte sol tarafta yer alır.",
+            "evde sağlık hizmetleri birimi": "Zemin Katta olup girişi binanın kuzey yönündedir.",
+            "röntgen görüntüleme diğer bina": "Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, 30 metre sonra sağa dönün, ileride sağ tarafta yer alır.",
+            "asansör": "Zemin katta Hasta Kayıt bankosunu geçince sol tarafta, 1. katta binanın tam orta kesiminde yer alır.",
+            "emzirme odası": "Birinci Kat - Merdivenlerden veya asansörden çıkınca sağa dönün, koridorun ilerisinde sağ tarafta İşitme testi Odio odasının yanında yer alır. ",
+            "tuvaletler lavabolar": "Zemin Katta - Ana girişten sonra sola dönün. Koridorun sonunda yer alır.",
+            "ekg birimi": "Birinci kat - Merdivenlerden veya asansörden çıkınca sağa dönün. Heyet Psikiyatri poliklinikleri karşısında yer alır."
+        };
+
+        const esAnlamlilar = {
+            "kan": "kan alma birimi", "tahlil": "kan alma birimi", "laboratuvar": "kan alma birimi",
+            "wc": "tuvaletler lavabolar", "lavabo": "tuvaletler lavabolar", "tuvalet": "tuvaletler lavabolar",
+            "heyet": "sağlık kurulu", "rapor": "sağlık kurulu",
+            "kulak": "heyet kbb poliklinik", "kbb": "heyet kbb poliklinik",
+            "göz": "heyet göz poliklinik", "kalp": "heyet kardiyoloji poliklinik", "kardiyoloji": "heyet kardiyoloji poliklinik",
+            "çocuk": "heyet çocuk çözger poliklinik", "fizik": "heyet fizik tedavi poliklinik",
+            "göğüs": "heyet göğüs hastalıkları poliklinik", "üroloji": "heyet üroloji poliklinik",
+            "cerrahi": "heyet genel cerrahi poliklinik", "röntgen": "röntgen görüntüleme diğer bina",
+            "film": "röntgen görüntüleme diğer bina", "işitme": "işitme testi odio",
+            "odio": "işitme testi odio", "dahiliye": "heyet dahiliye poliklinik",
+            "nöroloji": "heyet nöroloji poliklinik", "ortopedi": "heyet ortopedi poliklinik",
+            "psikiyatri": "heyet psikiyatri poliklinik", "cimer": "sabim cimer birimi", "sft": "solunum fonksiyon sft birimi"
+        };
+
+        function sesliOkuyucu(metin) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                var msg = new SpeechSynthesisUtterance(metin);
+                msg.lang = 'tr-TR';
+                msg.rate = 1.0;
+                window.speechSynthesis.speak(msg);
+            }
+        }
 
         function sesliAramaBaslat() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -494,53 +560,71 @@ with col_mic:
                 return;
             }
 
-            if (recognitionInstance) {
-                try { recognitionInstance.stop(); } catch(e) {}
-            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
 
-            recognitionInstance = new SpeechRecognition();
-            recognitionInstance.lang = 'tr-TR';
-            recognitionInstance.interimResults = false;
-            recognitionInstance.maxAlternatives = 1;
-            recognitionInstance.continuous = false; 
-
-            recognitionInstance.onstart = function() {
+            recognition.onstart = function() {
                 btnEl.style.backgroundColor = '#28a745';
                 btnEl.innerText = " Dinliyor...";
-                statusEl.innerText = "Lütfen konuşun...";
+                statusEl.innerText = "Konuşun...";
             };
 
-            recognitionInstance.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
+            recognition.onresult = function(event) {
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
+                
+                let bulunanBirim = "";
+                let tarif = "";
 
-                try { recognitionInstance.stop(); } catch(e) {}
+                if (esAnlamlilar[speechResult]) {
+                    bulunanBirim = esAnlamlilar[speechResult];
+                } else if (tarifVeritabani[speechResult]) {
+                    bulunanBirim = speechResult;
+                } else {
+                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
+                    let kelimeler = speechResult.split(" ");
+                    let maxOrtak = 0;
+                    for (let birim in tarifVeritabani) {
+                        let birimKelimeleri = birim.split(" ");
+                        let ortak = kelimeler.filter(k => birimKelimeleri.includes(k)).length;
+                        if (ortak > maxOrtak) {
+                            maxOrtak = ortak;
+                            bulunanBirim = birim;
+                        }
+                    }
+                }
+
+                if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
+                    tarif = bulunanBirim + " için yol tarifi. " + tarifVeritabani[bulunanBirim];
+                    sesliOkuyucu(tarif);
+                } else {
+                    sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
+                }
 
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
             };
 
-            recognitionInstance.onerror = function(event) {
+            recognition.onerror = function(event) {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 statusEl.innerText = "Hata: " + event.error;
-                try { recognitionInstance.stop(); } catch(e) {}
             };
 
-            recognitionInstance.onend = function() {
+            recognition.onend = function() {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
             };
 
             try {
-                recognitionInstance.start();
+                recognition.start();
             } catch(e) {
-                statusEl.innerText = "İzin alınamadı.";
-                btnEl.style.backgroundColor = '#ff4b4b';
-                btnEl.innerText = "🎙️ Konuş";
+                statusEl.innerText = "İzin hatası.";
             }
         }
     </script>
