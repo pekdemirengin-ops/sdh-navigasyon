@@ -534,10 +534,16 @@ with col_mic:
                 return;
             }
 
-            const recognition = new SpeechRecognition();
+            // Eğer halihazırda çalışan bir oturum varsa önce kapat
+            if (recognition) {
+                try { recognition.stop(); } catch(e) {}
+            }
+
+            recognition = new SpeechRecognition();
             recognition.lang = 'tr-TR';
             recognition.interimResults = false;
             recognition.maxAlternatives = 1;
+            recognition.continuous = false; // iOS'te sürekli dinlemeyi engeller
 
             recognition.onstart = function() {
                 btnEl.style.backgroundColor = '#28a745';
@@ -546,38 +552,12 @@ with col_mic:
             };
 
             recognition.onresult = function(event) {
-                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"").trim();
+                const speechResult = event.results[0][0].transcript.toLowerCase().replace(/[.,\\/#!$%\\^&\\*;:{}=\\-_`~()]/g,"").trim();
                 statusEl.innerText = "Bulundu: " + speechResult;
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
-                
-                let bulunanBirim = "";
-                let tarif = "";
 
-                if (esAnlamlilar[speechResult]) {
-                    bulunanBirim = esAnlamlilar[speechResult];
-                } else if (tarifVeritabani[speechResult]) {
-                    bulunanBirim = speechResult;
-                } else {
-                    // Kelime skoru tabanlı en iyi eşleşmeyi bul
-                    let kelimeler = speechResult.split(" ");
-                    let maxOrtak = 0;
-                    for (let birim in tarifVeritabani) {
-                        let birimKelimeleri = birim.split(" ");
-                        let ortak = kelimeler.filter(k => birimKelimeleri.includes(k)).length;
-                        if (ortak > maxOrtak) {
-                            maxOrtak = ortak;
-                            bulunanBirim = birim;
-                        }
-                    }
-                }
-
-                if (bulunanBirim && tarifVeritabani[bulunanBirim]) {
-                    tarif = bulunanBirim + " için yol tarifi. " + tarifVeritabani[bulunanBirim];
-                    sesliOkuyucu(tarif);
-                } else {
-                    sesliOkuyucu("Aradığınız birim sistemde bulunamadı. Lütfen tekrar deneyin.");
-                }
+                try { recognition.stop(); } catch(e) {}
 
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
@@ -588,17 +568,21 @@ with col_mic:
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
                 statusEl.innerText = "Hata: " + event.error;
+                try { recognition.stop(); } catch(e) {}
             };
 
             recognition.onend = function() {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
+                statusEl.innerText = "";
             };
 
             try {
                 recognition.start();
             } catch(e) {
                 statusEl.innerText = "İzin hatası.";
+                btnEl.style.backgroundColor = '#ff4b4b';
+                btnEl.innerText = "🎙️ Konuş";
             }
         }
     </script>
