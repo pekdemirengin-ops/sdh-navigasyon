@@ -678,4 +678,4 @@ if aktif_secim != "Seçim Yapınız...":
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
-st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
+st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
