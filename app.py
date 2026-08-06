@@ -335,13 +335,6 @@ def kroki_goster(kroki_dosya_adi):
         try:
             image = Image.open(bulunan_dosya)
             
-            st.markdown(f"""
-                <div style="text-align: center; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 500;">
-                    🔍 Krokiler Üzerine Dokunarak Büyütebilir / Küçültebilir ve Kaydırabilirsiniz
-                </div>
-                <div class="kroki-container" id="zoom-container">
-            """, unsafe_allow_html=True)
-            
             st.image(image, caption=f"🗺️ {st.session_state['secilen_birim']} Krokisi", use_container_width=True)
             
             st.markdown("""
