@@ -299,7 +299,6 @@ def kroki_goster(kroki_dosya_adi):
     su_an = Path(__file__).resolve().parent
     calisma_dizini = Path.cwd()
     
-    # Olası tüm olası klasör yolları
     arama_dizinleri = [
         su_an,
         calisma_dizini,
@@ -338,105 +337,106 @@ def kroki_goster(kroki_dosya_adi):
             if uzanti == 'jpg':
                 uzanti = 'jpeg'
             img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
+            dosya_id = bulunan_dosya.stem.replace(" ", "_").replace("-", "_")
 
             zoom_html = f"""
             <div style="text-align: center; margin-bottom: 5px; font-size: 12px; color: #555; font-weight: 500;">
                 🔍 İki parmağınızla sıkıştırarak büyütüp küçültebilir, çift tıklayarak sıfırlayabilirsiniz
             </div>
-            <div id="zoom-wrapper_{bulunan_dosya.stem}" style="width: 100%; height: 380px; overflow: hidden; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #fafafa; position: relative; display: flex; align-items: center; justify-content: center; touch-action: none;">
-                <img id="zoom-img_{bulunan_dosya.stem}" src="{img_data_uri}" style="max-width: 100%; height: auto; transform: scale(1) translate(0px, 0px); cursor: grab; user-select: none;" />
+            <div id="zoom_wrapper_{dosya_id}" style="width: 100%; height: 380px; overflow: hidden; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #fafafa; position: relative; display: flex; align-items: center; justify-content: center; touch-action: none;">
+                <img id="zoom_img_{dosya_id}" src="{img_data_uri}" style="max-width: 100%; height: auto; transform: scale(1) translate(0px, 0px); cursor: grab; user-select: none;" />
             </div>
             <script>
-                (function() {{
-                    const wrapper = document.getElementById('zoom-wrapper_{bulunan_dosya.stem}');
-                    const img = document.getElementById('zoom-img_{bulunan_dosya.stem}');
-                    
-                    let scale = 1;
-                    let panning = false;
-                    let pointX = 0;
-                    let pointY = 0;
-                    let startX = 0;
-                    let startY = 0;
-                    let initialDistance = null;
-                    let startScale = 1;
+            (function() {{
+                const wrapper = document.getElementById('zoom_wrapper_{dosya_id}');
+                const img = document.getElementById('zoom_img_{dosya_id}');
+                
+                let scale = 1;
+                let panning = false;
+                let pointX = 0;
+                let pointY = 0;
+                let startX = 0;
+                let startY = 0;
+                let initialDistance = null;
+                let startScale = 1;
 
-                    function setTransform() {{
-                        img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-                    }}
+                function setTransform() {{
+                    img.style.transform = 'translate(' + pointX + 'px, ' + pointY + 'px) scale(' + scale + ')';
+                }}
 
-                    wrapper.onmousedown = function(e) {{
-                        e.preventDefault();
-                        startX = e.clientX - pointX;
-                        startY = e.clientY - pointY;
+                wrapper.onmousedown = function(e) {{
+                    e.preventDefault();
+                    startX = e.clientX - pointX;
+                    startY = e.clientY - pointY;
+                    panning = true;
+                    img.style.cursor = 'grabbing';
+                }};
+
+                window.onmouseup = function() {{
+                    panning = false;
+                    img.style.cursor = 'grab';
+                }};
+
+                window.onmousemove = function(e) {{
+                    if (!panning) return;
+                    e.preventDefault();
+                    pointX = e.clientX - startX;
+                    pointY = e.clientY - startY;
+                    setTransform();
+                }};
+
+                wrapper.onttouchstart = function(e) {{
+                    if (e.touches.length === 1) {{
                         panning = true;
-                        img.style.cursor = 'grabbing';
-                    }};
-
-                    window.onmouseup = function() {{
+                        startX = e.touches[0].clientX - pointX;
+                        startY = e.touches[0].clientY - pointY;
+                    }} else if (e.touches.length === 2) {{
                         panning = false;
-                        img.style.cursor = 'grab';
-                    }};
+                        initialDistance = Math.hypot(
+                            e.touches[0].clientX - e.touches[1].clientX,
+                            e.touches[0].clientY - e.touches[1].clientY
+                        );
+                        startScale = scale;
+                    }}
+                }};
 
-                    window.onmousemove = function(e) {{
-                        if (!panning) return;
-                        e.preventDefault();
-                        pointX = e.clientX - startX;
-                        pointY = e.clientY - startY;
+                wrapper.onttouchmove = function(e) {{
+                    if (panning && e.touches.length === 1) {{
+                        pointX = e.touches[0].clientX - startX;
+                        pointY = e.touches[0].clientY - startY;
                         setTransform();
-                    }};
+                    }} else if (e.touches.length === 2 && initialDistance) {{
+                        let currentDistance = Math.hypot(
+                            e.touches[0].clientX - e.touches[1].clientX,
+                            e.touches[0].clientY - e.touches[1].clientY
+                        );
+                        let factor = currentDistance / initialDistance;
+                        scale = Math.min(Math.max(1, startScale * factor), 4);
+                        setTransform();
+                    }}
+                }};
 
-                    wrapper.onttouchstart = function(e) {{
-                        if (e.touches.length === 1) {{
-                            panning = true;
-                            startX = e.touches[0].clientX - pointX;
-                            startY = e.touches[0].clientY - pointY;
-                        }} else if (e.touches.length === 2) {{
-                            panning = false;
-                            initialDistance = Math.hypot(
-                                e.touches[0].clientX - e.touches[1].clientX,
-                                e.touches[0].clientY - e.touches[1].clientY
-                            );
-                            startScale = scale;
-                        }}
-                    }};
+                wrapper.onttouchend = function(e) {{
+                    if (e.touches.length < 2) {{
+                        initialDistance = null;
+                    }}
+                    if (e.touches.length === 0) {{
+                        panning = false;
+                    }}
+                }};
 
-                    wrapper.onttouchmove = function(e) {{
-                        if (panning && e.touches.length === 1) {{
-                            pointX = e.touches[0].clientX - startX;
-                            pointY = e.touches[0].clientY - startY;
-                            setTransform();
-                        }} else if (e.touches.length === 2 && initialDistance) {{
-                            let currentDistance = Math.hypot(
-                                e.touches[0].clientX - e.touches[1].clientX,
-                                e.touches[0].clientY - e.touches[1].clientY
-                            );
-                            let factor = currentDistance / initialDistance;
-                            scale = Math.min(Math.max(1, startScale * factor), 4);
-                            setTransform();
-                        }}
-                    }};
-
-                    wrapper.onttouchend = function(e) {{
-                        if (e.touches.length < 2) {{
-                            initialDistance = null;
-                        }}
-                        if (e.touches.length === 0) {{
-                            panning = false;
-                        }}
-                    }};
-
-                    let lastTap = 0;
-                    wrapper.onclick = function(e) {{
-                        let now = new Date().getTime();
-                        if (now - lastTap < 300) {{
-                            scale = 1;
-                            pointX = 0;
-                            pointY = 0;
-                            setTransform();
-                        }}
-                        lastTap = now;
-                    }};
-                }})();
+                let lastTap = 0;
+                wrapper.onclick = function(e) {{
+                    let now = new Date().getTime();
+                    if (now - lastTap < 300) {{
+                        scale = 1;
+                        pointX = 0;
+                        pointY = 0;
+                        setTransform();
+                    }}
+                    lastTap = now;
+                }};
+            }})();
             </script>
             """
             st.components.v1.html(zoom_html, height=430)
