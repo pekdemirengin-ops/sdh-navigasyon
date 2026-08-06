@@ -425,7 +425,7 @@ st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 # Açılışta Sesli Karşılama Mesajı (Tarayıcı etkileşim kilidini aşmak için buton tetiklemeli veya akıllı zamanlayıcılı)
 if "karsilama_yapildi" not in st.session_state:
     st.session_state["karsilama_yapildi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz.")
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binası sesli dijital yönlendirme sistemine hoş geldiniz. Lütfen gitmek istediğiniz birimi seçiniz veya Konuş butonuna basarak konuşunuz.")
 
 # Sesli arama parametresi kontrolü
 if "ses_arama" in st.query_params:
