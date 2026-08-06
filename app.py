@@ -334,7 +334,6 @@ def kroki_goster(kroki_dosya_adi):
     if bulunan_dosya:
         try:
             import base64
-            # Resmi base64 formatına çevirerek doğrudan HTML içinde kusursuz gösterelim
             with open(bulunan_dosya, "rb") as img_file:
                 encoded_string = base64.b64encode(img_file.read()).decode()
             
@@ -343,36 +342,108 @@ def kroki_goster(kroki_dosya_adi):
                 uzanti = 'jpeg'
             img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
 
-            # Garantili Dokunmatik ve Tıklama Zoom HTML/JS Bileşeni
+            # İki parmakla zoom (Pinch-to-Zoom) ve Çift Tıklama destekli gelişmiş HTML/JS
             zoom_html = f"""
-            <div style="text-align: center; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 500;">
-                🔍 Üzerine Dokunarak / Tıklayarak Büyütebilir (1x -> 2x -> 3x) ve Kaydırabilirsiniz
+            <div style="text-align: center; margin-bottom: 5px; font-size: 12px; color: #555; font-weight: 500;">
+                🔍 İki parmağınızla sıkıştırarak büyütüp küçültebilir, çift tıklayarak sıfırlayabilirsiniz
             </div>
-            <div id="zoom-wrapper_{bulunan_dosya.stem}" style="width: 100%; height: 380px; overflow: auto; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #fafafa; position: relative; display: flex; align-items: center; justify-content: center; -webkit-overflow-scrolling: touch;">
-                <img id="zoom-img_{bulunan_dosya.stem}" src="{img_data_uri}" style="max-width: 100%; height: auto; transition: transform 0.25s ease; cursor: zoom-in; transform-origin: center center;" />
+            <div id="zoom-wrapper_{bulunan_dosya.stem}" style="width: 100%; height: 380px; overflow: hidden; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #fafafa; position: relative; display: flex; align-items: center; justify-content: center; touch-action: none;">
+                <img id="zoom-img_{bulunan_dosya.stem}" src="{img_data_uri}" style="max-width: 100%; height: auto; transform: scale(1) translate(0px, 0px); cursor: grab; user-select: none;" />
             </div>
             <script>
                 (function() {{
                     const wrapper = document.getElementById('zoom-wrapper_{bulunan_dosya.stem}');
                     const img = document.getElementById('zoom-img_{bulunan_dosya.stem}');
-                    let scale = 1;
                     
-                    if (img && wrapper) {{
-                        img.onclick = function(e) {{
-                            e.preventDefault();
-                            scale += 1;
-                            if (scale > 3) {{
-                                scale = 1;
-                                img.style.transform = 'scale(1)';
-                                img.style.cursor = 'zoom-in';
-                                wrapper.style.overflow = 'auto';
-                            }} else {{
-                                img.style.transform = 'scale(' + scale + ')';
-                                img.style.cursor = 'zoom-out';
-                                wrapper.style.overflow = 'scroll';
-                            }}
-                        }};
+                    let scale = 1;
+                    let panning = false;
+                    let pointX = 0;
+                    let pointY = 0;
+                    let startX = 0;
+                    let startY = 0;
+                    
+                    let initialDistance = null;
+                    let startScale = 1;
+
+                    function setTransform() {{
+                        img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
                     }}
+
+                    // Sürükleme (Pan) Başlangıcı (Tek Parmak veya Mouse)
+                    wrapper.onmousedown = function(e) {{
+                        e.preventDefault();
+                        startX = e.clientX - pointX;
+                        startY = e.clientY - pointY;
+                        panning = true;
+                        img.style.cursor = 'grabbing';
+                    }};
+
+                    window.onmouseup = function() {{
+                        panning = false;
+                        img.style.cursor = 'grab';
+                    }};
+
+                    window.onmousemove = function(e) {{
+                        if (!panning) return;
+                        e.preventDefault();
+                        pointX = e.clientX - startX;
+                        pointY = e.clientY - startY;
+                        setTransform();
+                    }};
+
+                    // Dokunmatik Ekran Olayları (Mobil İçin Pinch & Pan)
+                    wrapper.onttouchstart = function(e) {{
+                        if (e.touches.length === 1) {{
+                            panning = true;
+                            startX = e.touches[0].clientX - pointX;
+                            startY = e.touches[0].clientY - pointY;
+                        }} else if (e.touches.length === 2) {{
+                            panning = false;
+                            initialDistance = Math.hypot(
+                                e.touches[0].clientX - e.touches[1].clientX,
+                                e.touches[0].clientY - e.touches[1].clientY
+                            );
+                            startScale = scale;
+                        }}
+                    }};
+
+                    wrapper.onttouchmove = function(e) {{
+                        if (panning && e.touches.length === 1) {{
+                            pointX = e.touches[0].clientX - startX;
+                            pointY = e.touches[0].clientY - startY;
+                            setTransform();
+                        }} else if (e.touches.length === 2 && initialDistance) {{
+                            let currentDistance = Math.hypot(
+                                e.touches[0].clientX - e.touches[1].clientX,
+                                e.touches[0].clientY - e.touches[1].clientY
+                            );
+                            let factor = currentDistance / initialDistance;
+                            scale = Math.min(Math.max(1, startScale * factor), 4);
+                            setTransform();
+                        }}
+                    }};
+
+                    wrapper.onttouchend = function(e) {{
+                        if (e.touches.length < 2) {{
+                            initialDistance = null;
+                        }}
+                        if (e.touches.length === 0) {{
+                            panning = false;
+                        }}
+                    }};
+
+                    // Çift Tıklama / Çift Dokunma ile Sıfırlama
+                    let lastTap = 0;
+                    wrapper.onclick = function(e) {{
+                        let now = new Date().getTime();
+                        if (now - lastTap < 300) {{
+                            scale = 1;
+                            pointX = 0;
+                            pointY = 0;
+                            setTransform();
+                        }}
+                        lastTap = now;
+                    }};
                 }})();
             </script>
             """
@@ -702,7 +773,6 @@ if aktif_secim != "Seçim Yapınız...":
         if bilgi.get('kroki'):
                 kroki_goster(bilgi['kroki'])
 
-
-        
+      
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme Sistemi (Engin PEKDEMİR)")
 
