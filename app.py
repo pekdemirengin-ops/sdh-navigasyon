@@ -329,13 +329,107 @@ def kroki_goster(kroki_dosya_adi):
 
     if bulunan_dosya and bulunan_dosya.exists():
         try:
-            image = Image.open(bulunan_dosya)
-            st.markdown("""
-                <div style="text-align: center; margin-bottom: 2px; font-size: 12px; color: #555; font-weight: 500;">
-                    🔍 Görsel üzerine iki parmağınızla dokunarak büyütebilir / küçültebilirsiniz
-                </div>
-            """, unsafe_allow_html=True)
-            st.image(image, caption=f"🗺️ {st.session_state['secilen_birim']} Krokisi", use_container_width=True)
+            import base64
+            with open(bulunan_dosya, "rb") as img_file:
+                encoded_string = base64.b64encode(img_file.read()).decode()
+            
+            uzanti = bulunan_dosya.suffix.lower().replace('.', '')
+            if uzanti == 'jpg':
+                uzanti = 'jpeg'
+            img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
+            dosya_id = bulunan_dosya.stem.replace(" ", "_").replace("-", "_")
+
+            zoom_html = f"""
+            <div style="text-align: center; margin-bottom: 4px; font-size: 12px; color: #555; font-weight: 500;">
+                🔍 İki parmağınızla açarak büyütün, sürükleyerek gezinin (Çift dokunma sıfırlar)
+            </div>
+            <div id="box_{dosya_id}" style="width: 100%; height: 380px; overflow: hidden; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #f9f9f9; position: relative; touch-action: none; display: flex; align-items: center; justify-content: center;">
+                <img id="img_{dosya_id}" src="{img_data_uri}" style="max-width: 90%; max-height: 90%; object-fit: contain; transform: translate(0px, 0px) scale(1); will-change: transform; user-select: none; -webkit-user-drag: none;" />
+            </div>
+            <script>
+            (function() {{
+                const container = document.getElementById('box_{dosya_id}');
+                const img = document.getElementById('img_{dosya_id}');
+                
+                let scale = 1, pointX = 0, pointY = 0;
+                let startX = 0, startY = 0, initialDist = null, startScale = 1;
+                let isDragging = false;
+
+                function updateTransform() {{
+                    img.style.transform = 'translate(' + pointX + 'px, ' + pointY + 'px) scale(' + scale + ')';
+                }}
+
+                // Mouse / Tek Parmak Sürükleme
+                container.addEventListener('mousedown', function(e) {{
+                    isDragging = true;
+                    startX = e.clientX - pointX;
+                    startY = e.clientY - pointY;
+                }});
+                window.addEventListener('mousemove', function(e) {{
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    pointX = e.clientX - startX;
+                    pointY = e.clientY - startY;
+                    updateTransform();
+                }});
+                window.addEventListener('mouseup', function() {{ isDragging = false; }});
+
+                // Dokunmatik Ekran (Mobil - Tek ve İki Parmak)
+                container.addEventListener('touchstart', function(e) {{
+                    if (e.touches.length === 1) {{
+                        isDragging = true;
+                        startX = e.touches[0].clientX - pointX;
+                        startY = e.touches[0].clientY - pointY;
+                    }} else if (e.touches.length === 2) {{
+                        isDragging = false;
+                        initialDist = Math.hypot(
+                            e.touches[0].clientX - e.touches[1].clientX,
+                            e.touches[0].clientY - e.touches[1].clientY
+                        );
+                        startScale = scale;
+                    }}
+                }}, {{ passive: false }});
+
+                container.addEventListener('touchmove', function(e) {{
+                    if (isDragging && e.touches.length === 1) {{
+                        e.preventDefault();
+                        pointX = e.touches[0].clientX - startX;
+                        pointY = e.touches[0].clientY - startY;
+                        updateTransform();
+                    }} else if (e.touches.length === 2 && initialDist !== null) {{
+                        e.preventDefault();
+                        let currentDist = Math.hypot(
+                            e.touches[0].clientX - e.touches[1].clientX,
+                            e.touches[0].clientY - e.touches[1].clientY
+                        );
+                        let factor = currentDist / initialDist;
+                        scale = Math.min(Math.max(1, startScale * factor), 5);
+                        updateTransform();
+                    }}
+                }}, {{ passive: false }});
+
+                container.addEventListener('touchend', function(e) {{
+                    if (e.touches.length < 2) initialDist = null;
+                    if (e.touches.length === 0) isDragging = false;
+                }});
+
+                // Çift Tıklama / Çift Dokunma ile Sıfırlama
+                let lastTap = 0;
+                container.addEventListener('click', function(e) {{
+                    let now = new Date().getTime();
+                    if (now - lastTap < 300) {{
+                        scale = 1;
+                        pointX = 0;
+                        pointY = 0;
+                        updateTransform();
+                    }}
+                    lastTap = now;
+                }});
+            }})();
+            </script>
+            """
+            st.components.v1.html(zoom_html, height=430)
+
         except Exception as e:
             st.error(f"⚠️ Görsel yüklenirken hata oluştu: {e}")
     else:
