@@ -250,16 +250,10 @@ if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
-if "sesli_mesaj" not in st.session_state:
-    st.session_state["sesli_mesaj"] = ""
 
 # ==============================================================================
 # 🛠️ YARDIMCI FONKSİYONLAR
 # ==============================================================================
-def otomatik_sesli_oku(metin):
-    if metin and metin.strip():
-        st.session_state["sesli_mesaj"] = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
-
 def kroki_goster(kroki_dosya_adi):
     if not kroki_dosya_adi:
         return
@@ -308,9 +302,8 @@ def kroki_goster(kroki_dosya_adi):
             if uzanti == 'jpg':
                 uzanti = 'jpeg'
             img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
-            dosya_id = bulunan_dosya.stem.replace(" ", "_").replace("-", "_")
 
-            # Mobil telefonlarda tarayıcının yerel pinch-to-zoom (iki parmakla zoom) ve kaydırma özelliğini açan yapı
+            # Mobil telefonlarda çift parmakla (pinch-to-zoom) ve akıcı kaydırmayı sağlayan yapı
             zoom_html = f"""
             <div style="text-align: center; margin-bottom: 4px; font-size: 12px; color: #555; font-weight: 500;">
                 🔍 İki parmağınızla yakınlaştırabilir, kaydırarak inceleyebilirsiniz
@@ -329,7 +322,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel dan ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -386,7 +379,6 @@ if "ses_arama" in st.query_params:
 # Açılışta Sesli Karşılama
 if "karsilama_yapildi" not in st.session_state:
     st.session_state["karsilama_yapildi"] = True
-    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz.")
 
 # ==============================================================================
 # 🚀 HIZLI ERİŞİM BUTONLARI
@@ -540,7 +532,7 @@ else:
         st.rerun()
 
 # ==============================================================================
-# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME & KROKİ
+# 🎯 SONUÇ GÖSTERİMİ, SESLENDİRME BUTONU & KROKİ
 # ==============================================================================
 aktif_secim = st.session_state["secilen_birim"]
 
@@ -550,7 +542,6 @@ if aktif_secim != "Seçim Yapınız...":
         bilgi = tum_liste[aktif_secim]
         
         tarif_metni = f"{aktif_secim} için yol tarifi. {bilgi['tarif']}"
-        otomatik_sesli_oku(tarif_metni)
         
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
@@ -559,34 +550,31 @@ if aktif_secim != "Seçim Yapınız...":
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
             
-        if bilgi.get('kroki'):
-            st.write("---")
-            st.write("### 🗺️ Rota Krokisi")
-            kroki_goster(bilgi['kroki'])
-
-# ==============================================================================
-# 🔊 GARANTİLİ SESLİ OKUMA BİLEŞENİ (TARAYICI KİLİDİNİ AŞAN)
-# ==============================================================================
-if st.session_state.get("sesli_mesaj"):
-    mesaj_to_speak = st.session_state["sesli_mesaj"]
-    st.session_state["sesli_mesaj"] = "" # Tekrar çalmaması için sıfırla
-    
-    sesli_html = f"""
-    <script>
-        function sesliOkuGarantili() {{
-            if ('speechSynthesis' in window) {{
-                window.speechSynthesis.cancel();
-                var utterance = new SpeechSynthesisUtterance("{mesaj_to_speak}");
-                utterance.lang = 'tr-TR';
-                utterance.rate = 1.0;
-                window.speechSynthesis.speak(utterance);
+        # Tarayıcı ses güvenlik engellerini aşmak için garantili "Sesli Dinle" Butonu
+        st.components.v1.html(f"""
+        <div style="text-align: center; margin: 10px 0;">
+            <button onclick="sesliOku()" style="background-color: #007bff; color: white; border: none; padding: 12px 20px; font-size: 15px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                🔊 Yol Tarifini Sesli Dinle
+            </button>
+        </div>
+        <script>
+            function sesliOku() {{
+                if ('speechSynthesis' in window) {{
+                    window.speechSynthesis.cancel();
+                    var utterance = new SpeechSynthesisUtterance("{tarif_metni}");
+                    utterance.lang = 'tr-TR';
+                    utterance.rate = 1.0;
+                    window.speechSynthesis.speak(utterance);
+                }} else {{
+                    alert("Tarayıcınız ses sentezini desteklemiyor.");
+                }}
             }}
-        }}
-        // Tarayıcı otomatik ses kilidini aşmak için hem hemen dener hem de ekrana dokunmayı tetikler
-        setTimeout(sesliOkuGarantili, 400);
-        document.addEventListener('click', sesliOkuGarantili, {{once: true}});
-    </script>
-    """
-    st.components.v1.html(sesli_html, height=0)
+            // Sayfa açıldığında otomatik ses çalmayı dener
+            window.onload = function() {{ setTimeout(sesliOku, 500); }};
+        </script>
+        """, height=70)
+            
+        if bilgi.get('kroki'):
+            kroki_goster(bilgi['kroki'])
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
