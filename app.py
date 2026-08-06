@@ -283,7 +283,7 @@ def otomatik_sesli_oku(metin):
                     }}
                 }} catch(e) {{}}
             }}
-            setTimeout(konusData, 300);
+            setTimeout(konusData, 500);
             document.addEventListener('click', konusData, {{once: true}});
         </script>
         """
@@ -375,7 +375,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel dan İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -461,7 +461,7 @@ with col2:
         st.rerun()
 
 # ==============================================================================
-# 🎙️ SESLİ ARAMA (WEB SPEECH API)
+# 🎙️ SESLİ ARAMA (WEB SPEECH API - KESİN ÇÖZÜM)
 # ==============================================================================
 st.write("---")
 st.write("### 🔍 Birim Arama / Sesle Konuş")
@@ -502,7 +502,7 @@ with col_mic:
             recognitionInstance.onstart = function() {
                 btnEl.style.backgroundColor = '#28a745';
                 btnEl.innerText = " Dinliyor...";
-                statusEl.innerText = "Konuşun...";
+                statusEl.innerText = "Lütfen konuşun...";
             };
 
             recognitionInstance.onresult = function(event) {
@@ -513,7 +513,7 @@ with col_mic:
 
                 try { recognitionInstance.stop(); } catch(e) {}
 
-                // Sadece sayfayı parametreyle yeniliyoruz, seslendirme Python tarafındaki otomatik_sesli_oku ile güvenle yapılacak
+                // Anında URL yönlendirmesi yaparak Python'un hem krokiyi hem sesli anlatımı açmasını sağla
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
@@ -529,13 +529,12 @@ with col_mic:
             recognitionInstance.onend = function() {
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
-                statusEl.innerText = "";
             };
 
             try {
                 recognitionInstance.start();
             } catch(e) {
-                statusEl.innerText = "İzin hatası.";
+                statusEl.innerText = "Mikrofon izni alınamadı.";
                 btnEl.style.backgroundColor = '#ff4b4b';
                 btnEl.innerText = "🎙️ Konuş";
             }
