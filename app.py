@@ -333,32 +333,50 @@ def kroki_goster(kroki_dosya_adi):
 
     if bulunan_dosya:
         try:
-            image = Image.open(bulunan_dosya)
+            import base64
+            # Resmi base64 formatına çevirerek doğrudan HTML içinde kusursuz gösterelim
+            with open(bulunan_dosya, "rb") as img_file:
+                encoded_string = base64.b64encode(img_file.read()).decode()
             
-            st.image(image, caption=f"🗺️ {st.session_state['secilen_birim']} Krokisi", use_container_width=True)
-            
-            st.markdown("""
-                </div>
-                <script>
-                    const container = document.getElementById('zoom-container');
-                    if (container) {
-                        const img = container.querySelector('img');
-                        if (img) {
-                            let scale = 1;
-                            img.onclick = function() {
-                                scale += 0.5;
-                                if (scale > 3) scale = 1;
-                                img.style.transform = `scale(${scale})`;
-                                if (scale === 1) {
-                                    container.style.overflow = 'auto';
-                                } else {
-                                    container.style.overflow = 'scroll';
-                                }
-                            };
-                        }
-                    }
-                </script>
-            """, unsafe_allow_html=True)
+            uzanti = bulunan_dosya.suffix.lower().replace('.', '')
+            if uzanti == 'jpg':
+                uzanti = 'jpeg'
+            img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
+
+            # Garantili Dokunmatik ve Tıklama Zoom HTML/JS Bileşeni
+            zoom_html = f"""
+            <div style="text-align: center; margin-bottom: 5px; font-size: 13px; color: #555; font-weight: 500;">
+                🔍 Üzerine Dokunarak / Tıklayarak Büyütebilir (1x -> 2x -> 3x) ve Kaydırabilirsiniz
+            </div>
+            <div id="zoom-wrapper_{bulunan_dosya.stem}" style="width: 100%; height: 380px; overflow: auto; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #fafafa; position: relative; display: flex; align-items: center; justify-content: center; -webkit-overflow-scrolling: touch;">
+                <img id="zoom-img_{bulunan_dosya.stem}" src="{img_data_uri}" style="max-width: 100%; height: auto; transition: transform 0.25s ease; cursor: zoom-in; transform-origin: center center;" />
+            </div>
+            <script>
+                (function() {{
+                    const wrapper = document.getElementById('zoom-wrapper_{bulunan_dosya.stem}');
+                    const img = document.getElementById('zoom-img_{bulunan_dosya.stem}');
+                    let scale = 1;
+                    
+                    if (img && wrapper) {{
+                        img.onclick = function(e) {{
+                            e.preventDefault();
+                            scale += 1;
+                            if (scale > 3) {{
+                                scale = 1;
+                                img.style.transform = 'scale(1)';
+                                img.style.cursor = 'zoom-in';
+                                wrapper.style.overflow = 'auto';
+                            }} else {{
+                                img.style.transform = 'scale(' + scale + ')';
+                                img.style.cursor = 'zoom-out';
+                                wrapper.style.overflow = 'scroll';
+                            }}
+                        }};
+                    }}
+                }})();
+            </script>
+            """
+            st.components.v1.html(zoom_html, height=430)
 
         except Exception as e:
             st.warning(f"⚠️ Görsel açılamadı ({bulunan_dosya.name}): {e}")
