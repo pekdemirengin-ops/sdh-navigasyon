@@ -283,7 +283,7 @@ def otomatik_sesli_oku(metin):
                     }}
                 }} catch(e) {{}}
             }}
-            setTimeout(konusData, 500);
+            setTimeout(konusData, 300);
             document.addEventListener('click', konusData, {{once: true}});
         </script>
         """
@@ -422,6 +422,11 @@ st.title("🏥 SDH BARAJ YOLU EK BİNASI")
 st.caption("📱 Mobil Sesli Dijital Yönlendirme Sistemi")
 st.info(f"📍 **Bulunduğunuz Konum:** {baslangic_noktasi}")
 
+# Açılışta veya ilk etkileşimde "Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza Hoşgeldiniz" sesli karşılama tetikleyicisi
+if "karsilama_yapildi" not in st.session_state:
+    st.session_state["karsilama_yapildi"] = True
+    otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz.")
+
 # Sesli arama parametresi kontrolü (Sayfa ilk açıldığında eşleştirmeyi yapar)
 if "ses_arama" in st.query_params:
     gelen_ses = st.query_params["ses_arama"]
@@ -513,7 +518,6 @@ with col_mic:
 
                 try { recognitionInstance.stop(); } catch(e) {}
 
-                // Anında URL yönlendirmesi yaparak Python'un hem krokiyi hem sesli anlatımı açmasını sağla
                 const url = new URL(window.parent.location.href);
                 url.searchParams.set('ses_arama', speechResult);
                 window.parent.location.href = url.toString();
