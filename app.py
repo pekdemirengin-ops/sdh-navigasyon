@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ==============================================================================
-# 📱 MOBİL İYİLEŞTİRME VE KROKİ ZOOM STİLLERİ (CSS)
+# 📱 MOBİL İYİLEŞTİRME VE STİLLER (CSS)
 # ==============================================================================
 st.markdown("""
     <style>
@@ -250,31 +250,15 @@ if "secilen_birim" not in st.session_state:
     st.session_state["secilen_birim"] = "Seçim Yapınız..."
 if "kategori" not in st.session_state:
     st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
+if "sesli_mesaj" not in st.session_state:
+    st.session_state["sesli_mesaj"] = ""
 
 # ==============================================================================
 # 🛠️ YARDIMCI FONKSİYONLAR
 # ==============================================================================
 def otomatik_sesli_oku(metin):
     if metin and metin.strip():
-        temiz_metin = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
-        js_kodu = f"""
-        <script>
-            function konusData() {{
-                try {{
-                    if ('speechSynthesis' in window) {{
-                        window.speechSynthesis.cancel();
-                        var msg = new SpeechSynthesisUtterance('{temiz_metin}');
-                        msg.lang = 'tr-TR';
-                        msg.rate = 1.0;
-                        window.speechSynthesis.speak(msg);
-                    }}
-                }} catch(e) {{}}
-            }}
-            setTimeout(konusData, 300);
-            document.addEventListener('click', konusData, {{once: true}});
-        </script>
-        """
-        st.components.v1.html(js_kodu, height=0)
+        st.session_state["sesli_mesaj"] = metin.replace("1. Kat", "Birinci Kat").replace("'", "\\'").replace('"', '\\"')
 
 def kroki_goster(kroki_dosya_adi):
     if not kroki_dosya_adi:
@@ -316,13 +300,27 @@ def kroki_goster(kroki_dosya_adi):
 
     if bulunan_dosya and bulunan_dosya.exists():
         try:
-            image = Image.open(bulunan_dosya)
-            st.markdown("""
-                <div style="text-align: center; margin-bottom: 2px; font-size: 12px; color: #555; font-weight: 500;">
-                    🔍 Görsel üzerine iki parmağınızla dokunarak büyütebilir / küçültebilirsiniz
-                </div>
-            """, unsafe_allow_html=True)
-            st.image(image, caption=f"🗺️ {st.session_state['secilen_birim']} Krokisi", use_container_width=True)
+            import base64
+            with open(bulunan_dosya, "rb") as img_file:
+                encoded_string = base64.b64encode(img_file.read()).decode()
+            
+            uzanti = bulunan_dosya.suffix.lower().replace('.', '')
+            if uzanti == 'jpg':
+                uzanti = 'jpeg'
+            img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
+            dosya_id = bulunan_dosya.stem.replace(" ", "_").replace("-", "_")
+
+            # Mobil telefonlarda tarayıcının yerel pinch-to-zoom (iki parmakla zoom) ve kaydırma özelliğini açan yapı
+            zoom_html = f"""
+            <div style="text-align: center; margin-bottom: 4px; font-size: 12px; color: #555; font-weight: 500;">
+                🔍 İki parmağınızla yakınlaştırabilir, kaydırarak inceleyebilirsiniz
+            </div>
+            <div style="width: 100%; height: 380px; overflow: auto; border-radius: 12px; border: 2px solid #e0e0e0; background-color: #f9f9f9; -webkit-overflow-scrolling: touch; display: flex; align-items: center; justify-content: center;">
+                <img src="{img_data_uri}" style="max-width: 100%; height: auto; display: block; margin: auto;" />
+            </div>
+            """
+            st.components.v1.html(zoom_html, height=430)
+
         except Exception as e:
             st.error(f"⚠️ Görsel yüklenirken hata oluştu: {e}")
     else:
@@ -331,7 +329,7 @@ def kroki_goster(kroki_dosya_adi):
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
     if birim_adi in DIGER_ALANLAR:
-        st.session_state["kategori"] = "⚙️ Genel ve İdari Birimler"
+        st.session_state["kategori"] = "⚙️ Genel dan ve İdari Birimler"
     elif birim_adi in POLIKLINIKLER:
         st.session_state["kategori"] = "🏥 Resmi Poliklinikler / Odalar"
 
@@ -385,7 +383,7 @@ if "ses_arama" in st.query_params:
     if gelen_ses:
         akilli_arama_isle(gelen_ses)
 
-# Açılışta Sesli Karşılama Mesajı
+# Açılışta Sesli Karşılama
 if "karsilama_yapildi" not in st.session_state:
     st.session_state["karsilama_yapildi"] = True
     otomatik_sesli_oku("Seyhan Devlet Hastanesi Baraj Yolu Ek Hizmet Binamıza hoş geldiniz.")
@@ -551,18 +549,44 @@ if aktif_secim != "Seçim Yapınız...":
     if aktif_secim in tum_liste:
         bilgi = tum_liste[aktif_secim]
         
+        tarif_metni = f"{aktif_secim} için yol tarifi. {bilgi['tarif']}"
+        otomatik_sesli_oku(tarif_metni)
+        
         if bilgi['fancy']:
             st.error(f"🎯 **Hedef:** {aktif_secim}")
             st.error(f"🚶 **Yönlendirme:** {bilgi['tarif']}")
-            otomatik_sesli_oku(bilgi['tarif'])
         else:
             st.success(f"🎯 **Hedef:** {aktif_secim}")
             st.warning(f"🚶 **Yol Tarifi:** {bilgi['tarif']}")
-            otomatik_sesli_oku(f"{aktif_secim} için yol tarifi. {bilgi['tarif']}")
             
         if bilgi.get('kroki'):
             st.write("---")
             st.write("### 🗺️ Rota Krokisi")
             kroki_goster(bilgi['kroki'])
+
+# ==============================================================================
+# 🔊 GARANTİLİ SESLİ OKUMA BİLEŞENİ (TARAYICI KİLİDİNİ AŞAN)
+# ==============================================================================
+if st.session_state.get("sesli_mesaj"):
+    mesaj_to_speak = st.session_state["sesli_mesaj"]
+    st.session_state["sesli_mesaj"] = "" # Tekrar çalmaması için sıfırla
+    
+    sesli_html = f"""
+    <script>
+        function sesliOkuGarantili() {{
+            if ('speechSynthesis' in window) {{
+                window.speechSynthesis.cancel();
+                var utterance = new SpeechSynthesisUtterance("{mesaj_to_speak}");
+                utterance.lang = 'tr-TR';
+                utterance.rate = 1.0;
+                window.speechSynthesis.speak(utterance);
+            }}
+        }}
+        // Tarayıcı otomatik ses kilidini aşmak için hem hemen dener hem de ekrana dokunmayı tetikler
+        setTimeout(sesliOkuGarantili, 400);
+        document.addEventListener('click', sesliOkuGarantili, {{once: true}});
+    </script>
+    """
+    st.components.v1.html(sesli_html, height=0)
 
 st.caption("🤖 Barajyolu Ek Hizmet Binası Mobil Dijital Yönlendirme (Engin PEKDEMİR)")
