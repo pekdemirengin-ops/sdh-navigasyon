@@ -293,12 +293,13 @@ def kroki_goster(kroki_dosya_adi):
     if not kroki_dosya_adi:
         return
 
-    aranan_tam = kroki_dosya_adi.strip().lower()
-    aranan_govde = Path(aranan_tam).stem.lower() 
+    aranan_dosya = kroki_dosya_adi.strip()
+    aranan_govde = Path(aranan_dosya).stem.lower()
     
     su_an = Path(__file__).resolve().parent
     calisma_dizini = Path.cwd()
     
+    # Olası tüm olası klasör yolları
     arama_dizinleri = [
         su_an,
         calisma_dizini,
@@ -310,28 +311,24 @@ def kroki_goster(kroki_dosya_adi):
 
     bulunan_dosya = None
     gecerli_uzantilar = {'.png', '.jpg', '.jpeg', '.webp'}
+    bulunan_dosyalar_listesi = []
 
     for dizin in arama_dizinleri:
         if dizin.exists():
             try:
                 for dosya in dizin.rglob("*"):
-                    if dosya.is_file() and dosya.suffix.lower() in gecerli_uzantilar:
-                        dosya_adi_lower = dosya.name.lower()
-                        dosya_govde_lower = dosya.stem.lower()
-                        
-                        if dosya_adi_lower == aranan_tam or dosya_govde_lower == aranan_govde:
-                            bulunan_dosya = dosya
-                            break
-                        
-                        if aranan_govde in dosya_govde_lower or dosya_govde_lower in aranan_govde:
-                            bulunan_dosya = dosya
-                            break
+                    if dosya.is_file():
+                        bulunan_dosyalar_listesi.append(dosya.name)
+                        if dosya.suffix.lower() in gecerli_uzantilar:
+                            if dosya.name.lower() == aranan_dosya.lower() or dosya.stem.lower() == aranan_govde:
+                                bulunan_dosya = dosya
+                                break
             except Exception:
                 pass
         if bulunan_dosya:
             break
 
-    if bulunan_dosya:
+    if bulunan_dosya and bulunan_dosya.exists():
         try:
             import base64
             with open(bulunan_dosya, "rb") as img_file:
@@ -342,7 +339,6 @@ def kroki_goster(kroki_dosya_adi):
                 uzanti = 'jpeg'
             img_data_uri = f"data:image/{uzanti};base64,{encoded_string}"
 
-            # İki parmakla zoom (Pinch-to-Zoom) ve Çift Tıklama destekli gelişmiş HTML/JS
             zoom_html = f"""
             <div style="text-align: center; margin-bottom: 5px; font-size: 12px; color: #555; font-weight: 500;">
                 🔍 İki parmağınızla sıkıştırarak büyütüp küçültebilir, çift tıklayarak sıfırlayabilirsiniz
@@ -361,7 +357,6 @@ def kroki_goster(kroki_dosya_adi):
                     let pointY = 0;
                     let startX = 0;
                     let startY = 0;
-                    
                     let initialDistance = null;
                     let startScale = 1;
 
@@ -369,7 +364,6 @@ def kroki_goster(kroki_dosya_adi):
                         img.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
                     }}
 
-                    // Sürükleme (Pan) Başlangıcı (Tek Parmak veya Mouse)
                     wrapper.onmousedown = function(e) {{
                         e.preventDefault();
                         startX = e.clientX - pointX;
@@ -391,7 +385,6 @@ def kroki_goster(kroki_dosya_adi):
                         setTransform();
                     }};
 
-                    // Dokunmatik Ekran Olayları (Mobil İçin Pinch & Pan)
                     wrapper.onttouchstart = function(e) {{
                         if (e.touches.length === 1) {{
                             panning = true;
@@ -432,7 +425,6 @@ def kroki_goster(kroki_dosya_adi):
                         }}
                     }};
 
-                    // Çift Tıklama / Çift Dokunma ile Sıfırlama
                     let lastTap = 0;
                     wrapper.onclick = function(e) {{
                         let now = new Date().getTime();
@@ -450,9 +442,11 @@ def kroki_goster(kroki_dosya_adi):
             st.components.v1.html(zoom_html, height=430)
 
         except Exception as e:
-            st.warning(f"⚠️ Görsel açılamadı ({bulunan_dosya.name}): {e}")
+            st.error(f"⚠️ Görsel yüklenirken hata oluştu: {e}")
     else:
-        st.warning(f"⚠️ Kroki Bulunamadı: `{kroki_dosya_adi}` dosyası proje dizininde veya alt klasörlerde okunamadı.")
+        st.warning(f"⚠️ Aranan Kroki Dosyası Bulunamadı: `{aranan_dosya}`")
+        with st.expander("📂 Klasörde Tespit Edilen Dosyalar (Kontrol İçin)"):
+            st.write(list(set(bulunan_dosyalar_listesi)) if bulunan_dosyalar_listesi else "Hiç dosya bulunamadı veya dizine erişilemiyor.")
 
 def birim_sec(birim_adi):
     st.session_state["secilen_birim"] = birim_adi
