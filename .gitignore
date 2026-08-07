@@ -1,0 +1,46 @@
+# Keep pull-request changes text-only. Existing tracked navigation images remain
+# available to Flutter, while newly generated binary assets stay untracked.
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.bmp
+*.tif
+*.tiff
+*.ico
+*.pdf
+
+# Android/iOS binary build and signing artifacts. Platform source and textual
+# configuration files under android/ and ios/ are intentionally not ignored.
+*.apk
+*.aab
+*.dex
+*.keystore
+*.jks
+*.ipa
+*.dSYM/
+*.mobileprovision
+*.p12
+*.cer
+
+# Flutter/Dart generated output.
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+
+# Android generated output.
+android/.gradle/
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+
+# iOS generated output.
+ios/Flutter/ephemeral/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Pods/
+ios/.symlinks/
+ios/Runner/GeneratedPluginRegistrant.*
