@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../search/domain/models/search_result.dart';
+import 'widgets/zoomable_hospital_map.dart';
 
 class DestinationScreen extends StatelessWidget {
   const DestinationScreen({required this.result, super.key});
@@ -18,7 +19,7 @@ class DestinationScreen extends StatelessWidget {
         const SizedBox(height: 8),
         Text(unit.directions),
         const SizedBox(height: 20),
-        ClipRRect(borderRadius: BorderRadius.circular(16), child: Image.asset(unit.mapAsset, errorBuilder: (_, __, ___) => const SizedBox.shrink())),
+        ZoomableHospitalMap(assetPath: unit.mapAsset),
       ]),
     );
   }
