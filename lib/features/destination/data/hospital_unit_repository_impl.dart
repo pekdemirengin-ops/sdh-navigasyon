@@ -5,7 +5,7 @@ class HospitalUnitRepositoryImpl implements HospitalUnitRepository {
   const HospitalUnitRepositoryImpl();
 
   static const _units = <HospitalUnit>[
-    HospitalUnit(id: 'unit-1', name: 'Heyet Çocuk (Çözger) Poliklinik', floor: 'Zemin Kat', directions: 'Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.', mapAsset: 'heyet_cozger_polk_yol_tarifi.png'),
+    HospitalUnit(id: 'unit-1', name: 'Heyet Çocuk (Çözger) Poliklinik', floor: 'Zemin Kat', directions: 'Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.', mapAsset: 'cozger_polk_yol_tarifi.png'),
     HospitalUnit(id: 'unit-2', name: 'Heyet Fizik Tedavi Poliklinik', floor: 'Zemin Kat', directions: 'Zemin Kat - Girişten koridora ilerleyip sol tarafa yönelin. Ön merdivenlerin hemen yanında yer alır.', mapAsset: 'heyet_fizik_tedavi_polk_yol_tarifi.png'),
     HospitalUnit(id: 'unit-3', name: 'Heyet KBB Poliklinik', floor: 'Zemin Kat', directions: 'Zemin Kat - Ana girişten girdikten sonra sola dönün. Ön merdivenleri geçince sağ taraftadır.', mapAsset: 'heyet_kbb_polk_yol_tarifi.png'),
     HospitalUnit(id: 'unit-4', name: 'Heyet Ortopedi Poliklinik', floor: 'Zemin Kat', directions: 'Zemin Kat - Girişten koridora girip sola ilerleyin. KBB odasının yanındaki odadır.', mapAsset: 'heyet_ortopedi_polk_yol_tarifi.png'),
@@ -31,11 +31,11 @@ class HospitalUnitRepositoryImpl implements HospitalUnitRepository {
     HospitalUnit(id: 'unit-24', name: 'Nöroloji Poliklinik', floor: '1. Kat', directions: '1. Kat - Merdivenlerden çıktıktan sonra sağa dönün ve koridor boyunca ilerleyin. Sol tarafta kalmaktadır.', mapAsset: 'noroloji_polk_yol_tarifi.png'),
     HospitalUnit(id: 'unit-25', name: 'Heyet Psikiyatri Poliklinik', floor: '1. Kat', directions: '1. Kat - Merdivenlerden çıkıp sağ koridora ilerleyin, orta hizada yer alan psikiyatri poliklinikleridir.', mapAsset: 'heyet_psikiyatri_polk_yol_tarifi.png'),
     HospitalUnit(id: 'unit-26', name: 'Sabim Cimer Birimi', floor: '1. Kat', directions: '1. Kat - Merdivenlerden çıktıktan sonra arka merdiven yönüne (sola) dönün, koridoru takip edin.', mapAsset: 'sabim_cimer_yol_tarifi.png'),
-    HospitalUnit(id: 'unit-27', name: 'Solunum Fonksiyon (SFT) Birimi', floor: '1. Kat', directions: '1. Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.', mapAsset: 'solunum_fonksiyon_yol_tarifi.png'),
+    HospitalUnit(id: 'unit-27', name: 'Solunum Fonksiyon (SFT) Birimi', floor: '1. Kat', directions: '1. Kat - Arka merdiven koridorunu geçip sola doğru ilerlediğinizde sol tarafta yer alır.', mapAsset: 'solunum_fonksiyon_yol_tarifi..png'),
     HospitalUnit(id: 'unit-28', name: 'Evrak Kayıt / Vezne', floor: 'Zemin Kat', directions: 'Zemin Kat - Ana girişten tam karşınızda.', mapAsset: 'evrak_kayıt_vezne_yol_tarifi.png'),
     HospitalUnit(id: 'unit-29', name: 'Hasta Kayıt', floor: 'Zemin Kat', directions: 'Ana girişte sol tarafta yer alır.', mapAsset: 'hasta_kayıt_yol_tarifi.png'),
     HospitalUnit(id: 'unit-30', name: 'Evde Sağlık Hizmetleri Birimi', floor: 'Zemin Kat', directions: 'Zemin Katta olup girişi binanın kuzey yönündedir.', mapAsset: 'evde_saglık_hizmetleri_yol_tarifi.png'),
-    HospitalUnit(id: 'unit-31', name: 'Röntgen / Görüntüleme (DİĞER BİNA)', floor: 'Diğer Bina', directions: 'Diğer binadadır! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır.', mapAsset: 'rontgen_yol_tarifi.png'),
+    HospitalUnit(id: 'unit-31', name: 'Röntgen / Görüntüleme (DİĞER BİNA)', floor: 'Diğer Bina', directions: 'Diğer binadadır! Röntgen birimi bu binada değildir. Arka kapıdan çıkınca sola dönün, ardından sağa, ileride sağ tarafta yer alır.', mapAsset: 'arka_cıkıs_yol_tarifi.png'),
     HospitalUnit(id: 'unit-32', name: 'Asansör', floor: 'Zemin Kat', directions: '1. katta binanın tam orta kesiminde, zemin katta Hasta Kayıt bankosunun geçince sol tarafta yer alır.', mapAsset: 'asansor_yol_tarifi.png'),
     HospitalUnit(id: 'unit-33', name: 'Emzirme Odası', floor: '1. Kat', directions: '1. Kat - Koridor boyunca sağa doğru ilerleyin. Sağ taraftaki odalardan biridir.', mapAsset: 'emzirme_odası_yol_tarifi.png'),
     HospitalUnit(id: 'unit-34', name: 'Tuvaletler / Lavabolar', floor: 'Zemin Kat', directions: 'Zemin Katta: Ana girişten sonra sola dönün. Koridorun sonunda yer alır.', mapAsset: 'tuvaletler_yol_tarifi.png'),
