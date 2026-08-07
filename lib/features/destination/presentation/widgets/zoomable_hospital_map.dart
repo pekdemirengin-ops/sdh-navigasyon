@@ -23,6 +23,7 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
   static const double _doubleTapScale = 2.5;
 
   late TransformationController _controller;
+  late bool _isZoomed;
   final Set<int> _activePointers = <int>{};
   Offset? _pointerDownPosition;
   Offset? _lastTapPosition;
@@ -34,6 +35,8 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
   void initState() {
     super.initState();
     _controller = widget.transformationController ?? TransformationController();
+    _isZoomed = _controller.value.getMaxScaleOnAxis() > 1;
+    _controller.addListener(_handleTransformationChanged);
   }
 
   @override
@@ -43,18 +46,31 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
       return;
     }
 
+    _controller.removeListener(_handleTransformationChanged);
     if (oldWidget.transformationController == null) {
       _controller.dispose();
     }
     _controller = widget.transformationController ?? TransformationController();
+    _isZoomed = _controller.value.getMaxScaleOnAxis() > 1;
+    _controller.addListener(_handleTransformationChanged);
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_handleTransformationChanged);
     if (widget.transformationController == null) {
       _controller.dispose();
     }
     super.dispose();
+  }
+
+  void _handleTransformationChanged() {
+    final isZoomed = _controller.value.getMaxScaleOnAxis() > 1;
+    if (isZoomed == _isZoomed) {
+      return;
+    }
+
+    setState(() => _isZoomed = isZoomed);
   }
 
   void _handlePointerDown(PointerDownEvent event) {
@@ -139,7 +155,10 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
           transformationController: _controller,
           minScale: 1,
           maxScale: 5,
-          panEnabled: true,
+          // At the minimum scale, leave one-finger drags to an ancestor
+          // Scrollable. Scaling stays enabled so a two-finger pinch can still
+          // start; once zoomed, InteractiveViewer owns pans in every direction.
+          panEnabled: _isZoomed,
           scaleEnabled: true,
           child: Image.asset(
             widget.assetPath,
