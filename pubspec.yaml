@@ -1,0 +1,64 @@
+name: sdh_navigasyon
+description: SDH hospital indoor navigation application.
+publish_to: none
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - arka_cıkıs_yol_tarifi.png
+    - arka_merdivenler_yol_tarifi.png
+    - asansor_yol_tarifi.png
+    - cocuk_evde_bakım_yol_tarifi.png
+    - cocuk_gelisim_yol_tarifi.png
+    - cozger_polk_yol_tarifi.png
+    - diyetisyen_yol_tarifi.png
+    - ekg_yol_tarifi.png
+    - emzirme_odası_yol_tarifi.png
+    - evde_saglık_hizmetleri_yol_tarifi.png
+    - evrak_kayıt_vezne_yol_tarifi.png
+    - fizik_tedavi_polk1_yol_tarifi.png
+    - fizik_tedavi_polk2_yol_tarifi.png
+    - fizik_tedavi_polk3_yol_tarifi.png
+    - gorme_alanı_yol_tarifi.png
+    - goz_oct_yol_tarifi.png
+    - goz_olcum_yol_tarifi.png
+    - hasta_kayıt_yol_tarifi.png
+    - heyet_cildiye_polk_yol_tarifi.png
+    - heyet_cocuk_psikiyatri_polk_yol_tarifi.png
+    - heyet_dahiliye_polk_yol_tarifi.png
+    - heyet_fizik_tedavi_polk_yol_tarifi.png
+    - heyet_genel_cerrahi_polk_yol_tarifi.png
+    - heyet_gogus_hastalıkları_polk_yol_tarifi.png
+    - heyet_goz_polk_yol_tarifi.png
+    - heyet_kardiyoloji_polk_yol_tarifi.png
+    - heyet_kbb_polk_yol_tarifi.png
+    - heyet_noroloji_polk_yol_tarifi.png
+    - heyet_ortopedi_polk_yol_tarifi.png
+    - heyet_psikiyatri_polk_yol_tarifi.png
+    - heyet_psikolog_yol_tarifi.png
+    - heyet_uroloji_polk_yol_tarifi.png
+    - isitme_testi_birimi_yol_tarifi.png
+    - kan_alma_yol_tarifi.png
+    - konusma_terapisti_yol_tarifi.png
+    - noroloji_polk_yol_tarifi.png
+    - on_merdivenler_yol_tarifi.png
+    - sabim_cimer_yol_tarifi.png
+    - saglık_kurulu_kayıt_yol_tarifi.png
+    - saglık_kurulu_yol_tarifi.png
+    - solunum_fonksiyon_yol_tarifi..png
+    - tuvaletler_yol_tarifi.png
