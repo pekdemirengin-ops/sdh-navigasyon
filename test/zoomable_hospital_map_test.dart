@@ -23,7 +23,7 @@ void main() {
     );
     expect(viewer.minScale, 1);
     expect(viewer.maxScale, 5);
-    expect(viewer.panEnabled, isFalse);
+    expect(viewer.panEnabled, isTrue);
     expect(viewer.scaleEnabled, isTrue);
 
     final center = tester.getCenter(find.byType(InteractiveViewer));
@@ -37,12 +37,15 @@ void main() {
     await tester.pump();
 
     expect(controller.value.getMaxScaleOnAxis(), greaterThan(1));
-    expect(
-      tester
-          .widget<InteractiveViewer>(find.byType(InteractiveViewer))
-          .panEnabled,
-      isTrue,
-    );
+    final transformAfterPinch = controller.value.clone();
+    final pan = await tester.startGesture(center);
+    await pan.moveBy(const Offset(35, 25));
+    await tester.pump();
+    await pan.up();
+    await tester.pump();
+
+    expect(controller.value.storage[12], isNot(transformAfterPinch.storage[12]));
+    expect(controller.value.storage[13], isNot(transformAfterPinch.storage[13]));
 
     await tester.tap(find.byType(InteractiveViewer));
     await tester.pump(const Duration(milliseconds: 50));
@@ -73,5 +76,37 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(controller.value.getMaxScaleOnAxis(), 2.5);
+  });
+
+  testWidgets('a two-pointer pinch is not mistaken for a double tap',
+      (tester) async {
+    final controller = TransformationController();
+    addTearDown(controller.dispose);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ZoomableHospitalMap(
+            assetPath: 'kan_alma_yol_tarifi.png',
+            transformationController: controller,
+          ),
+        ),
+      ),
+    );
+
+    final center = tester.getCenter(find.byType(InteractiveViewer));
+    final first = await tester.startGesture(center - const Offset(25, 0),
+        pointer: 1);
+    final second = await tester.startGesture(center + const Offset(25, 0),
+        pointer: 2);
+    await first.moveBy(const Offset(-50, -20));
+    await second.moveBy(const Offset(50, 20));
+    await tester.pump();
+    await first.up();
+    await second.up();
+    await tester.pump();
+
+    expect(controller.value.getMaxScaleOnAxis(), greaterThan(1));
+    expect(controller.value.getMaxScaleOnAxis(), isNot(2.5));
   });
 }
