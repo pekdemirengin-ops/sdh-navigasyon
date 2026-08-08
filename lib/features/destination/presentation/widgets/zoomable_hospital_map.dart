@@ -209,11 +209,10 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
                 allowSinglePointer: () => _isZoomed,
               ),
               (_PointerAwareScaleGestureRecognizer recognizer) {
-                recognizer
-                  ..allowSinglePointer = () => _isZoomed
-                  ..onStart = _handleScaleStart
-                  ..onUpdate = _handleScaleUpdate
-                  ..onEnd = _handleScaleEnd;
+                recognizer.allowSinglePointer = () => _isZoomed;
+                recognizer.onStart = _handleScaleStart;
+                recognizer.onUpdate = _handleScaleUpdate;
+                recognizer.onEnd = _handleScaleEnd;
               },
             ),
           },
