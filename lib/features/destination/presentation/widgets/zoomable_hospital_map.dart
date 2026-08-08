@@ -118,8 +118,8 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
     );
 
     _controller.value = Matrix4.identity()
-      ..translate(translation.dx, translation.dy)
-      ..scale(targetScale);
+      ..translateByDouble(translation.dx, translation.dy, 0.0, 1.0)
+      ..scaleByDouble(targetScale, targetScale, targetScale, 1.0);
   }
 
   void _handleScaleEnd(ScaleEndDetails details) {
@@ -187,13 +187,19 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
     }
 
     _controller.value = Matrix4.identity()
-      ..translate(
-        position.dx * (1 - _doubleTapScale),
-        position.dy * (1 - _doubleTapScale),
-      )
-      ..scale(_doubleTapScale);
-  }
-
+ ..translateByDouble(
+  position.dx * (1 - _doubleTapScale),
+  position.dy * (1 - _doubleTapScale),
+  0.0,
+  1.0,
+)
+..scaleByDouble(
+  _doubleTapScale,
+  _doubleTapScale,
+  _doubleTapScale,
+  1.0,
+);
+}
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
