@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +30,10 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
   static const double _minScale = 1;
   static const double _maxScale = 5;
   static const double _doubleTapScale = 2.5;
+
+  // A mild gain makes pinch zoom feel more responsive on physical phones
+  // without making small finger movements jumpy or difficult to control.
+  static const double _pinchSensitivity = 1.25;
 
   late TransformationController _controller;
   late bool _isZoomed;
@@ -97,7 +103,8 @@ class _ZoomableHospitalMapState extends State<ZoomableHospitalMap> {
       return;
     }
 
-    final targetScale = (_gestureStartScale * details.scale)
+    final responsiveScale = math.pow(details.scale, _pinchSensitivity).toDouble();
+    final targetScale = (_gestureStartScale * responsiveScale)
         .clamp(_minScale, _maxScale)
         .toDouble();
     final focalPoint = details.localFocalPoint;
